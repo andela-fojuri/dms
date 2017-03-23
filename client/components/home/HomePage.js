@@ -1,0 +1,57 @@
+import React from 'react';
+import { Link } from 'react-router';
+import ToggleDisplay from 'react-toggle-display';
+import LoginForm from '../login/LoginForm';
+import SignupPage from '../login/SignupPage';
+
+
+class HomePage extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      islogin: false,
+      isSignup: false
+    };
+
+    this.displayLoginForm = this.displayLoginForm.bind(this);
+    this.displaySignupForm = this.displaySignupForm.bind(this);
+  }
+
+  displayLoginForm() {
+    this.setState({ islogin: true });
+    this.setState({ isSignup: false });
+  }
+
+  displaySignupForm() {
+    this.setState({ isSignup: true });
+    this.setState({ islogin: false });
+  }
+
+  render() {
+    if (this.state.islogin) {
+      return (
+        <div id="login" className="z-depth-1 card-panel">
+          <LoginForm />
+          <p> Dont have an account yet? <a onClick={this.displaySignupForm}>Signup</a></p>
+        </div>
+      );
+    } else if (this.state.isSignup) {
+      return (
+        <div id="signup" className="z-depth-1 card-panel">
+          <SignupPage />
+          <p> Already have an account? <a onClick={this.displayLoginForm}>Login</a></p>
+        </div>
+      );
+    }
+    return (
+      <div id="start">
+        <button id="startBtn" className="btn waves-effect waves-light blue-grey darken-4" onClick={this.displayLoginForm} type="submit" name="action">Get Started
+          <i className="material-icons right">send</i>
+        </button>
+      </div>
+    );
+  }
+}
+
+export default HomePage;
