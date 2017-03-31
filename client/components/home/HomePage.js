@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import ToggleDisplay from 'react-toggle-display';
-import LoginForm from '../login/LoginForm';
-import SignupPage from '../login/SignupPage';
+import LoginPage from '../forms/LoginPage';
+import SignupPage from '../forms/SignupPage';
 
 
 class HomePage extends React.Component {
@@ -19,11 +19,13 @@ class HomePage extends React.Component {
   }
 
   displayLoginForm() {
+    this.context.router.push('/login');
     this.setState({ islogin: true });
     this.setState({ isSignup: false });
   }
 
   displaySignupForm() {
+    this.context.router.push('/signup');
     this.setState({ isSignup: true });
     this.setState({ islogin: false });
   }
@@ -32,7 +34,7 @@ class HomePage extends React.Component {
     if (this.state.islogin) {
       return (
         <div id="login" className="z-depth-1 card-panel">
-          <LoginForm />
+          <LoginPage />
           <p> Dont have an account yet? <a onClick={this.displaySignupForm}>Signup</a></p>
         </div>
       );
@@ -53,5 +55,9 @@ class HomePage extends React.Component {
     );
   }
 }
+
+HomePage.contextTypes = {
+  router: PropTypes.object
+};
 
 export default HomePage;

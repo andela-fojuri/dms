@@ -9,17 +9,33 @@ class SignupPage extends React.Component {
     super(props, context);
 
     this.state = {
-      user: Object.assign({}, props.user),
+      user: Object.assign({}, this.props.user),
       saving: false
     };
+    this.updateUserDetails = this.updateUserDetails.bind(this);
+    this.onClickSave = this.onClickSave.bind(this);
   }
+
+  onClickSave() {
+    this.props.actions.createUser(this.state.user).then(() => {
+      this.context.router.push('/');
+    });
+  }
+
+  updateUserDetails(event) {
+    const field = event.target.name;
+    const user = this.state.user;
+    user[field] = event.target.value;
+    return this.setState(user);
+  }
+
   render() {
     return (
       <SignupForm
         user={this.state.user}
         allRoles={this.props.roles}
-        onSave=""
-        onChange=""
+        onSave={this.onClickSave}
+        onChange={this.updateUserDetails}
         saving={this.state.saving}
       />
     );
@@ -28,17 +44,23 @@ class SignupPage extends React.Component {
 
 SignupPage.propTypes = {
   roles: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
-  const rolesDropdown = state.roles.map(role => ({
-    value: role.id,
-    text: role.category
-  }));
+SignupPage.contextTypes = {
+  router: PropTypes.object
+};
 
+function mapStateToProps(state, ownProps) {
+  const user = { roleId: '' };
+  const rolesDropdown = state.roles.roles.map(role => ({
+    value: role.id,
+    text: role.category,
+  }));
   return {
-    roles: rolesDropdown
+    roles: rolesDropdown,
+    user
   };
 }
 

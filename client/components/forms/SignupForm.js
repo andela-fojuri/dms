@@ -45,7 +45,7 @@ const SignupForm = ({ user, allRoles, onSave, onChange, saving }) => {
             <i className="material-icons prefix">https</i>
             <input
                 type="password"
-                name="confirmPassword"
+                name="password_confirmation"
                 className="validate"
                 onChange={onChange}
             />
@@ -59,6 +59,7 @@ const SignupForm = ({ user, allRoles, onSave, onChange, saving }) => {
               options={allRoles}
               onChange={onChange}
               value={user.roleId}
+              label="Role"
           />
         </div>
         <input
