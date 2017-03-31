@@ -1,9 +1,15 @@
 import faker from 'faker';
 
 export default {
+  user0: {
+    email: faker.internet.email().toLowerCase(),
+    password: 'fissyTest',
+    password_confirmation: 'fissyTest',
+    roleId: 2
+  },
   user1: {
     username: faker.name.findName(),
-    email: faker.internet.email(),
+    email: faker.internet.email().toLowerCase(),
     password: 'fissyTest',
     password_confirmation: 'fissyTest',
     roleId: 2

@@ -3,65 +3,60 @@ import jwt from 'jsonwebtoken';
 import index from '../models/index';
 
 const User = index.User;
+const Role = index.Role;
 let allUsers = [];
 const Users = {
   create: ((req, res) => {
-    console.log('this is ', process.env.SECRET)
-    if (req.body.username && req.body.email && req.body.password && req.body.password_confirmation && req.body.roleId) {
-      User.findOne({ where: { email: req.body.email } }).then((userEmail) => {
-        if (userEmail) {
-          res.send({ failure: 'User Email exists' });
-        } else {
-          User.findOne({ where: { username: req.body.username } }).then((username) => {
-            if (username) {
-              res.send({ failure: 'Username exists' });
-            } else {
-              User.create({
-                username: req.body.username,
-                email: req.body.email,
-                password: req.body.password,
-                password_confirmation: req.body.password_confirmation,
-                roleId: req.body.roleId
-              }).then((createdUser) => {
-                const payload = JSON.stringify(createdUser);
-                const token = jwt.sign(payload, process.env.SECRET);
-                res.send({ success: 'User Created Successfully', createdUser, token });
-              }).catch((err) => {
-                res.send({ failure: 'Unable to create user', message: err.message });
-              });
-            }
-          });
-        }
-      });
-    } else {
-      res.send({ failure: 'All fields must be filled' });
-    }
+    User.create({
+      username: req.body.username || null,
+      email: req.body.email || null,
+      password: req.body.password || null,
+      password_confirmation: req.body.password_confirmation || null,
+      roleId: req.body.roleId,
+    }).then((createdUser) => {
+      const payload = JSON.stringify(createdUser);
+      const token = jwt.sign(payload, process.env.SECRET);
+      res.send({ success: true, message: 'User Created Successfully', createdUser, token });
+    }, (error) => {
+      if (error.name === 'SequelizeValidationError') {
+        res.status(400).send({ success: false, message: error.message });
+      } else if (error.name === 'SequelizeUniqueConstraintError') {
+        res.status(400).send({ success: false, message: 'Invalid Username/Email' });
+      } else {
+        res.status(400).send({ success: false, message: 'Unexpected error occured' });
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
   }),
 
   login: ((req, res) => {
-    if (req.body.username && req.body.password) {
-      User.findOne({ where: { username: req.body.username } }).then((user) => {
-        if (user) {
-          bcrypt.compare(req.body.password, user.password_digest, (err, res2) => {
-            if (res2) {
-              const payload = JSON.stringify(user);
-              const token = jwt.sign(payload, process.env.SECRET);
-              res.send({ success: 'Successfully logged in', token });
-            } else {
-              res.send({ failure: 'Incorrect Username/Password' });
-            }
-          });
-        } else {
-          res.send({ failure: 'User not found, Kindly Signup to proceed' });
-        }
-      });
-    }
+    User.findOne({
+      where: { username: req.body.username },
+      include: [{ model: Role }]
+    }).then((user) => {
+      if (user) {
+        bcrypt.compare(req.body.password, user.password_digest, (err, res2) => {
+          if (res2) {
+            const payload = JSON.stringify(user);
+            const token = jwt.sign(payload, process.env.SECRET);
+            res.send({ success: true, message: 'Successfully logged in', token });
+          } else {
+            res.send({ success: false, message: 'Invalid Username/Password' });
+          }
+        });
+      } else {
+        res.status(200).send({ success: false, message: 'User Not Registered, Kindly signup to proceed' });
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
   }),
 
   logout: ((req, res) => {
     if (req.decoded.id) {
       User.findById(req.decoded.id).then((user) => {
-        res.send({ success: 'Successfully logged out' });
+        res.send({ success: true, message: 'Successfully logged out' });
       });
     }
   }),
@@ -70,100 +65,73 @@ const Users = {
   getUsers: ((req, res) => {
     if (req.query.limit && req.query.offset) {
       User.findAll({ offset: req.query.offset, limit: req.query.limit }).then((users) => {
-        if (users) {
-          res.send({ success: true, user: users });
-        } else {
-          res.send({ failure: 'No user found' });
-        }
+        res.send({ success: true, message: users });
       });
     } else if (req.query.limit) {
       User.findAll({ limit: req.query.limit }).then((users) => {
-        if (users) {
-          res.send({ success: true, user: users });
-        } else {
-          res.send({ failure: 'No user found' });
-        }
+        res.send({ success: true, message: users });
       });
     } else if (req.query.offset) {
       User.findAll({ offset: req.query.offset }).then((users) => {
-        if (users) {
-          res.send({ success: true, user: users });
-        } else {
-          res.send({ failure: 'No user found' });
-        }
+        res.send({ success: true, message: users });
       });
     } else {
       User.findAll().then((users) => {
-        if (users) {
-          allUsers = users;
-          res.send({ success: true, user: users });
-        } else {
-          res.send({ failure: 'No user found' });
-        }
+        allUsers = users;
+        res.send({ success: true, message: users });
+      }).catch((err) => {
+        res.status(500).send({ success: false, message: 'Unexpected error occured' });
       });
     }
   }),
 
   findUser: ((req, res) => {
-    if (req.query.id) {
-      User.findById(req.query.id).then((foundUser) => {
-        if (foundUser) {
-          res.send({ success: true, user: foundUser });
-        } else {
-          res.send({ failure: 'User not found' });
-        }
-      });
-    } else {
-      res.send({ failure: 'Kindly provide an ID' });
-    }
+    User.findById(req.query.id).then((foundUser) => {
+      res.send({ success: true, message: foundUser });
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
   }),
+
+
   updateUser: ((req, res) => {
-    if (req.decoded) {
-      User.findById(req.decoded.id).then((user) => {
-        if (req.body.oldPassword && req.body.newPassword && req.body.confirmNewPassword) {
-          bcrypt.compare(req.body.oldPassword, user.password_digest, (err, res2) => {
-            if (res2) {
-              user.update({
-                password: req.body.newPassword,
-                password_confirmation: req.body.confirmNewPassword,
-                username: req.body.username || user.username }).then((count, row) => {
-                  res.send({ success: 'Details Updated Successfully' });
-                });
-            } else {
-              res.send({ failure: 'Incorrect Old Password' });
-            }
-          });
-        } else if (req.body.username) {
-          user.update({ username: req.body.username }).then((count, row) => {
-            res.send({ success: 'Name Updated Successfully' });
-          });
-        } else {
-          res.send({ failure: 'Field(s) cannot be empty' });
-        }
-      }).catch((err) => {
-        res.send({ failure: 'Could not find User' });
-      });
-    } else {
-      res.send({ failure: 'Not Authenticated' });
-    }
+    User.findById(req.decoded.id).then((user) => {
+      if (req.body.oldPassword && req.body.newPassword && req.body.confirmNewPassword) {
+        bcrypt.compare(req.body.oldPassword, user.password_digest, (err, res2) => {
+          if (res2) {
+            user.update({
+              password: req.body.newPassword,
+              password_confirmation: req.body.confirmNewPassword,
+              username: req.body.username || user.username
+            }).then((count, row) => {
+              res.send({ success: true, message: 'Details Updated Successfully' });
+            });
+          } else {
+            res.status(400).send({ success: false, message: 'Incorrect Old Password' });
+          }
+        });
+      } else if (req.body.username) {
+        user.update({ username: req.body.username }).then((count, row) => {
+          res.send({ success: true, message: 'Name Updated Successfully' });
+        });
+      } else {
+        res.status(400).send({ success: false, message: 'Field(s) cannot be empty' });
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
   }),
 
   deleteUser: ((req, res) => {
-    if (req.query.id) {
-      User.findById(req.query.id).then((user) => {
-        user.destroy().then((deleted) => {
-          if (deleted) {
-            res.send({ success: 'User deleted Successfully' });
-          } else {
-            res.send({ success: 'Cannot delete user' });
-          }
-        });
+    User.findById(req.query.id).then((user) => {
+      user.destroy().then((deleted) => {
+        res.send({ success: true, message: 'User deleted Successfully' });
       }).catch((err) => {
-        res.send({ failure: 'Could not find User' });
+        res.status(500).send({ success: false, message: 'Unexpected error occured' });
       });
-    } else {
-      res.send({ failure: 'No ID provided' });
-    }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
   }),
 
   searchUser: ((req, res) => {

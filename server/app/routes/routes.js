@@ -24,14 +24,14 @@ module.exports = (app) => {
   app.put('/documents/id', auth.authentication, Documents.updateDocument);
   app.delete('/documents/id', auth.authentication, Documents.deleteDocument);
   app.get('/users/id/documents', auth.authentication, auth.verifyAdmin, Documents.findUserDocument);
-  // app.get('/users/documents', auth.authentication, Documents.findMyDocuments);
+  app.get('/documents/user', auth.authentication, Documents.userDocument);
   app.get('/documents/role', auth.authentication, Documents.getRoleAccess);
-  app.get('/documents/user', auth.authentication, Documents.userPublicDocument);
+  app.get('/documents/public', auth.authentication, Documents.publicDocument);
   app.get('/search/documents', auth.authentication, Documents.searchDocument);
 
   // Role Endpoints
   app.post('/roles', auth.authentication, auth.verifyAdmin, Roles.create);
-  app.get('/roles', auth.authentication, auth.verifyAdmin, Roles.getRoles);
+  app.get('/roles', Roles.getRoles);
   app.get('/users/roles', Roles.getUserRoles);
   app.delete('/roles/id', auth.authentication, auth.verifyAdmin, Roles.deleteRole);
 

@@ -7,17 +7,16 @@ import userDetails from '../helper/user';
 const expect = chai.expect;
 process.env.NODE_ENV = 'test';
 
+let user;
 describe('User Test Suite: ', () => {
-  let user, user2, userToken, userToken2, adminToken;
+  let user2, userToken, userToken2, adminToken;
   describe('Create User:', () => {
     it('checks if all fields were filled before creating a user', (done) => {
       request(app)
       .post('/users')
-      .send(userDetails.user3)
+      .send(userDetails.user0)
       .end((err, res) => {
-        user = res.body;
-        expect(res.status).to.equal(200);
-        expect(res.body.failure).to.equal('All fields must be filled');
+        expect(res.status).to.equal(400);
         done();
       });
     });
@@ -29,10 +28,11 @@ describe('User Test Suite: ', () => {
       .end((err, res) => {
         user = res.body;
         expect(res.status).to.equal(200);
-        expect(user.success).to.equal('User Created Successfully');
+        expect(user.message).to.equal('User Created Successfully');
         done();
       });
     });
+
 
     it('checks if created user is unique', (done) => {
       request(app)
@@ -45,8 +45,7 @@ describe('User Test Suite: ', () => {
         roleId: 2
       })
       .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body.failure).to.equal('User Email exists');
+        expect(res.status).to.equal(400);
         done();
       });
     });
@@ -65,7 +64,7 @@ describe('User Test Suite: ', () => {
         password: 'fissyTe',
       })
       .end((err, res) => {
-        expect(res.body.failure).to.equal('Incorrect Username/Password');
+        expect(res.body.message).to.equal('Invalid Username/Password');
         done();
       });
     });
@@ -78,7 +77,7 @@ describe('User Test Suite: ', () => {
         password: 'fissyTe',
       })
       .end((err, res) => {
-        expect(res.body.failure).to.equal('User not found, Kindly Signup to proceed');
+        expect(res.body.message).to.equal('User Not Registered, Kindly signup to proceed');
         done();
       });
     });
@@ -93,7 +92,7 @@ describe('User Test Suite: ', () => {
       .end((err, res) => {
         userToken = res.body.token;
         expect(userToken).to.not.be.undefined;
-        expect(res.body.success).to.equal('Successfully logged in');
+        expect(res.body.message).to.equal('Successfully logged in');
         done();
       });
     });
@@ -105,7 +104,7 @@ describe('User Test Suite: ', () => {
       .end((err, res) => {
         user2 = res.body;
         expect(res.status).to.equal(200);
-        expect(res.body.success).to.equal('User Created Successfully');
+        expect(res.body.message).to.equal('User Created Successfully');
         done();
       });
     });
@@ -129,7 +128,7 @@ describe('User Test Suite: ', () => {
       .post('/users/logout')
       .set('x-access-token', userToken)
       .end((err, res) => {
-        expect(res.body.success).to.equal('Successfully logged out');
+        expect(res.body.message).to.equal('Successfully logged out');
         done();
       });
     });
@@ -165,7 +164,7 @@ describe('User Test Suite: ', () => {
       .get('/users')
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.user).to.be.instanceof(Array);
+        expect(res.body.message).to.be.instanceof(Array);
         done();
       });
     });
@@ -186,9 +185,9 @@ describe('User Test Suite: ', () => {
       .get(`/users/id?id=${user.createdUser.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.user).to.be.instanceof(Object);
-        expect(res.body.user.id).to.be.a('number');
-        expect(res.body.user.username).to.be.a('string');
+        expect(res.body.message).to.be.instanceof(Object);
+        expect(res.body.message.id).to.be.a('number');
+        expect(res.body.message.username).to.be.a('string');
         done();
       });
     });
@@ -205,7 +204,7 @@ describe('User Test Suite: ', () => {
         confirmNewPassword: 'fissyChange'
       })
       .end((err, res) => {
-        expect(res.body.failure).to.equal('Incorrect Old Password');
+        expect(res.body.message).to.equal('Incorrect Old Password');
         done();
       });
     });
@@ -221,7 +220,7 @@ describe('User Test Suite: ', () => {
         confirmNewPassword: 'fissyChange'
       })
       .end((err, res) => {
-        expect(res.body.success).to.equal('Details Updated Successfully');
+        expect(res.body.message).to.equal('Details Updated Successfully');
         done();
       });
     });
@@ -243,7 +242,7 @@ describe('User Test Suite: ', () => {
       .delete(`/users/id?id=${user.createdUser.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.success).to.equal('User deleted Successfully');
+        expect(res.body.message).to.equal('User deleted Successfully');
         done();
       });
     });

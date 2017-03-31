@@ -4,8 +4,6 @@ import assert from 'assert';
 import app from '../../../serverTools/server';
 import userDetails from '../helper/user';
 
-process.env.NODE_ENV = 'test';
-
 const expect = chai.expect;
 describe('Document Test Suite: ', () => {
   let userToken, adminToken, document, userToken2;
@@ -26,7 +24,7 @@ describe('Document Test Suite: ', () => {
       });
     });
 
-    it('login to create a document', (done) => {
+    it('login to create a document', function (done)  {
       request(app)
       .post('/users/login')
       .send({
@@ -34,12 +32,13 @@ describe('Document Test Suite: ', () => {
         password: 'fissysecond'
       })
       .end((err, res) => {
+        console.log('response', res.body)
         userToken = res.body.token;
         expect(userToken).to.not.be.undefined;
-        expect(res.body.success).to.be.equal('Successfully logged in');
+        expect(res.body.message).to.be.equal('Successfully logged in');
         done();
       });
-    });
+    }).timeout(5000);
 
     it('Authenticated User can create a document', (done) => {
       request(app)
@@ -54,7 +53,7 @@ describe('Document Test Suite: ', () => {
       .end((err, res) => {
         document = res.body;
         expect(res.status).to.equal(200);
-        expect(document.success).to.equal('Document added Successfully');
+        expect(document.message).to.equal('Document added Successfully');
         done();
       });
     });
@@ -66,8 +65,8 @@ describe('Document Test Suite: ', () => {
       .get('/documents/role')
       .set('x-access-token', userToken)
       .end((err, res) => {
-        expect(res.body.document).to.be.instanceof(Array);
-        res.body.document.forEach((doc) => {
+        expect(res.body.message).to.be.instanceof(Array);
+        res.body.message.forEach((doc) => {
           expect(doc.access).to.not.be.undefined;
           expect(doc.id).to.be.a('number');
           expect(doc.content).to.be.a('string');
@@ -105,7 +104,7 @@ describe('Document Test Suite: ', () => {
       .get('/documents')
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.document).to.be.instanceof(Array);
+        expect(res.body.message).to.be.instanceof(Array);
         done();
       });
     });
@@ -126,8 +125,8 @@ describe('Document Test Suite: ', () => {
       .get('/documents')
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.document).to.be.instanceof(Array);
-        res.body.document.forEach((doc) => {
+        expect(res.body.message).to.be.instanceof(Array);
+        res.body.message.forEach((doc) => {
           expect(doc.createdAt).to.be.a('string');
         });
         done();
@@ -136,10 +135,10 @@ describe('Document Test Suite: ', () => {
 
     it('asserts that an authenticated user can see all public documents', (done) => {
       request(app)
-      .get('/documents/user')
+      .get('/documents/public')
       .set('x-access-token', userToken)
       .end((err, res) => {
-        expect(res.body.document).to.be.instanceof(Array);
+        expect(res.body.message).to.be.instanceof(Array);
         done();
       });
     });
@@ -149,9 +148,9 @@ describe('Document Test Suite: ', () => {
       .get(`/documents/id?id=${document.createdDocument.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.document).to.be.instanceof(Object);
-        expect(res.body.document.id).to.be.a('number');
-        expect(res.body.document.access).to.be.a('string');
+        expect(res.body.message).to.be.instanceof(Object);
+        expect(res.body.message.id).to.be.a('number');
+        expect(res.body.message.access).to.be.a('string');
         done();
       });
     });
@@ -171,8 +170,8 @@ describe('Document Test Suite: ', () => {
       .get(`/users/id/documents?userId=${document.createdDocument.userId}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
-        expect(res.body.document).to.be.instanceof(Array);
-        res.body.document.forEach((doc) => {
+        expect(res.body.message).to.be.instanceof(Array);
+        res.body.message.forEach((doc) => {
           expect(doc.access).to.be.a('string');
           expect(doc.id).to.be.a('number');
         });
@@ -180,19 +179,19 @@ describe('Document Test Suite: ', () => {
       });
     });
 
-    // it('All Documents of a user can be retrieved once the user logs in', (done) => {
-    //   request(app)
-    //   .get('/users/documents')
-    //   .set('x-access-token', userToken)
-    //   .end((err, res) => {
-    //     expect(res.body.document).to.be.instanceof(Array);
-    //     res.body.document.forEach((doc) => {
-    //       expect(doc.access).to.be.a('string');
-    //       expect(doc.id).to.be.a('number');
-    //     });
-    //     done();
-    //   });
-    // });
+    it('All Documents of a user can be retrieved once the user logs in', (done) => {
+      request(app)
+      .get('/documents/user')
+      .set('x-access-token', userToken)
+      .end((err, res) => {
+        expect(res.body.message).to.be.instanceof(Array);
+        res.body.message.forEach((doc) => {
+          expect(doc.access).to.be.a('string');
+          expect(doc.id).to.be.a('number');
+        });
+        done();
+      });
+    });
   });
 
   describe('Update Document:', () => {
@@ -206,7 +205,7 @@ describe('Document Test Suite: ', () => {
         content: 'I want to edit this Document',
       })
       .end((err, res) => {
-        expect(res.body.failure).to.equal('This Document is not yours and cannot be edited by you');
+        expect(res.body.message).to.equal('This Document is not yours and cannot be edited by you');
         done();
       });
     });
@@ -221,7 +220,7 @@ describe('Document Test Suite: ', () => {
         content: 'I just edited my Document',
       })
       .end((err, res) => {
-        expect(res.body.success).to.equal('Document updated Successfully');
+        expect(res.body.message).to.equal('Document updated Successfully');
         done();
       });
     });
@@ -238,7 +237,7 @@ describe('Document Test Suite: ', () => {
       .end((err, res) => {
         userToken2 = res.body.token;
         expect(userToken2).to.not.be.undefined;
-        expect(res.body.success).to.be.equal('Successfully logged in');
+        expect(res.body.message).to.be.equal('Successfully logged in');
         done();
       });
     });
@@ -248,7 +247,7 @@ describe('Document Test Suite: ', () => {
       .delete(`/documents/id?id=${document.createdDocument.id}`)
       .set('x-access-token', userToken2)
       .end((err, res) => {
-        expect(res.body.failure).to.equal('You do not have permission to delete this Document');
+        expect(res.body.message).to.equal('You do not have permission to delete this Document');
         done();
       });
     });
@@ -259,7 +258,7 @@ describe('Document Test Suite: ', () => {
       .delete(`/documents/id?id=${document.createdDocument.id}`)
       .set('x-access-token', userToken)
       .end((err, res) => {
-        expect(res.body.success).to.equal('Document deleted Successfully');
+        expect(res.body.message).to.equal('Document deleted Successfully');
         done();
       });
     });

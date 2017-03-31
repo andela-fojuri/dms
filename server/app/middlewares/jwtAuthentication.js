@@ -39,7 +39,7 @@ export default {
         }
       });
     } else {
-      res.send({ success: false, message: 'Failed to authenticate token.' });
+      res.status(403).send({ success: false, message: 'Failed to authenticate token.' });
     }
   })
 };
