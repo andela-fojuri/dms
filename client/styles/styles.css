@@ -166,4 +166,14 @@ width:100%;
   
   margin: 0 auto !important;
 }
+table{
+  margin-top: -24px
+}
+td{
+  width: 33.33%;
+}
+
+#forAdmin{
+  display: none
+}
 

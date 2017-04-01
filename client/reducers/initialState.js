@@ -1,8 +1,7 @@
 export default {
   manageRoles: { roles: [], editRole: {} },
-  loginDetails: {},
   signupDetails: {},
-  manageUsers: { users: [], editUser: {} },
+  manageUsers: { users: [], editUser: {}, userDetails: {} },
   manageDocuments: { document: [], documents: [], showDocument: {} },
 };
 

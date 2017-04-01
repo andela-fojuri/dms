@@ -38,10 +38,12 @@ class DocumentForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.showDocument.id !== nextProps.showDocument.id) {
-      this.setState(() =>
-        Object.assign({}, nextProps.showDocument)
-      );
+    if (this.props.showDocument) {
+      if (this.props.showDocument.id !== nextProps.showDocument.id) {
+        this.setState(() =>
+          Object.assign({}, nextProps.showDocument)
+        );
+      }
     }
   }
 
@@ -74,8 +76,6 @@ class DocumentForm extends React.Component {
   deleteDoc(id, index) {
     this.props.actions.deleteDocument(id, index).then(() => {
       this.props.actions.getDocuments();
-      this.props.actions.getPublicDocument();
-      this.props.actions.getRoleDocument();
     });
   }
 
@@ -87,11 +87,16 @@ class DocumentForm extends React.Component {
             <div className="card">
               <div className="card-content">
                 <div className="card-title activator ">
-                  <a name="myDoc" className="titleText grey-text">Document Title</a>
-                  <a className="ownerText grey-text">Owner</a>
-                  {/* <a className="right grey-text">Action</a>
-                  <a className="right grey-text">Date</a>*/}
-                  
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a name="myDoc" className="grey-text">Document Title</a> </td>
+                        <td><a className="grey-text">Owner</a></td>
+                        <td> <a className="right grey-text">Action</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -100,9 +105,20 @@ class DocumentForm extends React.Component {
                 <div className="card">
                   <div className="card-content">
                     <div className="card-title activator ">
-                      <a name="myDoc" className="grey-text " onClick={() => { this.getDocs(index); }}>{doc.title}</a>
-                      <a className="grey-text">{doc.User.username}</a>
-                      <a id="deleteIcon" name="delete" onClick={() => { this.deleteDoc(doc.id, index); }}><i className="material-icons right">delete</i></a>
+                      <table>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <a name="myDoc" className="grey-text " onClick={() => { this.getDocs(index); }}>{doc.title}</a>
+                            </td>
+                            <td><a className="grey-text">{doc.User.username}</a></td>
+                            <td>
+                              <a id="deleteIcon" name="delete" onClick={() => { this.deleteDoc(doc.id, index); }}><i className="material-icons right">delete</i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
                     </div>
                   </div>
                 </div>
@@ -169,6 +185,7 @@ DocumentForm.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  console.log(state);
   const documents = state.mydocument.documents;
   const showDocument = state.mydocument.showDocument;
   return {

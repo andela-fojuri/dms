@@ -14,21 +14,23 @@ class Search extends React.Component {
 
   onSearchChange(event) {
     const value = event.target.value;
-    console.log('value', value.length);
-    console.log(this.props.documents);
-    const currentDoc = this.props.documents;
-    let filtered = [];
-    const title = value.trim();
-    console.log(title.length);
-    if (title.length > 0) {
-      filtered = currentDoc.filter((doc) => {
-        return doc.title.includes(value);
-      });
-      console.log(filtered);
-      this.props.actions.getDocumentSuccess(filtered);
-    } else {
-      this.props.actions.getDocumentSuccess(currentDoc);
-    }
+    this.props.actions.searchDocument(value);
+    // const value = event.target.value;
+    // console.log('value', value.length);
+    // console.log(this.props.documents);
+    // const currentDoc = this.props.documents;
+    // let filtered = [];
+    // const title = value.trim();
+    // console.log(title.length);
+    // if (title.length > 0) {
+    //   filtered = currentDoc.filter((doc) => {
+    //     return doc.title.includes(value);
+    //   });
+    //   console.log(filtered);
+    //   this.props.actions.getDocumentSuccess(filtered);
+    // } else {
+    //   this.props.actions.getDocumentSuccess(currentDoc);
+    // }
   }
   render() {
     return (

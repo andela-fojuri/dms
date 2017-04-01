@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 import * as actions from './actionTypes';
 
 
@@ -19,8 +20,10 @@ export function getRoles() {
 }
 
 export function getAllRoles() {
-  return dispatch => axios.get('/roles').then((roles) => {
-    dispatch(getRolesSuccess(roles.data.message));
+  return dispatch => axios.get('/roles').then((response) => {
+    if (response.data.success) {
+      dispatch(getRolesSuccess(response.data.message));
+    }
   }).catch((error) => {
     throw (error);
   });
@@ -34,11 +37,12 @@ export function createRole(role) {
     headers: { 'x-access-token': localStorage.getItem('token') },
   };
   if (role.id !== '') {
-    requestObject = Object.assign({}, requestObject, { method: 'put', url: `/roles?id=${role.id}` });
+    requestObject = Object.assign({}, requestObject, { method: 'put', url: `/roles/${role.id}` });
   }
   return dispatch => axios(requestObject).then((response) => {
     if (response.data.success) {
       dispatch(createRoleSuccess(response.data.message));
+      browserHistory.push('/dashboard');
     } else {
       console.log(response.data);
     }

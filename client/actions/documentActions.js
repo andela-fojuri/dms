@@ -1,5 +1,6 @@
 import axios from 'axios';
 import toastr from 'toastr';
+import { browserHistory } from 'react-router';
 import * as actions from './actionTypes';
 
 
@@ -15,12 +16,17 @@ export function getRoleDocumentSuccess(documents) {
   return { type: actions.GET_ROLE_DOCUMENTS_SUCCESS, documents };
 }
 export function getDocuments() {
+  const id = localStorage.getItem('user');
   return dispatch => axios({
-    url: '/documents/user',
+    url: `/users/${id}/documents`,
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    dispatch(getDocumentSuccess(documents.data.message));
+  }).then((response) => {
+    if (response.data.success) {
+      console.log(response.data)
+      dispatch(getDocumentSuccess(response.data.message));
+      browserHistory.push('/dashboard');
+    }
   }).catch((error) => {
     throw (error);
   });
@@ -42,29 +48,48 @@ export function deleteDocumentSuccess(deleted, index) {
 }
 
 
+export function getAccessibleDocuments() {
+  return dispatch => axios({
+    url: '/user/documents',
+    method: 'get',
+    headers: { 'x-access-token': localStorage.getItem('token') }
+  }).then((response) => {
+    console.log(response.data);
+    if (response.data.success) {
+      dispatch(getDocumentSuccess(response.data.message));
+    }
+  }).catch((error) => {
+    console.log(error.response);
+    throw (error);
+  });
+}
 
 export function getPublicDocument() {
   return dispatch => axios({
-    url: '/documents/public',
+    url: '/public/documents',
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    dispatch(getDocumentSuccess(documents.data.message));
+  }).then((response) => {
+    console.log(response.data);
+    if (response.data.success) {
+      dispatch(getDocumentSuccess(response.data.message));
+    }
   }).catch((error) => {
+    console.log(error.response);
     throw (error);
   });
 }
 
 export function getRoleDocument() {
   return dispatch => axios({
-    url: '/documents/role',
+    url: '/role/documents',
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    console.log(documents);
-    dispatch(getDocumentSuccess(documents.data.message));
+  }).then((response) => {
+    if (response.data.success) {
+      dispatch(getDocumentSuccess(response.data.message));
+    }
   }).catch((error) => {
-    console.log(error.response);
     throw (error);
   });
 }
@@ -74,8 +99,10 @@ export function getAllDocuments() {
     url: '/documents',
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    dispatch(getDocumentSuccess(documents.data.message));
+  }).then((response) => {
+    if (response.data.success) {
+      dispatch(getDocumentSuccess(response.data.message));
+    }
   }).catch((error) => {
     throw (error);
   });
@@ -84,12 +111,13 @@ export function getAllDocuments() {
 
 export function deleteDocument(id, index) {
   return dispatch => axios({
-    url: `/documents/id?id=${id}`,
+    url: `/documents/${id}`,
     method: 'delete',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     if (response.data.success) {
-      dispatch(deleteDocumentSuccess(response.data.message, index));
+      toastr.success('Document deleted successfully');
+      // dispatch(deleteDocumentSuccess(response.data.message, index));
     } else {
       console.log(response.data);
     }
@@ -110,10 +138,13 @@ export function saveDocument(document) {
       { method: 'put', url: `/documents/id?id=${document.id}` });
   }
   return dispatch => axios(requestObj).then((response) => {
-    toastr.success(response.data.message);
-    dispatch(createDocumentSuccess());
+    if (response.data.success) {
+      toastr.success(response.data.message);
+      dispatch(createDocumentSuccess());
+      $('#modal1').modal('close');
+    }
   }, (error) => {
-    console.log( error.response.data);
+    console.log(error.response.data);
   }).catch((error) => {
     console.log('error', error.respose.data);
     // throw ('error', error);

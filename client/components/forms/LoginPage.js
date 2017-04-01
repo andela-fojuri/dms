@@ -20,8 +20,9 @@ class LoginPage extends React.Component {
 
   onClickLogin() {
     this.props.actions.loginUser(this.state.userLogin).then(() => {
-      this.context.router.push('/dashboard');
-      this.props.actions2.getDocuments();
+      this.props.actions2.getDocuments().then(() => {
+        // this.context.router.push('/dashboard');
+      });
       // this.props.actions2.getPublicDocument();
       // this.props.actions2.getRoleDocument();
     });
@@ -39,8 +40,8 @@ class LoginPage extends React.Component {
     return (
       <div>
         <LoginForm
-        onClick={this.onClickLogin}
-        onChange={this.updateLoginState}
+          onClick={this.onClickLogin}
+          onChange={this.updateLoginState}
         />
       </div>
     );
@@ -48,7 +49,6 @@ class LoginPage extends React.Component {
 }
 
 LoginPage.propTypes = {
-  loginDetails: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
   actions2: PropTypes.object.isRequired
 };
@@ -59,7 +59,7 @@ LoginPage.contextTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    loginDetails: state.loginToken
+    
   };
 }
 

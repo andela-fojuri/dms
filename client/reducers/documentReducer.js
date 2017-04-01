@@ -15,8 +15,8 @@ export default function roleReducer(state = initialState.manageDocuments, action
     case types.NEW_DOCUMENT:
       return Object.assign({}, state, { showDocument: action.empty });
     case types.DELETE_DOCUMENTS_SUCCESS:
-      state.documents.splice(action.index, 1);
-      return toastr.success(action.deleted);
+      toastr.success(action.deleted);
+      return state;
     default:
       return state;
   }

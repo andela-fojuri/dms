@@ -45,7 +45,7 @@ class UsersPage extends React.Component {
           <div className="modal-content">
             <div className="row">
               <form>
-                <h5>Sign Up</h5>
+                <h5>Edit User</h5>
                 <div className="row">
                   <TextInput
                     name="username"
@@ -65,31 +65,6 @@ class UsersPage extends React.Component {
                       onChange={this.onChangeUser}
                     />
                     <label htmlFor="email">Email</label>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="input-field col s12">
-                    <i className="material-icons prefix">https</i>
-                    <input
-                      type="password"
-                      name="password"
-                      className="validate"
-                      onChange={this.onChangeUser}
-                    />
-                    <label htmlFor="password">Password</label>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field col s12">
-                    <i className="material-icons prefix">https</i>
-                    <input
-                      type="password"
-                      name="password_confirmation"
-                      className="validate"
-                      onChange={this.onChangeUser}
-                    />
-                    <label htmlFor="confirmPassword">Confirm Password</label>
                   </div>
                 </div>
                 <div className="col s6">
@@ -119,12 +94,13 @@ class UsersPage extends React.Component {
 
 UsersPage.propTypes = {
   users: PropTypes.array.isRequired,
-  actions: PropTypes.func.isRequired,
+  actions: PropTypes.object.isRequired,
   roles: PropTypes.array.isRequired,
   editUser: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
+  console.log(state);
   const rolesDropdown = state.roles.roles.map(role => ({
     value: role.id,
     text: role.category,

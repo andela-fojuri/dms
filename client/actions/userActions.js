@@ -2,10 +2,7 @@ import axios from 'axios';
 import toastr from 'toastr';
 import jwt from 'jsonwebtoken';
 import * as types from './actionTypes';
-
-export function login(loginToken) {
-  return { type: types.USER_LOGIN_SUCCESS, loginToken };
-}
+import { browserHistory } from 'react-router';
 
 export function signUp(signupToken) {
   return { type: types.USER_SIGNUP_SUCCESS, signupToken };
@@ -19,6 +16,29 @@ export function getUsersSuccess(users) {
   return { type: types.GET_USERS_SUCCESS, users };
 }
 
+export function findUserSuccess(userDetails) {
+  return { type: types.FIND_USER_SUCCESS, userDetails };
+}
+
+export function loginUser(userLogin) {
+  return dispatch => axios({
+    method: 'post',
+    url: '/users/login',
+    data: userLogin
+  }).then((response) => {
+    if (response.data.success) {
+      toastr.success(response.data.message);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', response.data.user);
+      dispatch(findUser(localStorage.getItem('user')));
+    } else {
+      // console.log(response.data);
+    }
+  }).catch((error) => {
+    throw (error);
+  });
+}
+
 export function createUser(userSignup) {
   return dispatch => axios({
     method: 'post',
@@ -26,10 +46,7 @@ export function createUser(userSignup) {
     data: userSignup
   }).then((response) => {
     if (response.data.success) {
-      toastr.success(response.data.message);
-      localStorage.setItem('token', response.data.token);
-      const decodedToken = jwt.decode(response.data.token);
-      dispatch(signUp(decodedToken));
+      dispatch(loginUser(userSignup));
     } else {
       console.log(response.data);
     }
@@ -43,31 +60,25 @@ export function getUsers() {
     url: '/users',
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((users) => {
-    dispatch(getUsersSuccess(users.data.message));
+  }).then((response) => {
+    dispatch(getUsersSuccess(response.data.message));
   }).catch((error) => {
     throw (error);
   });
 }
 
-export function loginUser(userLogin) {
+export function findUser(id) {
   return dispatch => axios({
-    method: 'post',
-    url: '/users/login',
-    data: userLogin
+    url: `/users/${id}`,
+    method: 'get',
+    headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    if (response.data.success) {
-      console.log('headers', response.headers);
-      toastr.success(response.data.message);
-      localStorage.setItem('token', response.data.token);
-      const decodedToken = jwt.decode(response.data.token);
-      dispatch(login(decodedToken));
-      console.log(decodedToken);
-    } else {
-      console.log(response.data);
-    }
+    dispatch(findUserSuccess(response.data.message));
+    browserHistory.push('/dashboard');
   }).catch((error) => {
     throw (error);
   });
 }
+
+
 
