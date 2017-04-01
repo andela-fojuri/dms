@@ -8,9 +8,9 @@ const Role = index.Role;
 // route middleware to verify a token
 export default {
   authentication: ((req, res, next) => {
+   
     const token = req.headers.authorization || req.headers['x-access-token'];
-
-  // decode token
+    // decode token
     if (token) {
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if (err) {
@@ -29,15 +29,32 @@ export default {
 
   verifyAdmin: ((req, res, next) => {
     if (req.decoded) {
-      Role.findById(req.decoded.roleId).then((role) => {
-        if (role.category === 'SuperAdmin' || role.category === 'Admin') {
-          next();
-        } else {
-          res.send({
-            success: false,
-            message: 'Not authenticated as Super Admin' });
-        }
-      });
+      const { Role: { category } } = req.decoded;
+      if (category === 'SuperAdmin' || category === 'Admin') {
+        next();
+      } else {
+        res.send({
+          success: false,
+          message: 'Not authenticated as Super Admin'
+        });
+      }
+    } else {
+      res.status(403).send({ success: false, message: 'Failed to authenticate token.' });
+    }
+  }),
+
+  verifyAdminOrOwner: ((req, res, next) => {
+    const { id } = req.params;
+    if (req.decoded) {
+      const { Role: { category }, id: userId } = req.decoded;
+      if (category === 'SuperAdmin' || category === 'Admin' || Number(id) === userId) {
+        next();
+      } else {
+        res.send({
+          success: false,
+          message: 'Not authenticated as Super Admin or owner'
+        });
+      }
     } else {
       res.status(403).send({ success: false, message: 'Failed to authenticate token.' });
     }

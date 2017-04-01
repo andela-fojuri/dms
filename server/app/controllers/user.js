@@ -6,7 +6,7 @@ const User = index.User;
 const Role = index.Role;
 let allUsers = [];
 const Users = {
-  create: ((req, res) => {
+  create(req, res) {
     User.create({
       username: req.body.username || null,
       email: req.body.email || null,
@@ -28,19 +28,20 @@ const Users = {
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
     });
-  }),
+  },
 
-  login: ((req, res) => {
+  login(req, res) {
     User.findOne({
       where: { username: req.body.username },
       include: [{ model: Role }]
     }).then((user) => {
       if (user) {
         bcrypt.compare(req.body.password, user.password_digest, (err, res2) => {
+          // delete password
           if (res2) {
             const payload = JSON.stringify(user);
             const token = jwt.sign(payload, process.env.SECRET);
-            res.send({ success: true, message: 'Successfully logged in', token });
+            res.send({ success: true, message: 'Successfully logged in', token, user: user.id });
           } else {
             res.send({ success: false, message: 'Invalid Username/Password' });
           }
@@ -51,18 +52,18 @@ const Users = {
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
     });
-  }),
+  },
 
-  logout: ((req, res) => {
+  logout(req, res) {
     if (req.decoded.id) {
       User.findById(req.decoded.id).then((user) => {
         res.send({ success: true, message: 'Successfully logged out' });
       });
     }
-  }),
+  },
 
 
-  getUsers: ((req, res) => {
+  getUsers(req, res) {
     if (req.query.limit && req.query.offset) {
       User.findAll({ offset: req.query.offset, limit: req.query.limit }).then((users) => {
         res.send({ success: true, message: users });
@@ -83,19 +84,23 @@ const Users = {
         res.status(500).send({ success: false, message: 'Unexpected error occured' });
       });
     }
-  }),
+  },
 
-  findUser: ((req, res) => {
-    User.findById(req.query.id).then((foundUser) => {
-      res.send({ success: true, message: foundUser });
+  findUser(req, res) {
+    User.findOne({ where: { id: req.params.id }, include: [{ model: Role }] }).then((foundUser) => {
+      if (foundUser) {
+        res.send({ success: true, message: foundUser });
+      } else {
+        res.status(400).send({ success: false, message: 'Could not find user' });
+      }
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
     });
-  }),
+  },
 
 
-  updateUser: ((req, res) => {
-    User.findById(req.decoded.id).then((user) => {
+  updateUser(req, res) {
+    User.findById(req.params.id).then((user) => {
       if (req.body.oldPassword && req.body.newPassword && req.body.confirmNewPassword) {
         bcrypt.compare(req.body.oldPassword, user.password_digest, (err, res2) => {
           if (res2) {
@@ -120,10 +125,10 @@ const Users = {
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
     });
-  }),
+  },
 
-  deleteUser: ((req, res) => {
-    User.findById(req.query.id).then((user) => {
+  deleteUser(req, res) {
+    User.findById(req.params.id).then((user) => {
       user.destroy().then((deleted) => {
         res.send({ success: true, message: 'User deleted Successfully' });
       }).catch((err) => {
@@ -132,9 +137,9 @@ const Users = {
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
     });
-  }),
+  },
 
-  searchUser: ((req, res) => {
+  searchUser(req, res) {
     let users = [];
     let found = false;
     if (req.query.username) {
@@ -151,7 +156,7 @@ const Users = {
     } else {
       res.send({ success: false, message: 'Field cannot be empty' });
     }
-  })
+  }
 };
 
 export default Users;
