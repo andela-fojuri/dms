@@ -182,7 +182,7 @@ describe('User Test Suite: ', () => {
 
     it('asserts that authenticated user can see profile of a selected user', (done) => {
       request(app)
-      .get(`/users/id?id=${user.createdUser.id}`)
+      .get(`/users/${user.createdUser.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
         expect(res.body.message).to.be.instanceof(Object);
@@ -195,7 +195,7 @@ describe('User Test Suite: ', () => {
   describe('Update User:', () => {
     it('check that an authenticated user can update his/her profile with right details', (done) => {
       request(app)
-      .put('/users/id')
+      .put(`/users/${user.createdUser.id}`)
       .set('x-access-token', userToken)
       .send({
         username: 'FissyChange',
@@ -211,7 +211,7 @@ describe('User Test Suite: ', () => {
 
     it('check that an authenticated user can update his/her profile', (done) => {
       request(app)
-      .put('/users/id')
+      .put(`/users/${user.createdUser.id}`)
       .set('x-access-token', userToken)
       .send({
         username: 'FissyChange',
@@ -229,7 +229,7 @@ describe('User Test Suite: ', () => {
   describe('Delete User:', () => {
     it('checks that only a SuperAdmin/Admin can delete a user', (done) => {
       request(app)
-      .delete(`/users/id?id=${user.createdUser.id}`)
+      .delete(`/users/${user.createdUser.id}`)
       .set('x-access-token', userToken)
       .end((err, res) => {
         expect(res.body.message).to.equal('Not authenticated as Super Admin');
@@ -239,7 +239,7 @@ describe('User Test Suite: ', () => {
 
     it('Super Amin can delete a user', (done) => {
       request(app)
-      .delete(`/users/id?id=${user.createdUser.id}`)
+      .delete(`/users/${user.createdUser.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
         expect(res.body.message).to.equal('User deleted Successfully');
