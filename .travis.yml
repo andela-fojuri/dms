@@ -1,1 +1,4 @@
-npm test
+language: node_js
+node_js:
+  - "iojs"
+  - "6.9.4"
