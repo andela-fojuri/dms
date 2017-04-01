@@ -135,7 +135,7 @@ export function saveDocument(document) {
   };
   if (document.id !== '') {
     requestObj = Object.assign({}, requestObj,
-      { method: 'put', url: `/documents/id?id=${document.id}` });
+      { method: 'put', url: `/documents/${document.id}` });
   }
   return dispatch => axios(requestObj).then((response) => {
     if (response.data.success) {

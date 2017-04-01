@@ -60,9 +60,9 @@ describe('Document Test Suite: ', () => {
   });
 
   describe('Retrieve Document:', () => {
-    it('asserts that an authenticated user can see all documents accessible to the user', (done) => {
+    it('asserts that an authenticated user can see all  shared documents ', (done) => {
       request(app)
-      .get('/documents/role')
+      .get('/role/documents')
       .set('x-access-token', userToken)
       .end((err, res) => {
         expect(res.body.message).to.be.instanceof(Array);
@@ -135,7 +135,7 @@ describe('Document Test Suite: ', () => {
 
     it('asserts that an authenticated user can see all public documents', (done) => {
       request(app)
-      .get('/documents/public')
+      .get('/public/documents')
       .set('x-access-token', userToken)
       .end((err, res) => {
         expect(res.body.message).to.be.instanceof(Array);
@@ -145,7 +145,7 @@ describe('Document Test Suite: ', () => {
 
     it('asserts that authenticated user can see details of a selected document', (done) => {
       request(app)
-      .get(`/documents/id?id=${document.createdDocument.id}`)
+      .get(`/documents/${document.createdDocument.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
         expect(res.body.message).to.be.instanceof(Object);
