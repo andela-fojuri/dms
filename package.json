@@ -82,7 +82,9 @@
     "sequelize-cli": "^2.5.1",
     "toastr": "^2.1.2",
     "velocity-animate": "^1.5.0",
-    "webpack": "^1.13.0"
+    "webpack": "^1.13.0",
+    "webpack-dev-middleware": "^1.10.1",
+    "webpack-hot-middleware": "^2.17.1"
   },
   "devDependencies": {
     "axios": "^0.15.3",
