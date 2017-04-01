@@ -14,6 +14,10 @@
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helper/seed",
     "test:watch": "npm run test -- --watch"
   },
+  "engines": {
+    "node": "6.9.4",
+    "npm": "3.10.10"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andela-fojuri/dms.git"
