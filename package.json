@@ -10,7 +10,7 @@
     "lint": "node_modules/.bin/esw webpack.config.* client serverTools",
     "lint-watch": "npm run lint -- --watch",
     "test": "npm run db:test:seed && npm run thetest ",
-    "thetest": "NODE_ENV=test istanbul cover _mocha serverTools/testSetup.js \"server/tests/**/*.spec.js\" --timeout 5000",
+    "thetest": "NODE_ENV=test istanbul cover _mocha serverTools/testSetup.js \"server/tests/**/*.spec.js\"",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helper/seed",
     "test:watch": "npm run test -- --watch"
   },
