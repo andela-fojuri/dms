@@ -1,1 +1,1 @@
-web: babel-node serverTools/server.js
+web: node serverTools/server.js
