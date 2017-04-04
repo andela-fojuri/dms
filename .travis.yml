@@ -6,7 +6,7 @@ node_js:
 before_script:
   - npm install -g babel-cli
   - psql -c 'create database travis_ci_test;' -U postgres
-after_script:
+before_deploy:
   - npm run build
 deploy:
   provider: heroku
