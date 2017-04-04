@@ -1,9 +1,20 @@
+addons:
+  artifacts: true
 language: node_js
 node_js:
   - "6"
-before_install:
+before_script:
   - npm install -g babel-cli
   - psql -c 'create database travis_ci_test;' -U postgres
-
+after_script:
+  - npm run build
+deploy:
+  provider: heroku
+  api_key:
+    secure: 0997c645-d9fe-49be-ac06-4cb1a2e53cfd
+  app: manage-document
+  skip_cleanup: true
+  on:
+    all_branches: true
 services:
   - postgresql
