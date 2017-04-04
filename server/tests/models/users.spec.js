@@ -74,29 +74,29 @@ describe('User Model: ', () => {
       });
     });
 
-      describe('Unique Fields validation', () => {
-        uniqueFields.forEach((field) => {
-          it(`checks that ${field} must be unique`, (done) => {
-            user.save().then((createdUser) => {
-              userParams.roleId = createdUser.roleId;
-              return db.User.build(userParams).save();
-            }).catch((error) => {
-              expect(/SequelizeUniqueConstraintError/.test(error.name)).to.be.true;
-              done();
-            });
-          });
-        });
-      });
-
-      describe('Mail Validation', () => {
-        it('requires user mail to be an email', (done) => {
-          user.email = 'fisayo email';
-          user.save()
-          .catch((error) => {
-            expect(/Validation isEmail failed/.test(error.message)).to.be.true;
+    describe('Unique Fields validation', () => {
+      uniqueFields.forEach((field) => {
+        it(`checks that ${field} must be unique`, (done) => {
+          user.save().then((createdUser) => {
+            userParams.roleId = createdUser.roleId;
+            return db.User.build(userParams).save();
+          }).catch((error) => {
+            expect(/SequelizeUniqueConstraintError/.test(error.name)).to.be.true;
             done();
           });
         });
       });
+    });
+
+    describe('Mail Validation', () => {
+      it('requires user mail to be an email', (done) => {
+        user.email = 'fisayo email';
+        user.save()
+          .catch((error) => {
+            expect(/Validation isEmail failed/.test(error.message)).to.be.true;
+            done();
+          });
+      });
+    });
   });
 });

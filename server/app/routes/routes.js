@@ -4,36 +4,38 @@ import Documents from '../controllers/document';
 import Roles from '../controllers/role';
 import auth from '../middlewares/jwtAuthentication';
 
+const { authentication, verifyAdmin, verifyAdminOrOwner } = auth;
+
 module.exports = (app) => {
   // User Endpoints
   app.post('/users', Users.create);
   app.post('/users/login', Users.login);
-  app.post('/users/logout', auth.authentication, Users.logout);
-  app.get('/users', auth.authentication, auth.verifyAdmin, Users.getUsers);
-  app.get('/users/id', auth.authentication, Users.findUser);
+  app.post('/users/logout', authentication, Users.logout);
+  app.get('/users', authentication, verifyAdmin, Users.getUsers);
+  app.get('/users/:id', authentication, Users.findUser);
 
-  app.put('/users/id', auth.authentication, Users.updateUser);
-  app.delete('/users/id', auth.authentication, auth.verifyAdmin, Users.deleteUser);
-  app.get('/search/users', auth.authentication, auth.verifyAdmin, Users.searchUser);
+  app.put('/users/:id', authentication, verifyAdminOrOwner, Users.updateUser);
+  app.delete('/users/:id', authentication, verifyAdmin, Users.deleteUser);
+  app.get('/search/users', authentication, verifyAdmin, Users.searchUser);
 
   // Document Endpoints
-  app.post('/documents', auth.authentication, Documents.create);
-  app.get('/documents', auth.authentication, auth.verifyAdmin, Documents.getDocuments);
-  app.get('/documents/id', auth.authentication, Documents.findDocument);
+  app.post('/documents', authentication, Documents.create);
+  app.get('/documents', authentication, verifyAdmin, Documents.getDocuments);
+  app.get('/documents/:id', authentication, Documents.findDocument);
 
-  app.put('/documents/id', auth.authentication, Documents.updateDocument);
-  app.delete('/documents/id', auth.authentication, Documents.deleteDocument);
-  app.get('/users/id/documents', auth.authentication, auth.verifyAdmin, Documents.findUserDocument);
-  // app.get('/users/documents', auth.authentication, Documents.findMyDocuments);
-  app.get('/documents/role', auth.authentication, Documents.getRoleAccess);
-  app.get('/documents/user', auth.authentication, Documents.userPublicDocument);
-  app.get('/search/documents', auth.authentication, Documents.searchDocument);
+  app.put('/documents/:id', authentication, verifyAdminOrOwner, Documents.updateDocument);
+  app.delete('/documents/:id', authentication, Documents.deleteDocument);
+  app.get('/users/:id/documents', authentication, verifyAdminOrOwner, Documents.findUserDocument);
+  app.get('/user/documents', authentication, Documents.userDocument);
+  app.get('/role/documents', authentication, Documents.getRoleAccess);
+  app.get('/public/documents', authentication, Documents.publicDocument);
+  app.get('/search/documents', authentication, Documents.searchDocument);
 
   // Role Endpoints
-  app.post('/roles', auth.authentication, auth.verifyAdmin, Roles.create);
-  app.get('/roles', auth.authentication, auth.verifyAdmin, Roles.getRoles);
-  app.get('/users/roles', Roles.getUserRoles);
-  app.delete('/roles/id', auth.authentication, auth.verifyAdmin, Roles.deleteRole);
+  app.post('/roles', authentication, verifyAdmin, Roles.create);
+  app.get('/roles', Roles.getRoles);
+  app.get('/user/roles', Roles.getUserRoles);
+  app.delete('/roles/:id', authentication, verifyAdmin, Roles.deleteRole);
 
   // Search Endpoints
 };

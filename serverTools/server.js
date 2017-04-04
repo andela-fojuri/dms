@@ -1,8 +1,8 @@
-import express from 'express';
-import webpack from 'webpack';
-import path from 'path';
-import open from 'open';
-import config from '../webpack.config.dev';
+const express = require('express');
+const webpack = require('webpack');
+const path = require('path');
+const open = require('open');
+const config = require('../webpack.config.dev');
 
 require('dotenv').config();
 
@@ -40,4 +40,4 @@ app.listen(port, (err) => {
   }
 });
 
-export default app;
+module.exports = app;

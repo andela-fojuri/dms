@@ -10,14 +10,14 @@ const TextInput = ({ name, label, onChange, placeholder, value, error, icon }) =
           placeholder={placeholder}
           value={value}
           onChange={onChange} />
-    <label htmlFor={name}>{label}</label>
-    {error && <div className="alert alert-danger">{error}</div>}
+    <label htmlFor={name} data-error="wrong" data-success="right">{label}</label>
+    {error && <div>{error}</div>}
   </div>
   );
 
 TextInput.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   icon: PropTypes.string,
   placeholder: PropTypes.string,

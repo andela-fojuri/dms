@@ -7,6 +7,7 @@ const SelectInput = ({ name, label, onChange, defaultOption, value, error, optio
       <div className="row">
         {/* Note, value is set here rather than on the option - docs: https://facebook.github.io/react/docs/forms.html */}
         <select
+          id="selectInput"
           name={name}
           value={value}
           onChange={onChange}
@@ -25,11 +26,11 @@ const SelectInput = ({ name, label, onChange, defaultOption, value, error, optio
 
 SelectInput.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   defaultOption: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  error: PropTypes.string.isRequired,
+  value: PropTypes.number,
+  error: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 

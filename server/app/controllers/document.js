@@ -3,202 +3,210 @@ import index from '../models/index';
 const Document = index.Document;
 const User = index.User;
 const Role = index.Role;
-let roleAccess = [];
-let userDocuments = [];
-let allDocuments = [];
+let accessibleDocuments = [];
+
 const Documents = {
-  create: ((req, res) => {
-    if (req.body.title && req.body.content && req.decoded.id) {
-      Document.findOne({ where: { title: req.body.title, userId: req.decoded.id } }).then((document) => {
-        if (document) {
-          res.send({ alert: 'Docuement exist, Do you want to overrite? ' });
-        } else {
-          Document.create({ title: req.body.title,
-            content: req.body.content,
-            access: req.body.access || 'Public',
-            userId: req.decoded.id
-          }).then((createdDocument) => {
-            if (createdDocument) {
-              res.send({ success: 'Document added Successfully', createdDocument });
-            } else {
-              res.send({ failure: 'Cannot create document' });
-            }
-          });
-        }
-      });
-    } else {
-      res.send({ failure: 'All fields must be filled' });
-    }
-  }),
+  create(req, res) {
+    Document.create({
+      title: req.body.title || null,
+      content: req.body.content || null,
+      access: req.body.access || 'Public',
+      userId: req.decoded.id
+    }).then((createdDocument) => {
+      res.send({ success: true, message: 'Document added Successfully', createdDocument });
+    }, (error) => {
+      if (error.name === 'SequelizeValidationError') {
+        res.status(400).send({ success: false, message: error.message });
+      } else if (error.name === 'SequelizeUniqueConstraintError') {
+        res.status(400).send({ success: false, message: 'Title must be unique' });
+      } else {
+        res.status(400).send({ success: false, message: 'Unexpected error occured' });
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
+  },
 
-  getRoleAccess: ((req, res) => {
-    if (req.decoded) {
-      const roleDocuments = [];
-      const callback = () => {
-        roleAccess = roleDocuments;
-        res.send({ success: true, document: roleDocuments });
-      };
-      Document.findAll({ where: { access: 'Role' } }).then((documents) => {
-        documents.forEach((doc, index) => {
-          User.find({ where: { id: doc.userId } }).then((owner) => {
-            if (req.decoded.roleId == owner.roleId && owner.id != req.decoded.id) {
-              roleDocuments.push(doc);
-            }
-            if (index === documents.length - 1) {
-              callback();
-            }
-          }).catch((err) => {
-            res.send({ failure: 'User not found' });
-          });
+  getRoleAccess(req, res) {
+    const roleDocuments = [];
+    const callback = () => {
+      accessibleDocuments = roleDocuments;
+      res.send({ success: true, message: roleDocuments });
+    };
+    Document.findAll({ where: { access: 'Role' }, include: [{ model: User }] }).then((documents) => {
+      if (documents) {
+        documents.forEach((doc, indx) => {
+          if (req.decoded.roleId == doc.User.roleId && doc.User.id != req.decoded.id) {
+            roleDocuments.push(doc);
+          }
+          if (indx === documents.length - 1) {
+            callback();
+          }
         });
-      }).catch((err) => {
-        res.send({ failure: 'No Role Documents available' });
-      });
-    }
-  }),
+      } else {
+        callback();
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
+  },
 
-
-  getDocuments: ((req, res) => {
+  getDocuments(req, res) {
     if (req.query.limit && req.query.offset) {
-      Document.findAll({ offset: req.query.offset, limit: req.query.limit }).then((documents) => {
-        if (documents) {
-          res.send({ success: true, document: documents });
-        } else {
-          res.send({ failure: 'No Document found' });
-        }
+      Document.findAll({ offset: req.query.offset, limit: req.query.limit, include: [{ model: User }] }).then((documents) => {
+        res.send({ success: true, message: documents });
       });
     } else if (req.query.limit) {
       Document.findAll({ limit: req.query.limit }).then((documents) => {
-        if (documents) {
-          res.send({ success: true, document: documents });
-        } else {
-          res.send({ failure: 'No Document found' });
-        }
+        res.send({ success: true, message: documents });
       });
     } else if (req.query.offset) {
       Document.findAll({ offset: req.query.offset }).then((documents) => {
-        if (documents) {
-          res.send({ success: true, document: documents });
-        } else {
-          res.send({ failure: 'No Document found' });
-        }
+        res.send({ success: true, message: documents });
       });
     } else {
-      Document.findAll().then((documents) => {
-        if (documents) {
-          allDocuments = documents;
-          res.send({ success: true, document: documents });
-        } else {
-          res.send({ failure: 'No Document found' });
-        }
+      Document.findAll({ include: [{ model: User }] }).then((documents) => {
+        accessibleDocuments = documents;
+        res.send({ success: true, message: documents });
+      }).catch((err) => {
+        res.status(500).send({ success: false, message: 'Unexpected error occured' });
       });
     }
-  }),
-  findDocument: ((req, res) => {
-    if (req.query.id) {
-      Document.findById(req.query.id).then((foundDocument) => {
-        if (foundDocument) {
-          res.send({ success: true, document: foundDocument });
-        } else {
-          res.send({ failure: 'Document not found' });
-        }
-      });
-    } else {
-      res.send({ failure: 'Kindly provide an ID' });
-    }
-  }),
+  },
 
-  updateDocument: ((req, res) => {
-    if (req.query.id && req.decoded.id) {
-      Document.findById(req.query.id).then((foundDocument) => {
-        if (req.decoded.id == foundDocument.userId) {
-          foundDocument.update({ title: req.body.title || foundDocument.title,
+  findDocument(req, res) {
+    Document.findById(req.params.id).then((foundDocument) => {
+      res.send({ success: true, message: foundDocument });
+    }, (error) => {
+      if (!req.params.id) {
+        res.status(500).send({ success: false, message: 'Document Id required' });
+      }
+    }).catch((error) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
+  },
+
+  updateDocument(req, res) {
+    const roleId = req.decoded.roleId;
+    Role.findById(roleId).then((role) => {
+      Document.findById(req.params.id).then((foundDocument) => {
+        if (foundDocument.userId === req.decoded.id || role.category === 'SuperAdmin' || role.category === 'Admin') {
+          foundDocument.update({
+            title: req.body.title || foundDocument.title,
             content: req.body.content || foundDocument.content,
-            access: req.body.access || foundDocument.access }).then((row) => {
-              res.send({ success: 'Document updated Successfully' });
-            }).catch((err) => {
-              res.send({ failure: 'Unable to update Document at this time' });
-            });
+            access: req.body.access || foundDocument.access
+          }).then((row) => {
+            res.send({ success: true, message: 'Document updated Successfully' });
+          }, (error) => {
+            if (error.name === 'SequelizeUniqueConstraintError') {
+              res.status(400).send({ success: false, message: 'Invalid Title' });
+            } else {
+              res.status(400).send({ success: false, message: 'Unexpected error occured' });
+            }
+          });
         } else {
-          res.send({ failure: 'This Document is not yours and cannot be edited by you' });
+          res.send({ success: false, message: 'You do not have permission to update this Document' });
         }
+      }).catch((error) => {
+        res.status(500).send({ success: false, message: 'Unexpected error occured' });
       });
-    } else {
-      res.send({ failure: 'Document and UserId required' });
-    }
-  }),
+    });
+  },
 
-  deleteDocument: ((req, res) => {
-    if (req.query.id && req.decoded) {
-      const roleId = req.decoded.roleId;
-      Role.findById(roleId).then((role) => {
-        Document.findById(req.query.id).then((foundDocument) => {
-          if (foundDocument.userId == req.decoded.id || role.category === 'SuperAdmin' || role.category === 'Admin') {
-            foundDocument.destroy().then((deleted) => {
-              if (deleted) {
-                res.send({ success: 'Document deleted Successfully' });
-              }
-            });
-          } else {
-            res.send({ failure: 'You do not have permission to delete this Document' });
+  deleteDocument(req, res) {
+    const roleId = req.decoded.roleId;
+    Role.findById(roleId).then((role) => {
+      Document.findById(req.params.id).then((foundDocument) => {
+        if (foundDocument.userId === req.decoded.id || role.category === 'SuperAdmin' || role.category === 'Admin') {
+          foundDocument.destroy().then((deleted) => {
+            if (deleted) {
+              res.send({ success: true, message: 'Document deleted Successfully' });
+            }
+          });
+        } else {
+          res.send({ success: false, message: 'You do not have permission to delete this Document' });
+        }
+      }, (error) => {
+        if (!req.params.id) {
+          res.status(400).send({ success: false, message: 'Document Id required' });
+        }
+      }).catch((err) => {
+        res.status(500).send({ success: false, message: 'Unexpected error occured' });
+      });
+    });
+  },
+
+  findUserDocument(req, res) {
+    Document.findAll({
+      where: {
+        userId: req.params.id
+      },
+      include: [{ model: User }]
+    }).then((userDocuments) => {
+      if (userDocuments) {
+        accessibleDocuments = userDocuments;
+        res.send({ success: true, message: userDocuments });
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
+  },
+
+  publicDocument(req, res) {
+    Document.findAll({ where: { access: 'Public' }, include: [{ model: User }] }).then((documents) => {
+      if (documents) {
+        accessibleDocuments = documents;
+        res.send({ success: true, message: documents });
+      } else {
+        res.send({ success: true, message: [] });
+      }
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
+  },
+
+  userDocument(req, res) {
+    const roleDocuments = [];
+    const callback = () => {
+      accessibleDocuments = roleDocuments;
+      res.send({ success: true, message: roleDocuments });
+    };
+    Document.findAll({ where: { $or: [{ access: 'Public' }, { access: 'Role' }, { userId: req.decoded.id }] }, include: [{ model: User }] }).then((documents) => {
+      if (documents) {
+        documents.forEach((doc, indx) => {
+          if (req.decoded.roleId == doc.User.roleId) {
+            roleDocuments.push(doc);
           }
-        }).catch((err) => {
-          res.send({ failure: 'Document not found' });
+          if (indx === documents.length - 1) {
+            callback();
+          }
         });
-      });
-    } else {
-      res.send({ failure: 'No ID provided' });
-    }
-  }),
+      } else {
+        callback();
+      }
+    }).catch((err) => {
+      res.status(503).send({ success: false, message: 'Unexpected error occured' });
+    });
+  },
 
-  findUserDocument: ((req, res) => {
-    if (req.query.userId) {
-      Document.findAll({ where: { userId: req.query.userId } }).then((userDocuments) => {
-        if (userDocuments) {
-          res.send({ success: true, document: userDocuments });
-        } else {
-          res.send({ failure: 'Unable to fectch Documents' });
-        }
-      });
-    } else {
-      res.send({ failure: 'ID required' });
-    }
-  }),
-
-
-  userPublicDocument: ((req, res) => {
-    if (req.decoded.id) {
-      Document.findAll({ where: { $or: [{ userId: req.decoded.id }, { access: 'Public' }] } }).then((documents) => {
-        if (documents) {
-          userDocuments = documents;
-          res.send({ success: true, document: documents });
-        } else {
-          res.send({ failure: 'No Document found' });
-        }
-      });
-    } else {
-      res.send({ failure: 'ID required' });
-    }
-  }),
-
-  searchDocument: ((req, res) => {
-    let accessibleDocuments = [];
-    let found;
+  searchDocument(req, res) {
     if (req.query.title) {
-      accessibleDocuments = accessibleDocuments.concat(allDocuments, roleAccess, userDocuments);
-      accessibleDocuments.forEach((document) => {
-        if (req.query.title === document.title) {
-          res.send({ success: true, message: document });
-          found = true;
-        }
-      });
-      if (!found) {
-        res.send({ success: false, message: 'Document not found' });
+      let searchItem = req.query.title;
+      let filtered = [];
+      searchItem = searchItem.trim();
+      const fil = accessibleDocuments;
+      if (searchItem.length > 0) {
+        filtered = fil.filter((doc) => {
+          return doc.title.includes(searchItem);
+        });
+        res.send({ success: true, message: filtered });
+      } else {
+        res.send({ success: true, message: accessibleDocuments });
       }
     } else {
-      res.send({ success: false, message: 'Field cannot be empty' });
+      res.send({ success: true, message: accessibleDocuments });
     }
-  })
+  }
 };
 
 export default Documents;
