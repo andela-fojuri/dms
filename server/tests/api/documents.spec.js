@@ -55,7 +55,7 @@ describe('Document Test Suite: ', () => {
           expect(document.message).to.equal('Document added Successfully');
           done();
         });
-    });
+    }).timeout(10000);
   });
 
   describe('Retrieve Document:', () => {
