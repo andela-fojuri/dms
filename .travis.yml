@@ -1,8 +1,9 @@
 language: node_js
 node_js:
   - "6"
-before_script:
+before_install:
   - npm install -g babel-cli
-  - psql -c 'create database dmsTest;' -U postgres
+  - psql -c 'create database travis_ci_test;' -U postgres
+
 services:
   - postgresql
