@@ -8,8 +8,8 @@
     "start": "npm-run-all --parallel open:client lint-watch test:watch",
     "build": "npm-run-all copy:dist build:webpack dist:server",
     "copy:dist": "rm -rf dist && mkdir dist && cp client/index.html serverTools/distServer.js dist",
-    "build:webpack":"node_modules/.bin/webpack --config webpack.config.prod.js",
-    "dist:server":"babel ./server -d ./dist/server -D --ignore ./server/tests",
+    "build:webpack": "node_modules/.bin/webpack --config webpack.config.prod.js",
+    "dist:server": "babel ./server -d ./dist/server -D --ignore ./server/tests",
     "open:client": "babel-node serverTools/server.js",
     "lint": "node_modules/.bin/esw webpack.config.* client serverTools",
     "lint-watch": "npm run lint -- --watch",
@@ -35,6 +35,7 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "bcrypt": "^1.0.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.16.1",
     "bootstrap": "^3.3.6",
     "chai": "^3.5.0",
