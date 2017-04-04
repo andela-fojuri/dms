@@ -5,7 +5,6 @@ import app from '../../../serverTools/server';
 import userDetails from '../helper/user';
 
 const expect = chai.expect;
-process.env.NODE_ENV = 'test';
 
 let user;
 describe('User Test Suite: ', () => {

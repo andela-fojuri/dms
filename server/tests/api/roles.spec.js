@@ -5,7 +5,7 @@ import app from '../../../serverTools/server';
 import userDetails from '../helper/user';
 
 const expect = chai.expect;
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
 describe('Role Test Suite: ', () => {
   let userToken, adminToken, role;
