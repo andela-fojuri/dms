@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - "6"
+before_script:
+  - npm install -g babel-node
+  - psql -c 'create database travis_db_test;' -U postgres
+services:
+  - postgresql
