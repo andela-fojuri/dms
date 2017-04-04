@@ -4,7 +4,6 @@ const Document = index.Document;
 const User = index.User;
 const Role = index.Role;
 let accessibleDocuments = [];
-let allDocuments = [];
 
 const Documents = {
   create(req, res) {
@@ -31,6 +30,7 @@ const Documents = {
   getRoleAccess(req, res) {
     const roleDocuments = [];
     const callback = () => {
+      accessibleDocuments = roleDocuments;
       res.send({ success: true, message: roleDocuments });
     };
     Document.findAll({ where: { access: 'Role' }, include: [{ model: User }] }).then((documents) => {
@@ -66,7 +66,7 @@ const Documents = {
       });
     } else {
       Document.findAll({ include: [{ model: User }] }).then((documents) => {
-        allDocuments = documents;
+        accessibleDocuments = documents;
         res.send({ success: true, message: documents });
       }).catch((err) => {
         res.status(500).send({ success: false, message: 'Unexpected error occured' });
@@ -144,6 +144,7 @@ const Documents = {
       include: [{ model: User }]
     }).then((userDocuments) => {
       if (userDocuments) {
+        accessibleDocuments = userDocuments;
         res.send({ success: true, message: userDocuments });
       }
     }).catch((err) => {
@@ -154,6 +155,7 @@ const Documents = {
   publicDocument(req, res) {
     Document.findAll({ where: { access: 'Public' }, include: [{ model: User }] }).then((documents) => {
       if (documents) {
+        accessibleDocuments = documents;
         res.send({ success: true, message: documents });
       } else {
         res.send({ success: true, message: [] });
@@ -192,12 +194,17 @@ const Documents = {
       let searchItem = req.query.title;
       let filtered = [];
       searchItem = searchItem.trim();
+      const fil = accessibleDocuments;
       if (searchItem.length > 0) {
-        filtered = accessibleDocuments.filter((doc) => {
+        filtered = fil.filter((doc) => {
           return doc.title.includes(searchItem);
         });
         res.send({ success: true, message: filtered });
+      } else {
+        res.send({ success: true, message: accessibleDocuments });
       }
+    } else {
+      res.send({ success: true, message: accessibleDocuments });
     }
   }
 };

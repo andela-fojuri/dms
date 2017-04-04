@@ -140,21 +140,21 @@ const Users = {
   },
 
   searchUser(req, res) {
-    let users = [];
-    let found = false;
     if (req.query.username) {
-      users = users.concat(allUsers);
-      users.forEach((user) => {
-        if (req.query.username === user.username) {
-          res.send({ success: true, message: user });
-          found = true;
-        }
-      });
-      if (!found) {
-        res.send({ success: false, message: 'User not found' });
+      let searchItem = req.query.username;
+      let filtered = [];
+      searchItem = searchItem.trim();
+      const fil = allUsers;
+      if (searchItem.length > 0) {
+        filtered = fil.filter((user) => {
+          return user.username.includes(searchItem);
+        });
+        res.send({ success: true, message: filtered });
+      } else {
+        res.send({ success: true, message: allUsers });
       }
     } else {
-      res.send({ success: false, message: 'Field cannot be empty' });
+      res.send({ success: true, message: allUsers });
     }
   }
 };
