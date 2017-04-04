@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import * as documentActions from '../../actions/documentActions';
 import * as userActions from '../../actions/userActions';
 import * as roleActions from '../../actions/roleActions';
+import * as componentActions from '../../actions/componentActions';
 import userImage from '../../images/user2.jpeg';
+
 
 class DashboardMenu extends React.Component {
   constructor(props, context) {
@@ -20,10 +23,29 @@ class DashboardMenu extends React.Component {
     this.getAllDoc = this.getAllDoc.bind(this);
     this.getAccessDoc = this.getAccessDoc.bind(this);
   }
+  componentDidMount() {
+    // $(document).ready(() => {
+    $('.modal').modal();
+    $('.button-collapse').sideNav();
+    $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false, // Does not change width of dropdown to that of the activator
+      hover: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: true, // Displays dropdown below the button
+      alignment: 'left', // Displays dropdown with edge aligned to the left of button
+      // stopPropagation: false // Stops event propagation
+    }
+    );
+    // ]});
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.user.Role || nextProps.user.Role) {
       if (nextProps.user.Role.category === 'SuperAdmin' || nextProps.user.Role.category === 'Admin') {
         document.getElementById('forAdmin').style.display = 'block';
+        document.getElementById('forUser').style.display = 'none';
       }
     }
   }
@@ -40,29 +62,26 @@ class DashboardMenu extends React.Component {
     this.props.actions.getDocuments();
   }
 
-  showModal() {
-    this.props.actions.newDocument({ title: '', access: '', content: '', id: '' });
-    $('#modal1').modal('open');
-  }
-
   createRoleModal() {
     if (this.props.user.Role.category === 'SuperAdmin' || this.props.user.Role.category === 'Admin') {
       this.props.actions3.editRole({ category: '', id: '' });
-      $('#modal2').modal('open');
+      $('#editRole').modal('open');
     } else {
       toastr.error('You are not Authorized to view this page');
     }
   }
 
   showUsers() {
+    // this.context.router.push('/dashboard/users');
     this.props.actions2.getUsers().then(() => {
-      $('#usersModal').modal('open');
+      this.props.actions4.showUserComponent();
     });
   }
 
   showRoles() {
     this.props.actions3.getRoles().then(() => {
-      $('#modal3').modal('open');
+      this.props.actions4.showRoleComponent();
+      $('#rolesModal').modal('open');
     });
   }
 
@@ -72,6 +91,11 @@ class DashboardMenu extends React.Component {
 
   getAccessDoc() {
     this.props.actions.getAccessibleDocuments();
+  }
+
+  showModal() {
+    $('#modal1').modal('open');
+    this.props.actions.newDocument({ title: '', access: '', content: '', id: '' });
   }
 
   render() {
@@ -90,7 +114,7 @@ class DashboardMenu extends React.Component {
               </div>
             </li>
             <li><a name="create" onClick={this.showModal} ><i className="material-icons">add</i>New Doc</a></li>
-            <li><a name="anyone" onClick={this.getAccessDoc} >Owned By Anyone</a></li>
+            <li id="forUser"><a name="anyone" onClick={this.getAccessDoc} >Owned By Anyone</a></li>
             <li><a name="myDoc" onClick={this.getMyDoc} >Owned By me</a></li>
             <li><a name="PublicDoc" onClick={this.getPublicDoc}>Public</a></li>
             <li><a name="shared" onClick={this.getSharedDoc} >Shared</a></li>
@@ -111,9 +135,14 @@ DashboardMenu.propTypes = {
   actions: PropTypes.object.isRequired,
   actions2: PropTypes.object.isRequired,
   actions3: PropTypes.object.isRequired,
+  actions4: PropTypes.object.isRequired,
   showDocument: PropTypes.object.isRequired,
   user: PropTypes.object,
   onChange: PropTypes.func
+};
+
+DashboardMenu.contextTypes = {
+  router: PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {
@@ -131,7 +160,8 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     actions: bindActionCreators(documentActions, dispatch),
     actions2: bindActionCreators(userActions, dispatch),
-    actions3: bindActionCreators(roleActions, dispatch)
+    actions3: bindActionCreators(roleActions, dispatch),
+    actions4: bindActionCreators(componentActions, dispatch)
   };
 }
 

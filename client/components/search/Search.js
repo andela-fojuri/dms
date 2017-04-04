@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as documentActions from '../../actions/documentActions';
+import * as userActions from '../../actions/userActions';
 
 class Search extends React.Component {
   constructor(props, context) {
@@ -14,23 +15,12 @@ class Search extends React.Component {
 
   onSearchChange(event) {
     const value = event.target.value;
-    this.props.actions.searchDocument(value);
-    // const value = event.target.value;
-    // console.log('value', value.length);
-    // console.log(this.props.documents);
-    // const currentDoc = this.props.documents;
-    // let filtered = [];
-    // const title = value.trim();
-    // console.log(title.length);
-    // if (title.length > 0) {
-    //   filtered = currentDoc.filter((doc) => {
-    //     return doc.title.includes(value);
-    //   });
-    //   console.log(filtered);
-    //   this.props.actions.getDocumentSuccess(filtered);
-    // } else {
-    //   this.props.actions.getDocumentSuccess(currentDoc);
-    // }
+    if (this.props.showDoc) {
+      this.props.actions.searchDocument(value);
+    } else if (this.props.showUsers) {
+      this.props.actions2.searchUser(value);
+    }
+
   }
   render() {
     return (
@@ -50,21 +40,29 @@ class Search extends React.Component {
 
 Search.propTypes = {
   actions: PropTypes.object.isRequired,
-  documents: PropTypes.array.isRequired
+  actions2: PropTypes.object.isRequired,
+  documents: PropTypes.array.isRequired,
+  showDoc: PropTypes.bool.isRequired,
+  showUsers: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
   const documents = state.mydocument.documents;
   const showDocument = state.mydocument.showDocument;
+  const showDoc = state.components.showDoc;
+  const showUsers = state.components.showUsers;
   return {
     documents,
-    showDocument
+    showDocument,
+    showDoc,
+    showUsers
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    actions: bindActionCreators(documentActions, dispatch)
+    actions: bindActionCreators(documentActions, dispatch),
+    actions2: bindActionCreators(userActions, dispatch)
   };
 }
 

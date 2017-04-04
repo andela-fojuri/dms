@@ -62,7 +62,6 @@ width:100%;
 #signup{
   margin: 0 auto;
   text-align:center !important;
-  margin-top: 100px;
   background-color: whitesmoke !important;
   width: 38%;
   height: auto;
@@ -84,6 +83,7 @@ width:100%;
 }
 .fr-wrapper {
   height: 300px !important; 
+  margin: 0 auto !important;
   overflow-y: scroll;
   margin-bottom: 20px;
 }
@@ -104,10 +104,9 @@ width:100%;
   margin: 0 auto;
   margin-top: 5% !important;
   width: 80%;
+  overflow-y: scroll;
 }
-#backBtn{
-  float: left
-}
+
 #createBtn{
   float: right
 }

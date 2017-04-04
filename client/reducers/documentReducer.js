@@ -10,7 +10,6 @@ export default function roleReducer(state = initialState.manageDocuments, action
     case types.CREATE_DOCUMENTS_SUCCESS:
       return Object.assign({}, state);
     case types.SHOW_DOCUMENT:
-      $('#modal1').modal('open');
       return Object.assign({}, state, { showDocument: action.show });
     case types.NEW_DOCUMENT:
       return Object.assign({}, state, { showDocument: action.empty });

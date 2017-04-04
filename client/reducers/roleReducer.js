@@ -8,7 +8,6 @@ export default function roleReducer(state = initialState.manageRoles, action) {
     case types.CREATE_ROLES_SUCCESS:
       return action.roleCreated;
     case types.SHOW_EDITABLE_ROLE:
-      $('#modal2').modal('open');
       return Object.assign({}, state, { editRole: action.role });
     default:
       return state;

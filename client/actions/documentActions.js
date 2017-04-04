@@ -2,7 +2,10 @@ import axios from 'axios';
 import toastr from 'toastr';
 import { browserHistory } from 'react-router';
 import * as actions from './actionTypes';
+import { showDocComponent } from './componentActions';
+import configureStore from '../store/configureStore';
 
+const store = configureStore();
 
 export function getDocumentSuccess(documents) {
   return { type: actions.GET_DOCUMENTS_SUCCESS, documents };
@@ -23,11 +26,14 @@ export function getDocuments() {
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     if (response.data.success) {
-      console.log(response.data)
       dispatch(getDocumentSuccess(response.data.message));
+      dispatch(showDocComponent());
       browserHistory.push('/dashboard');
     }
+  }, (error) => {
+    toastr.error('An unexpected error occured');
   }).catch((error) => {
+    toastr.error('An unexpected error occured');
     throw (error);
   });
 }
@@ -41,12 +47,12 @@ export function showDocument(show) {
 }
 
 export function newDocument(empty) {
+  store.dispatch(showDocComponent());
   return { type: actions.NEW_DOCUMENT, empty };
 }
 export function deleteDocumentSuccess(deleted, index) {
   return { type: actions.DELETE_DOCUMENTS_SUCCESS, deleted, index };
 }
-
 
 export function getAccessibleDocuments() {
   return dispatch => axios({
@@ -54,12 +60,14 @@ export function getAccessibleDocuments() {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    console.log(response.data);
     if (response.data.success) {
       dispatch(getDocumentSuccess(response.data.message));
+      dispatch(showDocComponent());
     }
+  }, () => {
+    toastr.error('An unexpected error occured');
   }).catch((error) => {
-    console.log(error.response);
+    toastr.error('An unexpected error occured');
     throw (error);
   });
 }
@@ -70,12 +78,14 @@ export function getPublicDocument() {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    console.log(response.data);
     if (response.data.success) {
       dispatch(getDocumentSuccess(response.data.message));
+      dispatch(showDocComponent());
     }
+  }, () => {
+    toastr.error('An unexpected error occured');
   }).catch((error) => {
-    console.log(error.response);
+    toastr.error('An unexpected error occured');
     throw (error);
   });
 }
@@ -88,8 +98,12 @@ export function getRoleDocument() {
   }).then((response) => {
     if (response.data.success) {
       dispatch(getDocumentSuccess(response.data.message));
+      dispatch(showDocComponent());
     }
+  }, () => {
+    toastr.error('An unexpected error occured');
   }).catch((error) => {
+    toastr.error('An unexpected error occured');
     throw (error);
   });
 }
@@ -102,14 +116,18 @@ export function getAllDocuments() {
   }).then((response) => {
     if (response.data.success) {
       dispatch(getDocumentSuccess(response.data.message));
+      dispatch(showDocComponent());
     }
+  }, () => {
+    toastr.error('An unexpected error occured');
   }).catch((error) => {
+    toastr.error('An unexpected error occured');
     throw (error);
   });
 }
 
 
-export function deleteDocument(id, index) {
+export function deleteDocument(id) {
   return dispatch => axios({
     url: `/documents/${id}`,
     method: 'delete',
@@ -117,11 +135,13 @@ export function deleteDocument(id, index) {
   }).then((response) => {
     if (response.data.success) {
       toastr.success('Document deleted successfully');
-      // dispatch(deleteDocumentSuccess(response.data.message, index));
     } else {
-      console.log(response.data);
+      toastr.error('You do not have permission to delete this Document');
     }
+  }, () => {
+    toastr.error('An unexpected error occured');
   }).catch((error) => {
+    toastr.error('An unexpected error occured');
     throw (error);
   });
 }
@@ -144,10 +164,20 @@ export function saveDocument(document) {
       $('#modal1').modal('close');
     }
   }, (error) => {
-    console.log(error.response.data);
+    if (!document.title && !document.content) {
+      toastr.error('Document Title/Content required');
+    } else if (!document.content) {
+      toastr.warning('Document Content required');
+    } else if (!document.title) {
+      toastr.warning('Document Title required');
+    } else if (error.response.data.message === 'Title must be unique') {
+      toastr.warning('Invalid Title');
+    } else {
+      toastr.error('An unexpected error occured');
+    }
   }).catch((error) => {
-    console.log('error', error.respose.data);
-    // throw ('error', error);
+    toastr.error('An unexpected error occured');
+    throw (error);
   });
 }
 

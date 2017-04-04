@@ -37,6 +37,24 @@ class DocumentForm extends React.Component {
     this.deleteDoc = this.deleteDoc.bind(this);
   }
 
+  componentDidMount() {
+    // $(document).ready(() => {
+    $('.modal').modal();
+    $('.button-collapse').sideNav();
+    $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false, // Does not change width of dropdown to that of the activator
+      hover: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: true, // Displays dropdown below the button
+      alignment: 'left', // Displays dropdown with edge aligned to the left of button
+      // stopPropagation: false // Stops event propagation
+    }
+    );
+    // ]});
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.showDocument) {
       if (this.props.showDocument.id !== nextProps.showDocument.id) {
@@ -61,6 +79,7 @@ class DocumentForm extends React.Component {
 
   getDocs(index) {
     this.props.actions.showDocument(Object.assign({}, this.props.documents[index]));
+    $('#modal1').modal('open');
   }
 
   handleModelChange(model) {
@@ -73,8 +92,8 @@ class DocumentForm extends React.Component {
     this.setState(() => ({ [field]: value }));
   }
 
-  deleteDoc(id, index) {
-    this.props.actions.deleteDocument(id, index).then(() => {
+  deleteDoc(id) {
+    this.props.actions.deleteDocument(id).then(() => {
       this.props.actions.getDocuments();
     });
   }
@@ -113,7 +132,8 @@ class DocumentForm extends React.Component {
                             </td>
                             <td><a className="grey-text">{doc.User.username}</a></td>
                             <td>
-                              <a id="deleteIcon" name="delete" onClick={() => { this.deleteDoc(doc.id, index); }}><i className="material-icons right">delete</i></a>
+                              <a id="deleteIcon" name="delete" onClick={() => { this.deleteDoc(doc.id); }}><i className="material-icons right">delete</i></a>
+                              <a id="editIcon" name="edit" onClick={() => { this.getDocs(index); }}><i className="material-icons right">mode_edit</i></a>
                             </td>
                           </tr>
                         </tbody>
@@ -134,8 +154,10 @@ class DocumentForm extends React.Component {
                     <div className="col s6">
                       <TextInput
                         name="title"
+                        label="Title"
                         onChange={this.updateDocumentState}
-                        value={this.state.title}
+                        value={this.state.title || ''}
+                        placeholder="Enter title"
                       />
                     </div>
                     <div className="col s6">
@@ -166,7 +188,6 @@ class DocumentForm extends React.Component {
                       onClick={this.onClickSave}
                     />
                   </div>
-
                 </form>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toastr from 'toastr';
 import { browserHistory } from 'react-router';
 import * as actions from './actionTypes';
 
@@ -42,7 +43,7 @@ export function createRole(role) {
   return dispatch => axios(requestObject).then((response) => {
     if (response.data.success) {
       dispatch(createRoleSuccess(response.data.message));
-      browserHistory.push('/dashboard');
+      $('#editRole').modal('close');
     } else {
       console.log(response.data);
     }
@@ -54,4 +55,20 @@ export function createRole(role) {
 
 export function editRole(role) {
   return { type: actions.SHOW_EDITABLE_ROLE, role };
+}
+
+export function deleteRole(id) {
+  return dispatch => axios({
+    url: `/roles/${id}`,
+    method: 'delete',
+    headers: { 'x-access-token': localStorage.getItem('token') }
+  }).then((response) => {
+    if (response.data.success) {
+      toastr.success('Role deleted successfully');
+    } else {
+      console.log(response.data);
+    }
+  }).catch((error) => {
+    throw (error);
+  });
 }

@@ -14,79 +14,69 @@ class DashboardPage extends React.Component {
     super(props, context);
 
     this.state = {
-      showDoc: false,
-      document: {}
+      showDoc: props.showDoc,
+      showUsers: props.showUsers,
+      showRoles: props.showRoles
     };
-
-    this.updateStatus = this.updateStatus.bind(this);
-    this.updateDocumentState = this.updateDocumentState.bind(this);
-    this.onClickDocument = this.onClickDocument.bind(this);
-    this.getContentValue = this.getContentValue.bind(this);
   }
 
-  componentDidMount() {
-    // $(document).ready(() => {
-    $('.modal').modal();
-    $('.button-collapse').sideNav();
-    $('.dropdown-button').dropdown({
-      inDuration: 300,
-      outDuration: 225,
-      constrainWidth: false, // Does not change width of dropdown to that of the activator
-      hover: true, // Activate on hover
-      gutter: 0, // Spacing from edge
-      belowOrigin: true, // Displays dropdown below the button
-      alignment: 'left', // Displays dropdown with edge aligned to the left of button
-      // stopPropagation: false // Stops event propagation
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.showDoc !== this.props.showDoc) {
+      this.setState(() =>
+        Object.assign({}, { showDoc: nextProps.showDoc })
+      );
     }
-    );
-    // ]});
-  }
-
-  onClickDocument(event, id) {
-    const field = event.currentTarget.name;
-    if (field === 'back') {
-      this.context.router.push('/dashboard');
-    } else if (field === 'create') {
-      this.props.actions.createDocument(this.state.document);
+    if (nextProps.showUsers !== this.props.showUsers) {
+      this.setState(() =>
+        Object.assign({}, { showUsers: nextProps.showUsers })
+      );
     }
-  }
-
-  updateStatus(event) {
-    console.log(event.currentTarget.name);
-    const field = event.currentTarget.name;
-  }
-
-  updateDocumentState(event) {
-    const field = event.target.name;
-    const document = this.state.document;
-    document[field] = event.target.value;
-    console.log(this.state.document);
-    return this.setState(document);
-  }
-
-  getContentValue(value) {
-    const document = this.state.document;
-    document.content = value;
-    console.log(this.state.document);
-    return this.setState(document);
+    if (nextProps.showRoles !== this.props.showRoles) {
+      this.setState(() =>
+        Object.assign({}, { showRoles: nextProps.showRoles })
+      );
+    }
+    if (this.props.showDoc || this.props.showUsers) {
+      this.setState(() =>
+        Object.assign({}, { showDoc: nextProps.showDoc, showUsers: nextProps.showUsers, showRoles: nextProps.showRoles })
+      );
+    }
   }
 
   render() {
-    return (
-      <div className="row">
-        <DashboardMenu />
-        <Pagination />
-        <DocumentForm />
-        <RoleForm />
-        <UsersPage />
-      </div>
-    );
+    if (this.state.showDoc) {
+      return (
+        <div className="row">
+          <DashboardMenu />
+          <Pagination />
+          <DocumentForm />
+        </div>
+      );
+    } else if (this.state.showUsers) {
+      return (
+        <div className="row">
+          <DashboardMenu />
+          <Pagination />
+          <UsersPage />
+        </div>
+      );
+    } else if (this.state.showRoles) {
+      return (
+        <div className="row">
+          <DashboardMenu />
+          <Pagination />
+          <RoleForm />
+        </div>
+      );
+    }
   }
 }
 
 DashboardPage.propTypes = {
   actions: PropTypes.object.isRequired,
-  showDocument: PropTypes.object.isRequired
+  showDoc: PropTypes.bool.isRequired,
+  showUsers: PropTypes.bool.isRequired,
+  showRoles: PropTypes.bool.isRequired
 };
 
 DashboardPage.contextTypes = {
@@ -95,12 +85,13 @@ DashboardPage.contextTypes = {
 
 
 function mapStateToProps(state, ownProps) {
-  const documents = state.mydocument.documents;
-  const showDocument = state.mydocument.showDocument;
+  const showDoc = state.components.showDoc;
+  const showUsers = state.components.showUsers;
+  const showRoles = state.components.showRoles;
   return {
-    documents,
-    showDocument,
-    loginDetails: state.loginToken
+    showDoc,
+    showUsers,
+    showRoles
   };
 }
 
