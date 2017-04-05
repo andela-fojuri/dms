@@ -30,11 +30,10 @@ class DocumentForm extends React.Component {
       access: props.showDocument.access,
       userId: props.showDocument.userId,
     };
-    this.getDocs = this.getDocs.bind(this);
+  
     this.updateDocumentState = this.updateDocumentState.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
-    this.deleteDoc = this.deleteDoc.bind(this);
   }
 
   componentDidMount() {
@@ -77,11 +76,6 @@ class DocumentForm extends React.Component {
     }
   }
 
-  getDocs(index) {
-    this.props.actions.showDocument(Object.assign({}, this.props.documents[index]));
-    $('#modal1').modal('open');
-  }
-
   handleModelChange(model) {
     this.setState(() => ({ content: model }));
   }
@@ -92,104 +86,53 @@ class DocumentForm extends React.Component {
     this.setState(() => ({ [field]: value }));
   }
 
-  deleteDoc(id) {
-    this.props.actions.deleteDocument(id).then(() => {
-      this.props.actions.getDocuments();
-    });
-  }
 
   render() {
     return (
       <div className="row">
-        <div className="col s11">
-          <div className="docTable">
-            <div className="card">
-              <div className="card-content">
-                <div className="card-title activator ">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <a name="myDoc" className="grey-text">Document Title</a> </td>
-                        <td><a className="grey-text">Owner</a></td>
-                        <td> <a className="right grey-text">Action</a></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            {this.props.documents.map((doc, index) => (
-              <div key={doc.id}>
-                <div className="card">
-                  <div className="card-content">
-                    <div className="card-title activator ">
-                      <table>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <a name="myDoc" className="grey-text " onClick={() => { this.getDocs(index); }}>{doc.title}</a>
-                            </td>
-                            <td><a className="grey-text">{doc.User.username}</a></td>
-                            <td>
-                              <a id="deleteIcon" name="delete" onClick={() => { this.deleteDoc(doc.id); }}><i className="material-icons right">delete</i></a>
-                              <a id="editIcon" name="edit" onClick={() => { this.getDocs(index); }}><i className="material-icons right">mode_edit</i></a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            ))}
-          </div>
-          <div id="modal1" className="modal">
-            <div className="modal-content">
-              <div className="row">
-                <form>
-                  <div className="row">
-                    <div className="col s6">
-                      <TextInput
-                        name="title"
-                        label="Title"
-                        onChange={this.updateDocumentState}
-                        value={this.state.title || ''}
-                        placeholder="Enter title"
-                      />
-                    </div>
-                    <div className="col s6">
-                      <SelectInput
-                        defaultOption="Select Doc Access"
-                        name="access"
-                        options={access}
-                        onChange={this.updateDocumentState}
-                        value={this.state.access}
-                      />
-                    </div>
-                  </div>
-                  <label htmlFor="content">Content </label>
-                  <FroalaEditor
-                    id="content"
-                    name="content"
-                    model={this.state.content}
-                    onModelChange={this.handleModelChange}
-                  />
-                  <br />
-                  <div className="row">
-                    <input
-                      id="createBtn"
-                      name="create"
-                      type="button"
-                      className="waves-effect waves-light btn"
-                      value="Save"
-                      onClick={this.onClickSave}
+        <div id="modal1" className="modal">
+          <div className="modal-content">
+            <div className="row">
+              <form>
+                <div className="row">
+                  <div className="col s6">
+                    <TextInput
+                      name="title"
+                      label="Title"
+                      onChange={this.updateDocumentState}
+                      value={this.state.title || ''}
+                      placeholder="Enter title"
                     />
                   </div>
-                </form>
-              </div>
+                  <div className="col s6">
+                    <SelectInput
+                      defaultOption="Select Doc Access"
+                      name="access"
+                      options={access}
+                      onChange={this.updateDocumentState}
+                      value={this.state.access}
+                    />
+                  </div>
+                </div>
+                <label htmlFor="content">Content </label>
+                <FroalaEditor
+                  id="content"
+                  name="content"
+                  model={this.state.content}
+                  onModelChange={this.handleModelChange}
+                />
+                <br />
+                <div className="row">
+                  <input
+                    id="createBtn"
+                    name="create"
+                    type="button"
+                    className="waves-effect waves-light btn"
+                    value="Save"
+                    onClick={this.onClickSave}
+                  />
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -202,15 +145,11 @@ class DocumentForm extends React.Component {
 DocumentForm.propTypes = {
   actions: PropTypes.object.isRequired,
   showDocument: PropTypes.object.isRequired,
-  documents: PropTypes.array.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log(state);
-  const documents = state.mydocument.documents;
   const showDocument = state.mydocument.showDocument;
   return {
-    documents,
     showDocument
   };
 }

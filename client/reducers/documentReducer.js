@@ -6,7 +6,7 @@ import initialState from './initialState';
 export default function roleReducer(state = initialState.manageDocuments, action) {
   switch (action.type) {
     case types.GET_DOCUMENTS_SUCCESS:
-      return Object.assign({}, state, { documents: action.documents });
+      return Object.assign({}, state, { documents: action.documents, documentLabel: action.label, totalCount: action.count, path: action.path });
     case types.CREATE_DOCUMENTS_SUCCESS:
       return Object.assign({}, state);
     case types.SHOW_DOCUMENT:

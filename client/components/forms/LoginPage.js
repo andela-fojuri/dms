@@ -20,9 +20,9 @@ class LoginPage extends React.Component {
 
   onClickLogin() {
     this.props.actions.loginUser(this.state.userLogin).then(() => {
-      this.props.actions2.getDocuments().then(() => {
+      this.props.actions2.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
         // this.context.router.push('/dashboard');
-      });
+      // });
       // this.props.actions2.getPublicDocument();
       // this.props.actions2.getRoleDocument();
     });

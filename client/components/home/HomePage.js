@@ -35,7 +35,7 @@ class HomePage extends React.Component {
       return (
         <div id="login" className="z-depth-1 card-panel">
           <LoginPage />
-          <p> Dont have an account yet? <a onClick={this.displaySignupForm}>Signup</a></p>
+          <p> Dont have an account yet? <a id="signupLink" name="signupLink" onClick={this.displaySignupForm}>Signup</a></p>
         </div>
       );
     } else if (this.state.isSignup) {

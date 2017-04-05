@@ -82,7 +82,7 @@ class UsersPage extends React.Component {
       <div className="row">
         <div className="col s11">
           <div className="docTable">
-            <h5>All users</h5>
+            <h4 className="userLabel">All Users</h4>
             {this.props.users.map((user, index) => (
               <div key={user.id}>
                 <div className="card">

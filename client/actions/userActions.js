@@ -9,6 +9,9 @@ export function signUp(signupToken) {
   return { type: types.USER_SIGNUP_SUCCESS, signupToken };
 }
 
+export function userLogoutSuccess() {
+  return { type: types.USER_LOGOUT_SUCCESS };
+}
 export function editUser(user) {
   return { type: types.EDIT_USER, user };
 }
@@ -77,7 +80,7 @@ export function createUser(userSignup) {
     if (response.data.success) {
       dispatch(loginUser(userSignup));
     } else {
-      console.log(response.data);
+      toastr.error('Unexpected error occured');
     }
   }, (error) => {
     if (error.response.data.message === 'Invalid Username/Email') {
@@ -122,7 +125,6 @@ export function getUsers() {
     toastr.error('Unexpected error occured');
   });
 }
-
 
 export function deleteUser(id) {
   return dispatch => axios({

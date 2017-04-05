@@ -3,7 +3,6 @@ import Header from './common/Header';
 
 class App extends React.Component {
   componentDidUpdate() {
-    console.log('hello');
     $('.dropdown-button').dropdown({
       inDuration: 300,
       outDuration: 225,

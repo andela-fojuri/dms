@@ -7,6 +7,7 @@ body {
   background-image: url('../images/image4.jpg');
   background-repeat: no-repeat;
   background-size:cover;
+  
 }
 html{
 width:100%;
@@ -102,7 +103,7 @@ width:100%;
 }
 .docTable{
   margin: 0 auto;
-  margin-top: 5% !important;
+  margin-top: 0% !important;
   width: 80%;
   overflow-y: scroll;
 }
@@ -166,13 +167,19 @@ width:100%;
   margin: 0 auto !important;
 }
 table{
-  margin-top: -24px
+  margin-top: -24px;
+  font-size: 15px;
 }
 td{
-  width: 33.33%;
+  width: 25%;
 }
 
 #forAdmin{
   display: none
+}
+.paginateLink{
+  cursor: pointer;
+  padding: 5px ;
+  background-color: grey;
 }
 

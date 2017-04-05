@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DocumentForm from '../document/DocumentForm';
+import DocumentGrid from '../document/DocumentGrid';
+import RoleGrid from '../role/RoleGrid';
 import * as documentActions from '../../actions/documentActions';
 import DashboardMenu from './DashboardMenu';
 import RoleForm from '../role/RoleForm';
@@ -48,16 +50,18 @@ class DashboardPage extends React.Component {
       return (
         <div className="row">
           <DashboardMenu />
-          <Pagination />
           <DocumentForm />
+          <DocumentGrid />
+          <RoleForm />
         </div>
       );
     } else if (this.state.showUsers) {
       return (
         <div className="row">
           <DashboardMenu />
-          <Pagination />
           <UsersPage />
+          <DocumentForm />
+          <RoleForm />
         </div>
       );
     } else if (this.state.showRoles) {
@@ -66,9 +70,17 @@ class DashboardPage extends React.Component {
           <DashboardMenu />
           <Pagination />
           <RoleForm />
+          <RoleGrid />
+          <DocumentForm />
         </div>
       );
     }
+    return (
+      <div className="row">
+        <DashboardMenu />
+        <DocumentForm />
+      </div>
+    );
   }
 }
 

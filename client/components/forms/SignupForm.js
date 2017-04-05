@@ -65,8 +65,7 @@ const SignupForm = ({ user, allRoles, onSave, onChange, saving }) => {
           <div className="col s6">
             <input
               type="button"
-              disabled={saving}
-              value={saving ? 'Saving...' : 'Signup'}
+              value="Signup"
               className="waves-effect waves-light btn"
               onClick={onSave}
             />

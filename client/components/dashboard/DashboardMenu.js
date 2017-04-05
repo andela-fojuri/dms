@@ -24,7 +24,6 @@ class DashboardMenu extends React.Component {
     this.getAccessDoc = this.getAccessDoc.bind(this);
   }
   componentDidMount() {
-    // $(document).ready(() => {
     $('.modal').modal();
     $('.button-collapse').sideNav();
     $('.dropdown-button').dropdown({
@@ -38,41 +37,47 @@ class DashboardMenu extends React.Component {
       // stopPropagation: false // Stops event propagation
     }
     );
-    // ]});
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.user.Role || nextProps.user.Role) {
       if (nextProps.user.Role.category === 'SuperAdmin' || nextProps.user.Role.category === 'Admin') {
         document.getElementById('forAdmin').style.display = 'block';
-        document.getElementById('forUser').style.display = 'none';
+        // document.getElementById('forUser').style.display = 'none';
       }
     }
+    $('.modal').modal();
+    $('.button-collapse').sideNav();
+    $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false, // Does not change width of dropdown to that of the activator
+      hover: true, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: true, // Displays dropdown below the button
+      alignment: 'left', // Displays dropdown with edge aligned to the left of button
+      // stopPropagation: false // Stops event propagation
+    }
+    );
   }
 
   getPublicDoc() {
-    this.props.actions.getPublicDocument();
+    // this.props.actions.getPublicDocument();
+    this.props.actions.getDocs('/public/documents/', 0, 10, 'Public Documents');
   }
 
   getSharedDoc() {
-    this.props.actions.getRoleDocument();
+    // this.props.actions.getRoleDocument();
+    this.props.actions.getDocs('/role/documents/', 0, 10, 'Shared Documents');
   }
 
   getMyDoc() {
-    this.props.actions.getDocuments();
-  }
-
-  createRoleModal() {
-    if (this.props.user.Role.category === 'SuperAdmin' || this.props.user.Role.category === 'Admin') {
-      this.props.actions3.editRole({ category: '', id: '' });
-      $('#editRole').modal('open');
-    } else {
-      toastr.error('You are not Authorized to view this page');
-    }
+    const id = localStorage.getItem('user');
+    // this.props.actions.getDocuments();
+    this.props.actions.getDocs(`/users/${id}/documents`, 0, 10, 'My Documents');
   }
 
   showUsers() {
-    // this.context.router.push('/dashboard/users');
     this.props.actions2.getUsers().then(() => {
       this.props.actions4.showUserComponent();
     });
@@ -86,16 +91,21 @@ class DashboardMenu extends React.Component {
   }
 
   getAllDoc() {
-    this.props.actions.getAllDocuments();
+    this.props.actions.getDocs('/documents/', 0, 10, 'All Documents');
   }
 
   getAccessDoc() {
-    this.props.actions.getAccessibleDocuments();
+    this.props.actions.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
+    // this.props.actions.getAccessibleDocuments();
+  }
+
+  createRoleModal() {
+    this.props.actions3.editRole({ category: '', id: '' });
   }
 
   showModal() {
+    this.props.actions.newDocument();
     $('#modal1').modal('open');
-    this.props.actions.newDocument({ title: '', access: '', content: '', id: '' });
   }
 
   render() {
@@ -113,17 +123,17 @@ class DashboardMenu extends React.Component {
                 <a href="#!email">My Profile</a>
               </div>
             </li>
-            <li><a name="create" onClick={this.showModal} ><i className="material-icons">add</i>New Doc</a></li>
-            <li id="forUser"><a name="anyone" onClick={this.getAccessDoc} >Owned By Anyone</a></li>
-            <li><a name="myDoc" onClick={this.getMyDoc} >Owned By me</a></li>
-            <li><a name="PublicDoc" onClick={this.getPublicDoc}>Public</a></li>
-            <li><a name="shared" onClick={this.getSharedDoc} >Shared</a></li>
-            <div id="forAdmin"><li><a name="allDoc" onClick={this.getAllDoc} >All Documents</a></li>
-              <li><a name="role" onClick={this.createRoleModal} >CreateRole</a></li>
-              <li id=""><a name="users" onClick={this.showUsers} >Users</a></li>
-              <li><a name="roles" onClick={this.showRoles} >Roles</a></li></div>
+            <li><a id="createDoc" name="create" onClick={this.showModal} ><i className="material-icons">add</i>New Doc</a></li>
+            <li><a id="anyDoc" name="anyone" onClick={this.getAccessDoc} >Owned By Anyone</a></li>
+            <li><a id="myDoc" name="myDoc" onClick={this.getMyDoc} >Owned By me</a></li>
+            <li><a id="publicDoc" name="publicDoc" onClick={this.getPublicDoc}>Public</a></li>
+            <li><a id="sharedDoc" name="shared" onClick={this.getSharedDoc} >Shared</a></li>
+            <div id="forAdmin"><li id="allDocs"><a name="allDocs" onClick={this.getAllDoc} >All Documents</a></li>
+              <li><a id="createRole" name="role" onClick={this.createRoleModal} >CreateRole</a></li>
+              <li><a id="allUsers" name="users" onClick={this.showUsers} >Users</a></li>
+              <li><a id="allRoles" name="roles" onClick={this.showRoles} >Roles</a></li></div>
           </ul>
-          <a data-activates="slide-out" className="button-collapse"><i className="material-icons">menu</i></a>
+          <a data-activates="slide-out" id="button-collapse" className="button-collapse"><i className="material-icons">menu</i></a>
         </div>
       </div>
     );
@@ -136,9 +146,7 @@ DashboardMenu.propTypes = {
   actions2: PropTypes.object.isRequired,
   actions3: PropTypes.object.isRequired,
   actions4: PropTypes.object.isRequired,
-  showDocument: PropTypes.object.isRequired,
-  user: PropTypes.object,
-  onChange: PropTypes.func
+  user: PropTypes.object.isRequired,
 };
 
 DashboardMenu.contextTypes = {

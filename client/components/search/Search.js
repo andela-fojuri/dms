@@ -9,6 +9,7 @@ class Search extends React.Component {
     super(props, context);
 
     this.state = {
+      user: {}
     };
     this.onSearchChange = this.onSearchChange.bind(this);
   }
@@ -20,21 +21,23 @@ class Search extends React.Component {
     } else if (this.props.showUsers) {
       this.props.actions2.searchUser(value);
     }
-
   }
   render() {
-    return (
-      <div className="right hide-on-med-and-down">
-        <ul>
-          <form>
-            <li className="input-field">
-              <input id="search" type="search" onChange={this.onSearchChange} required />
-              <label id="searchIcon" className="label-icon" htmlFor="search"><i className="material-icons">search</i></label>
-            </li>
-          </form>
-        </ul>
-      </div>
-    );
+    if (this.props.user.id) {
+      return (
+        <div className="right hide-on-med-and-down">
+          <ul>
+            <form>
+              <li className="input-field">
+                <input id="search" type="search" onChange={this.onSearchChange} required />
+                <label id="searchIcon" className="label-icon" htmlFor="search"><i className="material-icons">search</i></label>
+              </li>
+            </form>
+          </ul>
+        </div>
+      );
+    }
+    return (<div />);
   }
 }
 
@@ -44,6 +47,7 @@ Search.propTypes = {
   documents: PropTypes.array.isRequired,
   showDoc: PropTypes.bool.isRequired,
   showUsers: PropTypes.bool.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -51,11 +55,13 @@ function mapStateToProps(state, ownProps) {
   const showDocument = state.mydocument.showDocument;
   const showDoc = state.components.showDoc;
   const showUsers = state.components.showUsers;
+  const user = state.users.userDetails;
   return {
     documents,
     showDocument,
     showDoc,
-    showUsers
+    showUsers,
+    user
   };
 }
 

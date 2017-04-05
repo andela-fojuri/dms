@@ -6,26 +6,19 @@ import * as documentActions from '../../actions/documentActions';
 class Pagination extends React.Component {
   constructor(props, context) {
     super(props, context);
-
+    this.limit = 5;
     this.state = {
       documents: this.props.documents
     };
-    this.onSearchChange = this.onSearchChange.bind(this);
   }
 
-  onSearchChange(event) {
-    const value = event.target.value;
-    console.log(value);
-    console.log(this.props.documents);
-    const currentDoc = this.props.documents;
-    let filtered = [];
-    currentDoc.forEach((doc) => {
-      filtered = currentDoc.filter(() => (doc.title.includes(value)));
-    });
-    console.log(filtered);
+  // getPages(){
+  //   const {totalCount} = this.props;
+  //   let pages = "";
+  //   for(let i = this.limit; i < totalCount; i+= this.limit){
 
-    this.props.actions.getDocumentSuccess(filtered);
-  }
+  //   }
+  // }
 
   render() {
     return (
@@ -46,16 +39,18 @@ class Pagination extends React.Component {
 
 Pagination.propTypes = {
   actions: PropTypes.object.isRequired,
-  documents: PropTypes.array.isRequired
+  documents: PropTypes.array.isRequired,
+  totalCount: PropTypes.number.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   const documents = state.mydocument.documents;
-  
+  const totalCount = state.mydocument.totalCount;
   const showDocument = state.mydocument.showDocument;
   return {
     documents,
-    showDocument
+    showDocument,
+    totalCount
   };
 }
 
