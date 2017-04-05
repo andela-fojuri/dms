@@ -28,50 +28,31 @@ const Documents = {
   },
 
   getRoleAccess(req, res) {
-    const roleDocuments = [];
-    const callback = () => {
-      accessibleDocuments = roleDocuments;
-      res.send({ success: true, message: roleDocuments });
-    };
-    Document.findAll({ where: { access: 'Role' }, include: [{ model: User }] }).then((documents) => {
-      if (documents) {
-        documents.forEach((doc, indx) => {
-          if (req.decoded.roleId == doc.User.roleId && doc.User.id != req.decoded.id) {
-            roleDocuments.push(doc);
-          }
-          if (indx === documents.length - 1) {
-            callback();
-          }
-        });
-      } else {
-        callback();
-      }
+    Document.findAndCountAll({
+      offset: req.query.offset || 0,
+      limit: req.query.limit || 50,
+      order: '"createdAt" DESC',
+      where: { $and: [{ access: 'Role' }, { $not: { userId: req.decoded.id } }] },
+      include: [{ model: User, where: { roleId: req.decoded.roleId } }]
+    }).then((response) => {
+      accessibleDocuments = response.rows;
+      res.send({ success: true, message: response.rows, count: response.count });
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
     });
   },
 
   getDocuments(req, res) {
-    if (req.query.limit && req.query.offset) {
-      Document.findAll({ offset: req.query.offset, limit: req.query.limit, include: [{ model: User }] }).then((documents) => {
-        res.send({ success: true, message: documents });
+    Document.findAndCountAll({
+      offset: req.query.offset || 0,
+      limit: req.query.limit || 50,
+      order: '"createdAt" DESC',
+      include: [{ model: User }]
+    })
+      .then((response) => {
+        accessibleDocuments = response.rows;
+        res.send({ success: true, message: response.rows, count: response.count });
       });
-    } else if (req.query.limit) {
-      Document.findAll({ limit: req.query.limit }).then((documents) => {
-        res.send({ success: true, message: documents });
-      });
-    } else if (req.query.offset) {
-      Document.findAll({ offset: req.query.offset }).then((documents) => {
-        res.send({ success: true, message: documents });
-      });
-    } else {
-      Document.findAll({ include: [{ model: User }] }).then((documents) => {
-        accessibleDocuments = documents;
-        res.send({ success: true, message: documents });
-      }).catch((err) => {
-        res.status(500).send({ success: false, message: 'Unexpected error occured' });
-      });
-    }
   },
 
   findDocument(req, res) {
@@ -137,15 +118,18 @@ const Documents = {
   },
 
   findUserDocument(req, res) {
-    Document.findAll({
+    Document.findAndCountAll({
+      offset: req.query.offset || 0,
+      limit: req.query.limit || 50,
+      order: '"createdAt" DESC',
       where: {
         userId: req.params.id
       },
       include: [{ model: User }]
-    }).then((userDocuments) => {
-      if (userDocuments) {
-        accessibleDocuments = userDocuments;
-        res.send({ success: true, message: userDocuments });
+    }).then((response) => {
+      if (response) {
+        accessibleDocuments = response.rows;
+        res.send({ success: true, message: response.rows, count: response.count });
       }
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
@@ -153,12 +137,18 @@ const Documents = {
   },
 
   publicDocument(req, res) {
-    Document.findAll({ where: { access: 'Public' }, include: [{ model: User }] }).then((documents) => {
-      if (documents) {
-        accessibleDocuments = documents;
-        res.send({ success: true, message: documents });
+    Document.findAndCountAll({
+      offset: req.query.offset || 0,
+      limit: req.query.limit || 50,
+      where: { access: 'Public' },
+      order: '"createdAt" DESC',
+      include: [{ model: User }]
+    }).then((response) => {
+      if (response) {
+        accessibleDocuments = response.rows;
+        res.send({ success: true, message: response.rows, count: response.count });
       } else {
-        res.send({ success: true, message: [] });
+        res.send({ success: true, message: [], count: 0 });
       }
     }).catch((err) => {
       res.status(500).send({ success: false, message: 'Unexpected error occured' });
@@ -166,23 +156,22 @@ const Documents = {
   },
 
   userDocument(req, res) {
-    const roleDocuments = [];
-    const callback = () => {
-      accessibleDocuments = roleDocuments;
-      res.send({ success: true, message: roleDocuments });
-    };
-    Document.findAll({ where: { $or: [{ access: 'Public' }, { access: 'Role' }, { userId: req.decoded.id }] }, include: [{ model: User }] }).then((documents) => {
-      if (documents) {
-        documents.forEach((doc, indx) => {
-          if (req.decoded.roleId == doc.User.roleId) {
-            roleDocuments.push(doc);
-          }
-          if (indx === documents.length - 1) {
-            callback();
-          }
-        });
-      } else {
-        callback();
+    let count = 0;
+    Document.findAndCountAll({
+      offset: req.query.offset || 0,
+      limit: req.query.limit || 50,
+      order: '"createdAt" DESC',
+      where: {
+        $or: [{ access: 'Public' },
+        { access: 'Role' }, { userId: req.decoded.id }]
+      },
+      include: [{ model: User, where: { roleId: req.decoded.roleId } }]
+    }).then((response) => {
+      count = response.count;
+      if (response) {
+        accessibleDocuments = response.rows;
+        count = response.count;
+        res.send({ success: true, message: accessibleDocuments, count });
       }
     }).catch((err) => {
       res.status(503).send({ success: false, message: 'Unexpected error occured' });
@@ -196,15 +185,13 @@ const Documents = {
       searchItem = searchItem.trim();
       const fil = accessibleDocuments;
       if (searchItem.length > 0) {
-        filtered = fil.filter((doc) => {
-          return doc.title.includes(searchItem);
-        });
-        res.send({ success: true, message: filtered });
+        filtered = fil.filter((doc) => doc.title.includes(searchItem));
+        res.send({ success: true, message: filtered, count: filtered.length });
       } else {
-        res.send({ success: true, message: accessibleDocuments });
+        res.send({ success: true, message: accessibleDocuments, count: accessibleDocuments.length });
       }
     } else {
-      res.send({ success: true, message: accessibleDocuments });
+      res.send({ success: true, message: accessibleDocuments, count: accessibleDocuments.length });
     }
   }
 };

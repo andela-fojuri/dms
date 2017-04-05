@@ -56,9 +56,9 @@ const Users = {
 
   logout(req, res) {
     if (req.decoded.id) {
-      User.findById(req.decoded.id).then((user) => {
-        res.send({ success: true, message: 'Successfully logged out' });
-      });
+      // User.findById(req.decoded.id).then((user) => {
+      res.send({ success: true, message: 'Successfully logged out' });
+      // });
     }
   },
 
