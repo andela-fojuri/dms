@@ -15,6 +15,7 @@
     "open:client": "babel-node serverTools/server.js",
     "lint": "node_modules/.bin/esw webpack.config.* client serverTools",
     "lint-watch": "npm run lint -- --watch",
+    "client:test":"mocha serverTools/testSetup.js \"client/tests/**/*.component.test.js\"",
     "test": "npm run db:test:seed && npm run thetest ",
     "thetest": "istanbul cover _mocha serverTools/testSetup.js \"server/tests/**/*.spec.js\"",
     "db:test:seed": "babel-node ./server/tests/helper/seed",
