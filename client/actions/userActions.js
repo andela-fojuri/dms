@@ -1,20 +1,20 @@
 import axios from 'axios';
 import toastr from 'toastr';
-import jwt from 'jsonwebtoken';
 import * as types from './actionTypes';
-import { browserHistory } from 'react-router';
-
 
 export function signUp(signupToken) {
   return { type: types.USER_SIGNUP_SUCCESS, signupToken };
 }
 
+export function userLogoutSuccess() {
+  return { type: types.USER_LOGOUT_SUCCESS };
+}
 export function editUser(user) {
   return { type: types.EDIT_USER, user };
 }
 
-export function getUsersSuccess(users) {
-  return { type: types.GET_USERS_SUCCESS, users };
+export function getUsersSuccess(users, count) {
+  return { type: types.GET_USERS_SUCCESS, users, count };
 }
 
 
@@ -29,7 +29,6 @@ export function findUser(id) {
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     dispatch(findUserSuccess(response.data.message));
-    browserHistory.push('/dashboard');
   }).catch((error) => {
     throw (error);
   });
@@ -42,7 +41,6 @@ export function loginUser(userLogin) {
     data: userLogin
   }).then((response) => {
     if (response.data.success) {
-      toastr.success(response.data.message);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', response.data.user);
       dispatch(findUser(localStorage.getItem('user')));
@@ -77,7 +75,7 @@ export function createUser(userSignup) {
     if (response.data.success) {
       dispatch(loginUser(userSignup));
     } else {
-      console.log(response.data);
+      toastr.error('Unexpected error occured');
     }
   }, (error) => {
     if (error.response.data.message === 'Invalid Username/Email') {
@@ -95,11 +93,12 @@ export function createUser(userSignup) {
 export function updateUser(user) {
   return dispatch => axios({
     method: 'put',
-    url: '/users',
-    data: user
+    url: `/users/${user.id}`,
+    data: user,
+    headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     if (response.data.success) {
-      toastr.success(response.data.message);
+      toastr.success('Details updated Successfully');
     } else {
       toastr.error(response.data.message);
     }
@@ -111,18 +110,17 @@ export function updateUser(user) {
   });
 }
 
-export function getUsers() {
+export function getUsers(offset, limit) {
   return dispatch => axios({
-    url: '/users',
+    url: `/users?offset=${offset}&limit=${limit}`,
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    dispatch(getUsersSuccess(response.data.message));
+    dispatch(getUsersSuccess(response.data.message, response.data.count));
   }).catch((error) => {
     toastr.error('Unexpected error occured');
   });
 }
-
 
 export function deleteUser(id) {
   return dispatch => axios({
@@ -147,8 +145,8 @@ export function searchUser(username) {
     url: `/search/users?username=${username}`,
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    dispatch(getUsersSuccess(documents.data.message));
+  }).then((response) => {
+    dispatch(getUsersSuccess(response.data.message, response.data.count));
   }).catch((error) => {
     throw (error);
   });

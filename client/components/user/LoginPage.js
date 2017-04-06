@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
 import { bindActionCreators } from 'redux';
-import Delay from 'react-delay';
-import LoginForm from './LoginForm';
+import { browserHistory } from 'react-router';
+import LoginFormComponent from './forms/LoginForm';
 import * as userActions from '../../actions/userActions';
 import * as documentActions from '../../actions/documentActions';
 
-class LoginPage extends React.Component {
+export class LoginPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -20,11 +21,9 @@ class LoginPage extends React.Component {
 
   onClickLogin() {
     this.props.actions.loginUser(this.state.userLogin).then(() => {
-      this.props.actions2.getDocuments().then(() => {
-        // this.context.router.push('/dashboard');
-      });
-      // this.props.actions2.getPublicDocument();
-      // this.props.actions2.getRoleDocument();
+      this.props.actions2.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
+      browserHistory.push('/dashboard');
+      toastr.success('Successfully Looged in');
     });
   }
 
@@ -39,7 +38,7 @@ class LoginPage extends React.Component {
   render() {
     return (
       <div>
-        <LoginForm
+        <LoginFormComponent
           onClick={this.onClickLogin}
           onChange={this.updateLoginState}
         />
@@ -49,8 +48,8 @@ class LoginPage extends React.Component {
 }
 
 LoginPage.propTypes = {
-  actions: PropTypes.object.isRequired,
-  actions2: PropTypes.object.isRequired
+  actions: PropTypes.object,
+  actions2: PropTypes.object
 };
 
 LoginPage.contextTypes = {

@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import DocumentForm from '../document/DocumentForm';
+import DocumentFormComponent from '../document/DocumentForm';
+import DocumentGridComponent from '../document/DocumentGrid';
+import RoleGridComponent from '../role/RoleGrid';
 import * as documentActions from '../../actions/documentActions';
-import DashboardMenu from './DashboardMenu';
-import RoleForm from '../role/RoleForm';
-import UsersPage from '../user/UsersPage';
-import Pagination from '../pagination/Pagination';
+import DashboardMenuComponent from './DashboardMenu';
+import RoleFormComponent from '../role/RoleForm';
+import UsersFormCompnent from '../user/forms/UsersForm';
+import UsersPageComponent from '../user/UsersPage';
 
 
-class DashboardPage extends React.Component {
+export class DashboardPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -47,28 +49,39 @@ class DashboardPage extends React.Component {
     if (this.state.showDoc) {
       return (
         <div className="row">
-          <DashboardMenu />
-          <Pagination />
-          <DocumentForm />
+          <DashboardMenuComponent />
+          <DocumentFormComponent />
+          <DocumentGridComponent />
+          <RoleFormComponent />
+          <UsersFormCompnent />
         </div>
       );
     } else if (this.state.showUsers) {
       return (
         <div className="row">
-          <DashboardMenu />
-          <Pagination />
-          <UsersPage />
+          <DashboardMenuComponent />
+          <UsersPageComponent />
+          <DocumentFormComponent />
+          <RoleFormComponent />
+          <UsersFormCompnent />
         </div>
       );
     } else if (this.state.showRoles) {
       return (
         <div className="row">
-          <DashboardMenu />
-          <Pagination />
-          <RoleForm />
+          <DashboardMenuComponent />
+          <RoleFormComponent />
+          <RoleGridComponent />
+          <DocumentFormComponent />
+          <UsersFormCompnent />
         </div>
       );
     }
+    return (
+      <div className="row">
+        <DashboardMenuComponent />
+      </div>
+    );
   }
 }
 

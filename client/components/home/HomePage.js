@@ -1,11 +1,9 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import ToggleDisplay from 'react-toggle-display';
-import LoginPage from '../forms/LoginPage';
-import SignupPage from '../forms/SignupPage';
+import LoginPageComponent from '../user/LoginPage';
+import SignupPageComponent from '../user/SignupPage';
 
 
-class HomePage extends React.Component {
+export class HomePage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -34,14 +32,14 @@ class HomePage extends React.Component {
     if (this.state.islogin) {
       return (
         <div id="login" className="z-depth-1 card-panel">
-          <LoginPage />
-          <p> Dont have an account yet? <a onClick={this.displaySignupForm}>Signup</a></p>
+          <LoginPageComponent />
+          <p> Dont have an account yet? <a id="signupLink" name="signupLink" onClick={this.displaySignupForm}>Signup</a></p>
         </div>
       );
     } else if (this.state.isSignup) {
       return (
         <div id="signup" className="z-depth-1 card-panel">
-          <SignupPage />
+          <SignupPageComponent />
           <p> Already have an account? <a onClick={this.displayLoginForm}>Login</a></p>
         </div>
       );

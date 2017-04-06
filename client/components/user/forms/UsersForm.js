@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as userActions from '../../actions/userActions';
-import * as componentActions from '../../actions/componentActions';
-import TextInput from '../common/TextInput';
-import SelectInput from '../common/SelectInput';
+import * as userActions from '../../../actions/userActions';
+import * as componentActions from '../../../actions/componentActions';
+import TextInput from '../../common/TextInput';
+import SelectInput from '../../common/SelectInput';
 
-class UsersPage extends React.Component {
+export class UsersPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -17,8 +17,6 @@ class UsersPage extends React.Component {
       roleId: this.props.editUser.roleId
     };
 
-    this.showUserForm = this.showUserForm.bind(this);
-    this.deleteUser = this.deleteUser.bind(this);
     this.onChangeUser = this.onChangeUser.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
   }
@@ -39,8 +37,8 @@ class UsersPage extends React.Component {
   }
 
   onClickSave() {
-    this.props.actions.createUser(this.state).then(() => {
-      this.context.router.push('/');
+    this.props.actions.updateUser(this.state).then(() => {
+      $('#editUser').modal('close');
     });
   }
 
@@ -55,10 +53,9 @@ class UsersPage extends React.Component {
                 <div className="row">
                   <TextInput
                     name="username"
-                    label="Username"
                     onChange={this.onChangeUser}
                     icon="account_circle"
-                    value={this.state.username}
+                    value={this.state.username || ''}
                     placeholder="Enter username"
                   />
                 </div>
@@ -70,28 +67,28 @@ class UsersPage extends React.Component {
                       name="email"
                       className="validate"
                       onChange={this.onChangeUser}
-                      value={this.state.email}
+                      value={this.state.email || ''}
                       placeholder="Enter Email"
                     />
-                    <label htmlFor="email">Email</label>
                   </div>
                 </div>
-                <div className="col s6">
-                  {/* <SelectInput
-                    defaultOption="Select your role"
-                    name="roleId"
-                    options={this.props.roles}
-                    onChange={this.onChangeUser}
-                    value={this.state.roleId}
-                    label="Role"
-                  />*/}
+                <div className="row">
+                  <div className="col s6">
+                    <SelectInput
+                      defaultOption="Select your role"
+                      name="roleId"
+                      options={this.props.roles}
+                      onChange={this.onChangeUser}
+                      value={this.state.roleId}
+                    />
+                  </div>
+                  <input
+                    type="button"
+                    value="Update"
+                    className="waves-effect waves-light btn"
+                    onClick={this.onClickSave}
+                  />
                 </div>
-                <input
-                  type="button"
-                  value="Update"
-                  className="waves-effect waves-light btn"
-                  onClick={this.onClickSave}
-                />
               </form>
             </div>
           </div>
@@ -102,9 +99,8 @@ class UsersPage extends React.Component {
 }
 
 UsersPage.propTypes = {
-  users: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
-  // roles: PropTypes.array.isRequired,
+  roles: PropTypes.array.isRequired,
   editUser: PropTypes.object.isRequired
 };
 
@@ -114,7 +110,6 @@ function mapStateToProps(state, ownProps) {
     text: role.category,
   }));
   return {
-    users: state.users.users,
     roles: rolesDropdown,
     editUser: state.users.editUser
   };

@@ -1,7 +1,6 @@
 import * as types from './actionTypes';
 
 export function showUserComponent() {
-  console.log('hehehehe');
   return { type: types.SHOW_USER_COMPONENT };
 }
 

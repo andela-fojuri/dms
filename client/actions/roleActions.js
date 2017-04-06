@@ -13,15 +13,11 @@ export function createRoleSuccess(roleCreated) {
 }
 
 export function getRoles() {
-  return dispatch => axios.get('/roles').then((roles) => {
-    dispatch(getRolesSuccess(roles.data.message));
-  }).catch((error) => {
-    throw (error);
-  });
-}
-
-export function getAllRoles() {
-  return dispatch => axios.get('/roles').then((response) => {
+  return dispatch => axios({
+    method: 'get',
+    url: '/roles',
+    headers: { 'x-access-token': localStorage.getItem('token') },
+  }).then((response) => {
     if (response.data.success) {
       dispatch(getRolesSuccess(response.data.message));
     }
@@ -30,11 +26,11 @@ export function getAllRoles() {
   });
 }
 
-export function createRole(role) {
+export function saveRole(role) {
   let requestObject = {
     method: 'post',
     url: '/roles',
-    data: { category: role },
+    data: { category: role.category },
     headers: { 'x-access-token': localStorage.getItem('token') },
   };
   if (role.id !== '') {
@@ -43,12 +39,13 @@ export function createRole(role) {
   return dispatch => axios(requestObject).then((response) => {
     if (response.data.success) {
       dispatch(createRoleSuccess(response.data.message));
-      $('#editRole').modal('close');
     } else {
-      console.log(response.data);
+      toastr.error('Unexpected error occured');
     }
+  }, (error) => {
+    toastr.error('Unexpected error occured');
   }).catch((error) => {
-    console.log(error.response);
+    toastr.error('Unexpected error occured');
     throw (error);
   });
 }
@@ -66,7 +63,7 @@ export function deleteRole(id) {
     if (response.data.success) {
       toastr.success('Role deleted successfully');
     } else {
-      console.log(response.data);
+      toastr.error('Unexpected error occured');
     }
   }).catch((error) => {
     throw (error);

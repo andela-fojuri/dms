@@ -2,9 +2,9 @@ import React from 'react';
 import toastr from 'toastr';
 import { Route, IndexRoute } from 'react-router';
 import App from './components/App';
-import HomePage from './components/home/HomePage';
-import DashboardPage from './components/dashboard/DashboardPage';
-import UsersPage from './components/user/UsersPage';
+import HomePageComponent from './components/home/HomePage';
+import DashboardPageComponent from './components/dashboard/DashboardPage';
+import UsersPageComponent from './components/user/UsersPage';
 import auth from './middlewares/authentication';
 
 function requireAuth(nextState, replace) {
@@ -17,11 +17,11 @@ function requireAuth(nextState, replace) {
 }
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={HomePage} />
-    <Route path="/login" component={HomePage} />
-    <Route path="/logout" component={DashboardPage} />
-    <Route path="/signup" component={HomePage} />
-    <Route path="dashboard" component={DashboardPage} onEnter={requireAuth} />
+    <IndexRoute component={HomePageComponent} />
+    <Route path="/login" component={HomePageComponent} />
+    <Route path="/logout" component={DashboardPageComponent} />
+    <Route path="/signup" component={HomePageComponent} />
+    <Route path="dashboard" component={DashboardPageComponent} onEnter={requireAuth} />
     {/* <Route path="users" component={UsersPage} onEnter={requireAuth} />*/}
   </Route>
 );

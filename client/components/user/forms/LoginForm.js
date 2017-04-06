@@ -1,7 +1,7 @@
 import React from 'react';
-import TextInput from '../common/TextInput';
+import TextInput from '../../common/TextInput';
 
-const LoginForm = ({ onChange, onClick, errors }) => {
+export const LoginForm = ({ onChange, onClick, errors }) => {
   return (
     <div className="row">
       <form>
