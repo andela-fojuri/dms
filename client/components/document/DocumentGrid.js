@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ReactPaginate from 'react-paginate';
 import * as documentActions from '../../actions/documentActions';
-// import Pagination from '../pagination/Pagination';
 
 
-class DocumentGrid extends React.Component {
+export class DocumentGrid extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.limit = 10;

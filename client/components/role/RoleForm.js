@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import TextInput from '../common/TextInput';
 import * as roleActions from '../../actions/roleActions';
 
-class RoleForm extends React.Component {
+export class RoleForm extends React.Component {
   constructor(props, context) {
     super(props, context);
 

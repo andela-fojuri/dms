@@ -13,14 +13,6 @@ export function createRoleSuccess(roleCreated) {
 }
 
 export function getRoles() {
-  return dispatch => axios.get('/roles').then((roles) => {
-    dispatch(getRolesSuccess(roles.data.message));
-  }).catch((error) => {
-    throw (error);
-  });
-}
-
-export function getAllRoles() {
   return dispatch => axios.get('/roles').then((response) => {
     if (response.data.success) {
       dispatch(getRolesSuccess(response.data.message));

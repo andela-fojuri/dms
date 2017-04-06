@@ -1,9 +1,8 @@
 import axios from 'axios';
 import toastr from 'toastr';
+import { browserHistory } from 'react-router';
 import jwt from 'jsonwebtoken';
 import * as types from './actionTypes';
-import { browserHistory } from 'react-router';
-
 
 export function signUp(signupToken) {
   return { type: types.USER_SIGNUP_SUCCESS, signupToken };
@@ -96,10 +95,12 @@ export function createUser(userSignup) {
 }
 
 export function updateUser(user) {
+  console.log(user);
   return dispatch => axios({
     method: 'put',
-    url: '/users',
-    data: user
+    url: `/users/${user.id}`,
+    data: user,
+    headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     if (response.data.success) {
       toastr.success(response.data.message);
@@ -107,6 +108,7 @@ export function updateUser(user) {
       toastr.error(response.data.message);
     }
   }, (error) => {
+    console.log(error.response);
     toastr.error('An unexpected error occured');
   }).catch((error) => {
     toastr.error('An unexpected error occured');

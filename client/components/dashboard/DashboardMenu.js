@@ -7,10 +7,10 @@ import * as documentActions from '../../actions/documentActions';
 import * as userActions from '../../actions/userActions';
 import * as roleActions from '../../actions/roleActions';
 import * as componentActions from '../../actions/componentActions';
-import userImage from '../../images/user2.jpeg';
+import userImage from '../../images/user2.jpg';
 
 
-class DashboardMenu extends React.Component {
+export class DashboardMenu extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.showModal = this.showModal.bind(this);

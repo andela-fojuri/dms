@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Dropdown, NavItem } from 'react-materialize';
 import 'froala-editor/js/froala_editor.pkgd.min';
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -18,7 +17,7 @@ allAccess.forEach((acc) => {
   access.push({ value: acc, text: acc });
 });
 
-class DocumentForm extends React.Component {
+export class DocumentForm extends React.Component {
 
   constructor(props, context) {
     super(props, context);
@@ -51,7 +50,6 @@ class DocumentForm extends React.Component {
       // stopPropagation: false // Stops event propagation
     }
     );
-    // ]});
   }
 
   componentWillReceiveProps(nextProps) {

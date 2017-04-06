@@ -5,11 +5,9 @@ import * as userActions from '../../actions/userActions';
 import * as componentActions from '../../actions/componentActions';
 import TextInput from '../common/TextInput';
 import SelectInput from '../common/SelectInput';
-import DashboardMenu from '../dashboard/DashboardMenu';
-import RoleForm from '../role/RoleForm';
-import Pagination from '../pagination/Pagination';
 
-class UsersPage extends React.Component {
+
+export class UsersPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 

@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import * as documentActions from '../../actions/documentActions';
 import * as userActions from '../../actions/userActions';
-import auth from '../../middlewares/authentication';
 
 class Search extends React.Component {
   constructor(props, context) {

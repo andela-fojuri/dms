@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as userActions from '../../actions/userActions';
-import * as componentActions from '../../actions/componentActions';
-import TextInput from '../common/TextInput';
-import SelectInput from '../common/SelectInput';
+import * as userActions from '../../../actions/userActions';
+import * as componentActions from '../../../actions/componentActions';
+import TextInput from '../../common/TextInput';
+import SelectInput from '../../common/SelectInput';
 
 class UsersPage extends React.Component {
   constructor(props, context) {

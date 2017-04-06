@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as roleActions from '../../actions/roleActions';
 
-class RoleGrid extends React.Component {
+export class RoleGrid extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {

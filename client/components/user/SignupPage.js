@@ -1,16 +1,15 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import SignupForm from './SignupForm';
+import SignupFormComponent from './forms/SignupForm';
 import * as userActions from '../../actions/userActions';
 
-class SignupPage extends React.Component {
+export class SignupPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      user: Object.assign({}, this.props.user),
-      saving: false
+      user: {}
     };
     this.updateUserDetails = this.updateUserDetails.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
@@ -31,21 +30,16 @@ class SignupPage extends React.Component {
 
   render() {
     return (
-      <SignupForm
-        user={this.state.user}
-        allRoles={this.props.roles}
+      <SignupFormComponent
         onSave={this.onClickSave}
         onChange={this.updateUserDetails}
-        saving={this.state.saving}
       />
     );
   }
 }
 
 SignupPage.propTypes = {
-  roles: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired
 };
 
 SignupPage.contextTypes = {
@@ -53,15 +47,6 @@ SignupPage.contextTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const user = { roleId: '' };
-  const rolesDropdown = state.roles.roles.map(role => ({
-    value: role.id,
-    text: role.category,
-  }));
-  return {
-    roles: rolesDropdown,
-    user
-  };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
