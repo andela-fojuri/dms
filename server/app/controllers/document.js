@@ -76,8 +76,8 @@ const Documents = {
             title: req.body.title || foundDocument.title,
             content: req.body.content || foundDocument.content,
             access: req.body.access || foundDocument.access
-          }).then((row) => {
-            res.send({ success: true, message: 'Document updated Successfully' });
+          }).then((document) => {
+            res.send({ success: true, message: 'Document updated Successfully', document });
           }, (error) => {
             if (error.name === 'SequelizeUniqueConstraintError') {
               res.status(400).send({ success: false, message: 'Invalid Title' });
@@ -193,31 +193,6 @@ const Documents = {
     } else {
       res.send({ success: true, message: accessibleDocuments, count: accessibleDocuments.length });
     }
-  },
-
-  searchDocument2: (req, res) => {
-    Document.findAll({
-      where: {
-        $or: [{
-          title: {
-            $iLike: `%${req.query.q}%`
-          }
-        }, {
-          content: {
-            $iLike: `%${req.query.q}%`
-          }
-        }]
-      }
-    }).then((documents) => {
-      if (!documents) {
-        return res.status(404)
-            .send({ message: 'No document found' });
-      }
-      res.status(200).send(documents);
-    })
-      .catch((err) => {
-        res.status(400).send(err);
-      });
   }
 };
 

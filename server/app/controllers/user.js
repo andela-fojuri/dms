@@ -5,6 +5,7 @@ import index from '../models/index';
 const User = index.User;
 const Role = index.Role;
 let allUsers = [];
+
 const Users = {
   create(req, res) {
     User.create({
@@ -14,8 +15,13 @@ const Users = {
       password_confirmation: req.body.password_confirmation || null,
       roleId: 3,
     }).then((createdUser) => {
-      const payload = JSON.stringify(createdUser);
-      const token = jwt.sign(payload, process.env.SECRET);
+      const token = jwt.sign({
+        id: createdUser.id,
+        email: createdUser.email,
+        roleId: createdUser.roleId
+      },
+        process.env.SECRET,
+        { expiresIn: '10h' });
       res.send({ success: true, message: 'User Created Successfully', createdUser, token });
     }, (error) => {
       if (error.name === 'SequelizeValidationError') {
@@ -37,10 +43,13 @@ const Users = {
     }).then((user) => {
       if (user) {
         bcrypt.compare(req.body.password, user.password_digest, (err, res2) => {
-          // delete password
           if (res2) {
-            const payload = JSON.stringify(user);
-            const token = jwt.sign(payload, process.env.SECRET);
+            const token = jwt.sign({
+              id: user.id,
+              email: user.email,
+              roleId: user.roleId,
+              Role: user.Role
+            }, process.env.SECRET, { expiresIn: '10h' });
             res.send({ success: true, message: 'Successfully logged in', token, user: user.id });
           } else {
             res.send({ success: false, message: 'Invalid Username/Password' });
@@ -64,26 +73,15 @@ const Users = {
 
 
   getUsers(req, res) {
-    if (req.query.limit && req.query.offset) {
-      User.findAll({ offset: req.query.offset, limit: req.query.limit }).then((users) => {
-        res.send({ success: true, message: users });
-      });
-    } else if (req.query.limit) {
-      User.findAll({ limit: req.query.limit }).then((users) => {
-        res.send({ success: true, message: users });
-      });
-    } else if (req.query.offset) {
-      User.findAll({ offset: req.query.offset }).then((users) => {
-        res.send({ success: true, message: users });
-      });
-    } else {
-      User.findAll().then((users) => {
-        allUsers = users;
-        res.send({ success: true, message: users });
-      }).catch((err) => {
-        res.status(500).send({ success: false, message: 'Unexpected error occured' });
-      });
-    }
+    User.findAndCountAll({
+      offset: req.query.offset || 0,
+      limit: req.query.limit || 50
+    }).then((response) => {
+      allUsers = response.rows;
+      res.send({ success: true, message: response.rows, count: response.count });
+    }).catch((err) => {
+      res.status(500).send({ success: false, message: 'Unexpected error occured' });
+    });
   },
 
   findUser(req, res) {
@@ -108,16 +106,16 @@ const Users = {
               password: req.body.newPassword,
               password_confirmation: req.body.confirmNewPassword,
               username: req.body.username || user.username
-            }).then((count, row) => {
-              res.send({ success: true, message: 'Details Updated Successfully' });
+            }).then((updatedUser) => {
+              res.send({ success: true, message: 'Details Updated Successfully', updatedUser });
             });
           } else {
             res.status(400).send({ success: false, message: 'Incorrect Old Password' });
           }
         });
       } else if (req.body.username || req.body.roleId) {
-        user.update({ username: req.body.username, roleId: req.body.roleId || user.roleId }).then((count, row) => {
-          res.send({ success: true, message: 'Details Updated Successfully' });
+        user.update({ username: req.body.username || user.username, roleId: req.body.roleId || user.roleId }).then((updatedUser) => {
+          res.send({ success: true, message: 'Details Updated Successfully', updatedUser });
         });
       } else {
         res.status(400).send({ success: false, message: 'Field(s) cannot be empty' });
@@ -146,15 +144,13 @@ const Users = {
       searchItem = searchItem.trim();
       const fil = allUsers;
       if (searchItem.length > 0) {
-        filtered = fil.filter((user) => {
-          return user.username.includes(searchItem);
-        });
-        res.send({ success: true, message: filtered });
+        filtered = fil.filter(user => user.username.includes(searchItem));
+        res.send({ success: true, message: filtered, count: filtered.length });
       } else {
-        res.send({ success: true, message: allUsers });
+        res.send({ success: true, message: allUsers, count: allUsers.length });
       }
     } else {
-      res.send({ success: true, message: allUsers });
+      res.send({ success: true, message: allUsers, count: allUsers.length });
     }
   }
 };

@@ -31,8 +31,8 @@ const Roles = {
 
   updateRole(req, res) {
     Role.findById(req.params.id).then((foundRole) => {
-      foundRole.update({ category: req.body.category || foundRole.category }).then(() => {
-        res.send({ success: true, message: 'Role Updated Successfully' });
+      foundRole.update({ category: req.body.category || foundRole.category }).then((role) => {
+        res.send({ success: true, message: 'Role Updated Successfully', role });
       });
     }, (error) => {
       if (error.name === 'SequelizeUniqueConstraintError') {
