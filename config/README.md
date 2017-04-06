@@ -29,10 +29,7 @@ GET | [/users/:id](#get-a-user) | Get details of a specific user
 PUT | [/users/:id](#update-user) | Edit user details
 DELETE | [/users/:id](#delete-user) | Remove a user from storage
 POST | [/users/login](#login) | To log a user in
-GET| [/users/documents](#get-usersdoc) | To get a users personal documents
-GET| [/users/:id/documents](#get-usersdoc) | To get document of a specific user
-GET| [/users/search/:email](#get-userbyemail) | To get a user by email
-PUT| [/users/:id/password](#reset-password) | To reset users password
+POST | [/users/logout](#login) | To log a user out
 
 **Roles**
 
@@ -41,8 +38,7 @@ Request type | Endpoint | Action
 POST | [/roles](#create-role) | Create a new role
 GET | [/roles](#get-roles) | Get all created roles
 PUT | [/role/:id](#update-role) | To edit a role
-PATCH | [/role/:id](#update-role) | To edit a role
-GET | [/role/:id](#get-a-role) | To get a role
+DELETE | [/role/:id](#delete-a-role) | To delete a role
 
 **Documents**
 
@@ -53,9 +49,12 @@ GET | [/documents](#get-documents) | Retrieve all documents
 GET | [/documents/:id](#get-a-document) | Retrieve a specific document
 PUT | [/documents/:id](#update-document) | Update a specific document
 DELETE | [/documents/:id](#delete-document) | Remove a specific document from storage
-GET | [/documents??offset=1&limit=10](#get-documents) | Retrieve maximum of first 10 documents
-GET | [/accessible/documents](#get-accessible-documents) | Retrieve documents created by other users that are public and on the role level
-GET | [/documents/access/private](#get-private-doc) | Gets documents that has been share privately with the user
+GET| [/users/:id/documents](#get-usersdoc) | To retrieve all documents of a specific user
+GET| [/users/documents](#get-usersdoc) | To retrieve all accessible documents such as public documents, document created by user and shared documents.
+GET| [/role/documents](#get-usersdoc) | To retrieve all documents shared with the user.
+GET| [/public/documents](#get-usersdoc) | To retrieve all public documents.
+GET | [/documents??offset=0&limit=10](#get-documents) | Retrieve maximum of first 10 documents
+
 
 **Search**
 
@@ -72,30 +71,30 @@ To create a new user, make a **POST** request to `/users`
 #### Request
 ```
 {
-    "username": "Ada",
-    "firstname": "Addnana",
-    "lastname": "Ada",
-    "email": "ada@gmail.com",
-    "password":"password"
+    "username": "Yetunde",
+    "email": "yetunde@gmail.com",
+    "password": "yetunde",
+    "password_confirmation": "yetunde"
 }
 ```
 
 #### Response
 ```
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjE1LCJFbWFpbCI6ImFkYUBnbWFpbC5jb20iLCJSb2xlSWQiOjEsImlhdCI6MTQ5MTIyMTk4NiwiZXhwIjoxNDkxMjU3OTg2fQ.MtqGTyA5q7zrs7pgbKwtsVUqiTyWYcH6KINgnQK8KJA",
-  "expiresIn": "10h",
-  "user": {
-    "id": 15,
-    "username": "Ada",
-    "firstname": "Addnana",
-    "lastname": "Ada",
-    "email": "ada@gmail.com",
-    "password": "$2a$10$.jAF5xr2IGeZDyUOsivN2etYd8HaUPwvVc3bjPlI0quQEZy5yexN2",
-    "RoleId": 2,
-    "updatedAt": "2017-04-03T12:19:45.740Z",
-    "createdAt": "2017-04-03T12:19:45.740Z"
-  }
+  "success": true,
+  "message": "User Created Successfully",
+  "createdUser": {
+    "id": 29,
+    "username": "Yetunde",
+    "email": "yetunde@gmail.com",
+    "password": "yetunde",
+    "password_confirmation": "yetunde",
+    "roleId": 3,
+    "updatedAt": "2017-04-06T20:31:30.512Z",
+    "createdAt": "2017-04-06T20:31:30.512Z",
+    "password_digest": "$2a$10$27HY4xUyMq2dGINYfE2k2e6sktlL265cNyjPrBgUQXL997G2AOs.W"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksImVtYWlsIjoieWV0dW5kZUBnbWFpbC5jb20iLCJyb2xlSWQiOjMsImlhdCI6MTQ5MTUxMDY5MCwiZXhwIjoxNDkxNTQ2NjkwfQ.78zyf7GLfgZkodRT6pqcG87K6poHTkizfDGOFhmBEN4"
 }
 ```
 
@@ -107,122 +106,190 @@ Fetches all users' details,
 #### Response
 ```
 {
-  "paginationMeta": {
-    "totalCount": 13,
-    "pageSize": 8,
-    "pageCount": 2,
-    "currentPage": 1
-  },
-  "result": [
+  "success": true,
+  "message": [
     {
       "id": 1,
-      "username": "simi",
-      "firstname": "Simisola",
-      "lastname": "Akinrele",
-      "email": "akinrelesimi@gmail.com",
-      "password": "$2a$10$J/1mi4mPbP4XwEGJSknwlOS1/luSdiTlXueor5GoYO7eWnaXN4fZ.",
-      "RoleId": 1,
-      "createdAt": "2017-04-02T16:47:41.251Z",
-      "updatedAt": "2017-04-02T16:47:41.251Z"
+      "username": "yemisi",
+      "email": "yemisi@yahoo.com",
+      "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+      "createdAt": "2017-03-29T19:54:35.398Z",
+      "updatedAt": "2017-03-29T19:54:35.398Z",
+      "roleId": 3
+    },
+    {
+      "id": 3,
+      "username": "Fisayomi",
+      "email": "fisayomi.ojuri@andela.com",
+      "password_digest": "$2a$10$FLmcv3/RXSeAuEjx92lpjevLCK6vpiJBWRDsSud/DFwdCsyIp92gy",
+      "createdAt": "2017-03-30T14:53:44.355Z",
+      "updatedAt": "2017-03-30T14:53:44.355Z",
+      "roleId": 1
     },
     {
       "id": 4,
-      "username": "dede",
-      "firstname": "Dedele",
-      "lastname": "Adebiyi",
-      "email": "dede@gmail.com",
-      "password": "$2a$10$kWVzQ1qR/DXeYhkhURQMQ.wq0fDj5z1ndqcgVceAOGpA7sQbItpsa",
-      "RoleId": 2,
-      "createdAt": "2017-04-02T16:47:41.251Z",
-      "updatedAt": "2017-04-02T16:47:41.251Z"
-    },
-    {
-      "id": 2,
-      "username": "barbie",
-      "firstname": "Barbara",
-      "lastname": "Ezomo",
-      "email": "barbara@gmail.com",
-      "password": "simisola",
-      "RoleId": 2,
-      "createdAt": "2017-04-02T16:47:41.251Z",
-      "updatedAt": "2017-04-02T21:22:08.187Z"
-    },
-    {
-      "id": 5,
-      "username": "seyi",
-      "firstname": "Seyi",
-      "lastname": "Adebiyi",
-      "email": "seyi@gmail.com",
-      "password": "$2a$10$T2K8zrYS2zMADhzf4yd17eBV7q3VEG7ZDVuWGWLtEtvKFXnCgV5/C",
-      "RoleId": 1,
-      "createdAt": "2017-04-02T16:47:41.251Z",
-      "updatedAt": "2017-04-03T10:56:58.067Z"
-    },
-    {
-      "id": 6,
-      "username": "Jaylin_Harberdd",
-      "firstname": "Bertsss",
-      "lastname": "Jastsss",
-      "email": "simisoola@gmail.com",
-      "password": "$2a$10$YhkR1owE9.NT7AM27293VeimpYAQSe/6M976p5EDc7QprPL18z.eK",
-      "RoleId": 1,
-      "createdAt": "2017-04-02T16:48:03.390Z",
-      "updatedAt": "2017-04-02T22:04:50.756Z"
-    },
-    {
-      "id": 7,
-      "username": "bola",
-      "firstname": "Bolarinwa",
-      "lastname": "Adetayo",
-      "email": "rere@gmail.com",
-      "password": "$2a$10$jH3g1lbWeDcHBnKUVI/qQ.i9lalNI88lXTqUOQ.4DA4n05b8a3d36",
-      "RoleId": 2,
-      "createdAt": "2017-04-02T16:48:17.033Z",
-      "updatedAt": "2017-04-02T16:48:17.033Z"
+      "username": "Sunday",
+      "email": "sunday@andela.com",
+      "password_digest": "$2a$10$HoMaRyIsPjD1YdQspNI38u7j/C5pLb00plIw5YChmgomU0CY5iUYi",
+      "createdAt": "2017-03-31T14:25:06.761Z",
+      "updatedAt": "2017-03-31T14:25:06.761Z",
+      "roleId": 3
     },
     {
       "id": 8,
-      "username": "Jayde_Sanford",
-      "firstname": "Carlie",
-      "lastname": "Hintz",
-      "email": "Wilmer.Von@gmail.com",
-      "password": "$2a$10$Pl1Cu3yCcuOmOldt3nLOQ.wLE3D.LFSk4hVL877Ub7h7M44KicHH6",
-      "RoleId": 1,
-      "createdAt": "2017-04-02T16:48:17.753Z",
-      "updatedAt": "2017-04-02T16:48:17.753Z"
+      "username": "JurryTest",
+      "email": "jurrytest@gmail.com",
+      "password_digest": "$2a$10$BfWnoxTh0UVJs/a0e7LX.OC13pL0Ucm/xdGQMKDdBLbfbSI1BWPua",
+      "createdAt": "2017-04-04T22:37:52.383Z",
+      "updatedAt": "2017-04-04T22:37:52.383Z",
+      "roleId": 2
     },
     {
       "id": 9,
-      "username": "Leif.King19",
-      "firstname": "Christiana",
-      "lastname": "Conn",
-      "email": "Rogelio77@yahoo.com",
-      "password": "$2a$10$zTl51.Osql6gkdHBfHuBxePTNbz1CJvoiRk/VOTcMY3xGFO0cN9VC",
-      "RoleId": 2,
-      "createdAt": "2017-04-02T16:48:18.297Z",
-      "updatedAt": "2017-04-02T16:48:18.297Z"
+      "username": "testUser",
+      "email": "testuse@gmail.com",
+      "password_digest": "$2a$10$vQJbB5T6NS/7KHyo5.xUpu352OCtXEyauK6R2jqQu6CMbxWn4IKR2",
+      "createdAt": "2017-04-04T22:38:45.683Z",
+      "updatedAt": "2017-04-04T22:38:45.683Z",
+      "roleId": 3
+    },
+    {
+      "id": 13,
+      "username": "Emmanuel",
+      "email": "emanuel@yahoo.com",
+      "password_digest": "$2a$10$co.qy6YJcOX74LiZ4g6w5.JYM7eXJlytbtkOvEXzP1nUMTMkPjNAS",
+      "createdAt": "2017-04-04T22:50:18.556Z",
+      "updatedAt": "2017-04-04T22:50:18.556Z",
+      "roleId": 3
+    },
+    {
+      "id": 19,
+      "username": "Isom Cartwright",
+      "email": "melvina48@yahoo.com",
+      "password_digest": "$2a$10$m5cqZSVj5wtg4UI1HSOXMe0IMspz13xuvSN8BAHd1IJPqSgZqaQS2",
+      "createdAt": "2017-04-05T08:28:15.857Z",
+      "updatedAt": "2017-04-05T08:28:15.857Z",
+      "roleId": 3
+    },
+    {
+      "id": 20,
+      "username": "Kiara Tromp",
+      "email": "river54@hotmail.com",
+      "password_digest": "$2a$10$ODrTOMXpu2z729lom9SgpuMg7mxCAeymB6SjGeFlmywX4THlq5pgm",
+      "createdAt": "2017-04-05T08:39:02.368Z",
+      "updatedAt": "2017-04-05T08:39:02.368Z",
+      "roleId": 3
+    },
+    {
+      "id": 21,
+      "username": "Mathias Bechtelar",
+      "email": "jerry_keebler@hotmail.com",
+      "password_digest": "$2a$10$5tLcDSuyLP4X3q46btXSLO3FO0hjDnpQ2YHGdsN99vs9j3M/FrvZ6",
+      "createdAt": "2017-04-05T08:40:01.897Z",
+      "updatedAt": "2017-04-05T08:40:01.897Z",
+      "roleId": 3
+    },
+    {
+      "id": 22,
+      "username": "Cordie Schmitt",
+      "email": "lexie.rosenbaum83@yahoo.com",
+      "password_digest": "$2a$10$Gy9GEOzBtQe0/RaCVv5gr.49b46MWjtuO9qBTavJogtdzqMA8l9oi",
+      "createdAt": "2017-04-05T09:08:29.582Z",
+      "updatedAt": "2017-04-05T09:08:29.582Z",
+      "roleId": 3
+    },
+    {
+      "id": 24,
+      "username": "Hassie Koss",
+      "email": "tierra86@gmail.com",
+      "password_digest": "$2a$10$wMYfMRlkGoUyUtH0IpRAd.chgDJQH5vPtl57pR/PESRgz68BWLrr2",
+      "createdAt": "2017-04-05T22:34:53.236Z",
+      "updatedAt": "2017-04-05T22:34:53.236Z",
+      "roleId": 3
+    },
+    {
+      "id": 18,
+      "username": "JTest",
+      "email": "jtest@gmail.com",
+      "password_digest": "$2a$10$uQBWPvhY9D9xo7ttwEtinOhlpcUEyyMpgNDhO3XcF3F2f7zpyQGo6",
+      "createdAt": "2017-04-04T22:59:27.187Z",
+      "updatedAt": "2017-04-06T13:58:45.938Z",
+      "roleId": 8
+    },
+    {
+      "id": 25,
+      "username": "newUser",
+      "email": "newuser@gmail.com",
+      "password_digest": "$2a$10$Wv7VtR1oYrDlTaNZI6hnPeHg0IQy8Wi7noOQ7DEaIccQj5qe5oe7.",
+      "createdAt": "2017-04-06T14:06:35.698Z",
+      "updatedAt": "2017-04-06T14:06:35.698Z",
+      "roleId": 3
+    },
+    {
+      "id": 26,
+      "username": "Tolulope",
+      "email": "tolu@gmail.com",
+      "password_digest": "$2a$10$3u.rGowigvrDWalhT6bfCunwwJBYbG/bw23SoNxo2T1b9S.TX1LqC",
+      "createdAt": "2017-04-06T20:21:06.123Z",
+      "updatedAt": "2017-04-06T20:21:06.123Z",
+      "roleId": 3
+    },
+    {
+      "id": 28,
+      "username": "Adebimpe",
+      "email": "bimpe@gmail.com",
+      "password_digest": "$2a$10$WtRS9ECgUO2QAbZsTOAEIOzFunrEfGGlG9hPu7.Jg5kT01pIovkMC",
+      "createdAt": "2017-04-06T20:22:48.100Z",
+      "updatedAt": "2017-04-06T20:22:48.100Z",
+      "roleId": 3
+    },
+    {
+      "id": 29,
+      "username": "Yetunde",
+      "email": "yetunde@gmail.com",
+      "password_digest": "$2a$10$27HY4xUyMq2dGINYfE2k2e6sktlL265cNyjPrBgUQXL997G2AOs.W",
+      "createdAt": "2017-04-06T20:31:30.512Z",
+      "updatedAt": "2017-04-06T20:31:30.512Z",
+      "roleId": 3
+    },
+    {
+      "id": 16,
+      "username": "testing",
+      "email": "te@yahoo.com",
+      "password_digest": "$2a$10$pmepBViOnyc4bfn91bvycOmqSB/L59W5l.Stc6Xm37DF86IkS7fNu",
+      "createdAt": "2017-04-04T22:55:07.605Z",
+      "updatedAt": "2017-04-06T20:51:36.255Z",
+      "roleId": 10
     }
-  ]
+  ],
+  "count": 17
 }
 ```
 
 
-## Get A User
+## Find A User
 #### Request
   - Endpoint: **GET**: `/users/:id`
   - Requires `Authorization` header to be set
 #### Response
 ```
 {
-    "id": 8,
-    "username": "Jayde_Sanford",
-    "firstname": "Carlie",
-    "lastname": "Hintz",
-    "email": "Wilmer.Von@gmail.com",
-    "password": "$2a$10$Pl1Cu3yCcuOmOldt3nLOQ.wLE3D.LFSk4hVL877Ub7h7M44KicHH6",
-    "RoleId": 1,
-    "createdAt": "2017-04-02T16:48:17.753Z",
-    "updatedAt": "2017-04-02T16:48:17.753Z"
+  "success": true,
+  "message": {
+    "id": 16,
+    "username": "testing",
+    "email": "te@yahoo.com",
+    "password_digest": "$2a$10$pmepBViOnyc4bfn91bvycOmqSB/L59W5l.Stc6Xm37DF86IkS7fNu",
+    "createdAt": "2017-04-04T22:55:07.605Z",
+    "updatedAt": "2017-04-06T20:51:36.255Z",
+    "roleId": 10,
+    "Role": {
+      "id": 10,
+      "category": "test2",
+      "createdAt": "2017-04-05T14:39:10.388Z",
+      "updatedAt": "2017-04-05T22:19:20.160Z"
+    }
+  }
 }
 ```
 ## Update user
@@ -231,21 +298,22 @@ Fetches all users' details,
   - Requires `Authorization` header to be set
 ```
 {
-  "RoleId": 2
+  "RoleId": 4
 }
 ```
 #### Response
 ```
 {
-  "id": 8,
-  "username": "Jayde_Sanford",
-  "firstname": "Carlie",
-  "lastname": "Hintz",
-  "email": "Wilmer.Von@gmail.com",
-  "password": "$2a$10$Pl1Cu3yCcuOmOldt3nLOQ.wLE3D.LFSk4hVL877Ub7h7M44KicHH6",
-  "RoleId": 2,
-  "createdAt": "2017-04-02T16:48:17.753Z",
-  "updatedAt": "2017-04-03T12:30:50.315Z"
+  "success": true,
+  "message": {
+    "id": 28,
+    "username": "Adebimpe",
+    "email": "bimpe@gmail.com",
+    "password_digest": "$2a$10$WtRS9ECgUO2QAbZsTOAEIOzFunrEfGGlG9hPu7.Jg5kT01pIovkMC",
+    "createdAt": "2017-04-06T20:22:48.100Z",
+    "updatedAt": "2017-04-06T22:07:26.663Z",
+    "roleId": "4"
+  }
 }
 ```
 
@@ -257,7 +325,8 @@ Fetches all users' details,
 
 ```
 {
-  "message": "Delete successful"
+  "success": true,
+  "message": "User deleted Successfully"
 }
 ```
 
@@ -266,124 +335,141 @@ Fetches all users' details,
  - Endpoint: **POST**: `/users/login`
 ```
 {
-    "email": "akinrelesimi@gmail.com",
-    "password":"password"
+    "email": "Fisayomi",
+    "password":"fisayomi"
 }
 ``` 
 
 ### Response 
 ``` 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEsIkVtYWlsIjoiYWtpbnJlbGVzaW1pQGdtYWlsLmNvbSIsIlJvbGVJZCI6MSwiaWF0IjoxNDkxMjIyNzQ2LCJleHAiOjE0OTEyNTg3NDZ9.YA3vFPmoCoVM_z9ykCUuT-V7yAlRHQfTY1pFgr4DcZI",
-  "user": {
-    "id": 1,
-    "username": "simi",
-    "firstname": "Simisola",
-    "lastname": "Akinrele",
-    "email": "akinrelesimi@gmail.com",
-    "password": "$2a$10$J/1mi4mPbP4XwEGJSknwlOS1/luSdiTlXueor5GoYO7eWnaXN4fZ.",
-    "RoleId": 1,
-    "createdAt": "2017-04-02T16:47:41.251Z",
-    "updatedAt": "2017-04-02T16:47:41.251Z"
-  }
+  "success": true,
+  "message": "Successfully logged in",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJmaXNheW9taS5vanVyaUBhbmRlbGEuY29tIiwicm9sZUlkIjoxLCJSb2xlIjp7ImlkIjoxLCJjYXRlZ29yeSI6IlN1cGVyQWRtaW4iLCJjcmVhdGVkQXQiOiIyMDE3LTAzLTI5VDE5OjUxOjMyLjUyNloiLCJ1cGRhdGVkQXQiOiIyMDE3LTAzLTI5VDE5OjUxOjMyLjUyNloifSwiaWF0IjoxNDkxNTE1ODAwLCJleHAiOjE0OTE1NTE4MDB9.tnGpWrYtPg6XLsqDgIwiLyi3WHW8BJ4NQ0p4lHSXCnc",
+  "user": 3
 }
 ```
 
-# Get Logged-in user's Document 
+# Get user's accessible Documents 
 ### Request
-  - Enpoint: **GET**: `/users/documents`
+  - Enpoint: **GET**: `/user/documents`
   - Requires `Authorization` header to be set
   
 ### Response 
 ```
 {
-  "paginationMeta": {
-    "totalCount": 4,
-    "pageSize": 8,
-    "pageCount": 1,
-    "currentPage": 1
-  },
-  "result": [
+  "success": true,
+  "message": [
     {
-      "id": 1,
-      "title": "hey there",
-      "content": "<p>ea reiciendis fuga</p>",
-      "OwnerId": 1,
-      "access": "private",
-      "createdAt": "2017-04-02T16:47:41.262Z",
-      "updatedAt": "2017-04-02T20:35:06.436Z"
+      "id": 34,
+      "title": "ljskhagfxjhgfjhgfnbvjhg",
+      "content": "<p>jkhgfdcfghjkjhgfdckjuhgkjhgfjujygfds</p>",
+      "access": "Public",
+      "createdAt": "2017-04-01T09:41:24.730Z",
+      "updatedAt": "2017-04-01T09:41:24.730Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
     },
     {
-      "id": 4,
-      "title": "meal ",
-      "content": "<p>et ratione earum</p>",
-      "OwnerId": 1,
-      "access": "role",
-      "createdAt": "2017-04-02T16:47:41.262Z",
-      "updatedAt": "2017-04-02T20:38:10.399Z"
+      "id": 33,
+      "title": "ljskhagfxjhgfjhgfnbv",
+      "content": "<p>jkhgfdcfghjkjhgfdckjuhgkjhgf</p>",
+      "access": "Public",
+      "createdAt": "2017-04-01T09:41:16.502Z",
+      "updatedAt": "2017-04-01T09:41:16.502Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
     },
     {
-      "id": 13,
-      "title": "ddd",
-      "content": "<p>simi</p>",
-      "OwnerId": 1,
-      "access": "private",
-      "createdAt": "2017-04-02T20:20:16.614Z",
-      "updatedAt": "2017-04-03T10:04:25.359Z"
+      "id": 30,
+      "title": "ljskhagfxjhgfjhgf",
+      "content": "<p>jkhgfdcfghjkjhgfdckjuhg</p>",
+      "access": "Private",
+      "createdAt": "2017-04-01T09:41:00.718Z",
+      "updatedAt": "2017-04-01T09:41:00.718Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
     },
     {
-      "id": 15,
-      "title": "bla bla",
-      "content": "<p>A random text to test how things are working</p>",
-      "OwnerId": 1,
-      "access": "public",
-      "createdAt": "2017-04-02T20:34:02.046Z",
-      "updatedAt": "2017-04-02T20:34:02.046Z"
+      "id": 28,
+      "title": "ljskhagfxjhgf",
+      "content": "<p>jkhgfdcfghjkjhgfdc</p>",
+      "access": "Role",
+      "createdAt": "2017-04-01T09:40:32.903Z",
+      "updatedAt": "2017-04-01T09:40:32.903Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
+    },
+    {
+      "id": 27,
+      "title": "ljskhagfx",
+      "content": "<p>jkhgfdcfghjk</p>",
+      "access": "Role",
+      "createdAt": "2017-04-01T09:40:19.128Z",
+      "updatedAt": "2017-04-01T09:40:19.128Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
+    },
+    {
+      "id": 9,
+      "title": "Sunday_Doc",
+      "content": "<p>This is my first Doc</p>",
+      "access": "Role",
+      "createdAt": "2017-03-31T14:29:43.227Z",
+      "updatedAt": "2017-03-31T14:29:43.227Z",
+      "userId": 4,
+      "User": {
+        "id": 4,
+        "username": "Sunday",
+        "email": "sunday@andela.com",
+        "password_digest": "$2a$10$HoMaRyIsPjD1YdQspNI38u7j/C5pLb00plIw5YChmgomU0CY5iUYi",
+        "createdAt": "2017-03-31T14:25:06.761Z",
+        "updatedAt": "2017-03-31T14:25:06.761Z",
+        "roleId": 3
+      }
     }
-  ]
-}
-```
-
-# Search for a user with email 
-### Request
-  - Enpoint: **GET**: `/users/search/:email`
-  - Requires `Authorization` header to be set
-
-### Response 
-
-```
-{
-  "id": 15,
-  "username": "Ada",
-  "firstname": "Addnana",
-  "lastname": "Ada",
-  "email": "ada@gmail.com",
-  "password": "$2a$10$.jAF5xr2IGeZDyUOsivN2etYd8HaUPwvVc3bjPlI0quQEZy5yexN2",
-  "RoleId": 1,
-  "createdAt": "2017-04-03T12:19:45.740Z",
-  "updatedAt": "2017-04-03T12:19:45.740Z"
-}
-```
-
-# Update password 
-### Request
-  - Enpoint: **PUT**: `/users/:id/password`
-  - Requires `Authorization` header to be set
-
-Body (application/json)
-```
-{
-    "oldPassword": "password",
-    "newPassword": "simisola",
-    "confirmPassword": "simisola"
-}
-``` 
-
-### Response
-
-```
-{
-    "message": "Password Update successful"
+  ],
+  "count": 6
 }
 ```
 
@@ -396,15 +482,21 @@ ROLES
 Body (application/json)
 ```
 {
-  "title": "Admin"
+  "category": "technical"
 }
 ```
 #### Response
 Body (application/json)
 ```
 {
-  status: 201,
-  message: 'Successfully created'
+  "success": true,
+  "message": "Role created Successfully",
+  "createdRole": {
+    "id": 14,
+    "category": "technical",
+    "updatedAt": "2017-04-06T22:28:20.167Z",
+    "createdAt": "2017-04-06T22:28:20.167Z"
+  }
 }
 ```
 
@@ -416,20 +508,65 @@ Body (application/json)
 #### Response
 Body (application/json)
 ```
-[
-  {
-    "id": 1,
-    "title": "Admin",
-    "createdAt": "2017-04-02T16:47:40.183Z",
-    "updatedAt": "2017-04-02T16:47:40.183Z"
-  },
-  {
-    "id": 2,
-    "title": "User",
-    "createdAt": "2017-04-02T16:47:40.183Z",
-    "updatedAt": "2017-04-02T16:47:40.183Z"
-  }
-]
+{
+  "success": true,
+  "message": [
+    {
+      "id": 1,
+      "category": "SuperAdmin",
+      "createdAt": "2017-03-29T19:51:32.526Z",
+      "updatedAt": "2017-03-29T19:51:32.526Z"
+    },
+    {
+      "id": 2,
+      "category": "Admin",
+      "createdAt": "2017-03-29T19:51:44.268Z",
+      "updatedAt": "2017-03-29T19:51:44.268Z"
+    },
+    {
+      "id": 3,
+      "category": "Regular",
+      "createdAt": "2017-03-29T19:51:55.228Z",
+      "updatedAt": "2017-03-29T19:51:55.228Z"
+    },
+    {
+      "id": 4,
+      "category": "Staff",
+      "createdAt": "2017-03-29T19:52:09.640Z",
+      "updatedAt": "2017-03-29T19:52:09.640Z"
+    },
+    {
+      "id": 7,
+      "category": "another",
+      "createdAt": "2017-04-05T14:17:59.919Z",
+      "updatedAt": "2017-04-05T14:17:59.919Z"
+    },
+    {
+      "id": 8,
+      "category": "anotherRole",
+      "createdAt": "2017-04-05T14:34:59.373Z",
+      "updatedAt": "2017-04-05T14:34:59.373Z"
+    },
+    {
+      "id": 11,
+      "category": "testing",
+      "createdAt": "2017-04-05T14:42:29.076Z",
+      "updatedAt": "2017-04-05T14:42:29.076Z"
+    },
+    {
+      "id": 12,
+      "category": "cgcvdgfds",
+      "createdAt": "2017-04-05T14:48:50.672Z",
+      "updatedAt": "2017-04-05T14:48:50.672Z"
+    },
+    {
+      "id": 10,
+      "category": "test2",
+      "createdAt": "2017-04-05T14:39:10.388Z",
+      "updatedAt": "2017-04-05T22:19:20.160Z"
+    }
+  ]
+}
 ```
 
 ## Update Role
@@ -439,17 +576,21 @@ Body (application/json)
 Body (application/json)
 ```
 {
-  "title": "Account Manager"
+  "category": "tech"
 }
 ```
 #### Response
 Body (application/json)
 ```
 {
-  "id": 6,
-  "title": "Account Manager",
-  "createdAt": "2017-04-02T16:47:40.183Z",
-  "updatedAt": "2017-04-03T13:30:46.792Z"
+  "success": true,
+  "message": "Role Updated Successfully",
+  "role": {
+    "id": 14,
+    "category": "tech",
+    "createdAt": "2017-04-06T22:28:20.167Z",
+    "updatedAt": "2017-04-06T22:29:29.938Z"
+  }
 }
 ```
 
@@ -461,116 +602,99 @@ DOCUMENTS
   - Requires `Authorization` header to be set
 ```
 {
-  "title": "Marvel",
-  "content": "Diary of a movie addict"
+  "title": "test_Docc",
+  "content": "This is a test Document",
+  "access": "Role"
 }
 ```
 #### Response
   - Body `(application/json)`
 ```
 {
-  "access": "public",
-  "id": 19,
-  "title": "Marvel",
-  "content": "Diary of a movie addict",
-  "OwnerId": 1,
-  "updatedAt": "2017-04-03T13:32:34.887Z",
-  "createdAt": "2017-04-03T13:32:34.887Z"
+  "success": true,
+  "message": "Document added Successfully",
+  "createdDocument": {
+    "id": 59,
+    "title": "test_Doccc",
+    "content": "This is a test Document",
+    "access": "Role",
+    "userId": 3,
+    "updatedAt": "2017-04-06T22:35:32.001Z",
+    "createdAt": "2017-04-06T22:35:32.001Z"
+  }
 }
 ```
 ## Get Document
 #### Request
-  - Endpoint **GET** `/documents`
-  - Optional queries **page** (for the page number) && **limit** (number of documents per page)
+  - Endpoint **GET** `/public/documents`
+  - Optional queries **offset** && **limit** (number of documents per page)
   - Requires `Authorization` header to be set
 
 #### Response
 ```
 {
-  "paginationMeta": {
-    "totalCount": 11,
-    "pageSize": 8,
-    "pageCount": 2,
-    "currentPage": 1
-  },
-  "result": [
+  "success": true,
+  "message": [
     {
-      "id": 1,
-      "title": "hey there",
-      "content": "<p>ea reiciendis fuga</p>",
-      "OwnerId": 1,
-      "access": "private",
-      "createdAt": "2017-04-02T16:47:41.262Z",
-      "updatedAt": "2017-04-02T20:35:06.436Z"
+      "id": 55,
+      "title": "Sunday_type",
+      "content": "<p>kjhgfdghj</p>",
+      "access": "Public",
+      "createdAt": "2017-04-05T14:08:11.491Z",
+      "updatedAt": "2017-04-05T14:08:11.491Z",
+      "userId": 3,
+      "User": {
+        "id": 3,
+        "username": "Fisayomi",
+        "email": "fisayomi.ojuri@andela.com",
+        "password_digest": "$2a$10$FLmcv3/RXSeAuEjx92lpjevLCK6vpiJBWRDsSud/DFwdCsyIp92gy",
+        "createdAt": "2017-03-30T14:53:44.355Z",
+        "updatedAt": "2017-03-30T14:53:44.355Z",
+        "roleId": 1
+      }
     },
     {
-      "id": 5,
-      "title": "bread ",
-      "content": "bread and beans",
-      "OwnerId": 2,
-      "access": "role",
-      "createdAt": "2017-04-02T16:47:41.262Z",
-      "updatedAt": "2017-04-02T16:47:41.262Z"
+      "id": 34,
+      "title": "ljskhagfxjhgfjhgfnbvjhg",
+      "content": "<p>jkhgfdcfghjkjhgfdckjuhgkjhgfjujygfds</p>",
+      "access": "Public",
+      "createdAt": "2017-04-01T09:41:24.730Z",
+      "updatedAt": "2017-04-01T09:41:24.730Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
     },
     {
-      "id": 4,
-      "title": "meal ",
-      "content": "<p>et ratione earum</p>",
-      "OwnerId": 1,
-      "access": "role",
-      "createdAt": "2017-04-02T16:47:41.262Z",
-      "updatedAt": "2017-04-02T20:38:10.399Z"
-    },
-    {
-      "id": 3,
-      "title": "new doc ",
-      "content": "This is my test second data",
-      "OwnerId": 2,
-      "access": "private",
-      "createdAt": "2017-04-02T16:47:41.262Z",
-      "updatedAt": "2017-04-02T16:47:41.262Z"
-    },
-    {
-      "id": 7,
-      "title": "debitis",
-      "content": "culpa laudantium dolores",
-      "OwnerId": 6,
-      "access": "public",
-      "createdAt": "2017-04-02T16:48:16.975Z",
-      "updatedAt": "2017-04-02T16:48:16.975Z"
-    },
-    {
-      "id": 8,
-      "title": "Multi-lateral high-level artificial intelligence",
-      "content": "Et aperiam laudantium et est cum architecto. Et architecto velit est voluptas. Sit impedit eveniet sit magnam aut.",
-      "OwnerId": 6,
-      "access": "private",
-      "createdAt": "2017-04-02T16:48:16.987Z",
-      "updatedAt": "2017-04-02T16:48:16.987Z"
-    },
-    {
-      "id": 9,
-      "title": "Fundamental tertiary project",
-      "content": "Vel maiores quis dicta quos eos nisi sunt qui. Velit qui architecto accusantium cupiditate aliquid dignissimos doloremque porro. Sit est nostrum sed quas iste quia. Eaque itaque dolores aut cum dolorem ipsam.",
-      "OwnerId": null,
-      "access": "public",
-      "createdAt": "2017-04-02T16:48:19.786Z",
-      "updatedAt": "2017-04-02T16:48:19.786Z"
-    },
-    {
-      "id": 13,
-      "title": "ddd",
-      "content": "<p>simi</p>",
-      "OwnerId": 1,
-      "access": "private",
-      "createdAt": "2017-04-02T20:20:16.614Z",
-      "updatedAt": "2017-04-03T10:04:25.359Z"
+      "id": 33,
+      "title": "ljskhagfxjhgfjhgfnbv",
+      "content": "<p>jkhgfdcfghjkjhgfdckjuhgkjhgf</p>",
+      "access": "Public",
+      "createdAt": "2017-04-01T09:41:16.502Z",
+      "updatedAt": "2017-04-01T09:41:16.502Z",
+      "userId": 1,
+      "User": {
+        "id": 1,
+        "username": "yemisi",
+        "email": "yemisi@yahoo.com",
+        "password_digest": "$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2",
+        "createdAt": "2017-03-29T19:54:35.398Z",
+        "updatedAt": "2017-03-29T19:54:35.398Z",
+        "roleId": 3
+      }
     }
-  ]
+  ],
+  "count": 3
 }
 ```
 
-## Get A Document
+## Find A Document
 #### Request
   - Endpoint **GET** `/documents/:id` where id is the id of the document
   - Requires `Authorization` header to be set
@@ -578,13 +702,16 @@ DOCUMENTS
 ##### Response
 ```
 {
-  "id": 4,
-  "title": "meal ",
-  "content": "<p>et ratione earum</p>",
-  "OwnerId": 1,
-  "access": "role",
-  "createdAt": "2017-04-02T16:47:41.262Z",
-  "updatedAt": "2017-04-02T20:38:10.399Z"
+  "success": true,
+  "message": {
+    "id": 33,
+    "title": "ljskhagfxjhgfjhgfnbv",
+    "content": "<p>jkhgfdcfghjkjhgfdckjuhgkjhgf</p>",
+    "access": "Public",
+    "createdAt": "2017-04-01T09:41:16.502Z",
+    "updatedAt": "2017-04-01T09:41:16.502Z",
+    "userId": 1
+  }
 }
 ```
 
@@ -594,20 +721,23 @@ DOCUMENTS
   - Requires `Authorization` header to be set
 ```
 {
-  "title": "The accountant",
-  "content": "J.K simmons was in the movie as well as Ben Affleck, one of my fav"
+  "content": "This is an updated test Document"
 }
 ```
 ##### Response
 ```
 {
-  "id": 4,
-  "title": "The accountant",
-  "content": "J.K simmons was in the movie as well as Ben Affleck, one of my fav",
-  "OwnerId": 1,
-  "access": "role",
-  "createdAt": "2017-04-02T16:47:41.262Z",
-  "updatedAt": "2017-04-02T20:38:10.399Z"
+  "success": true,
+  "message": "Document updated Successfully",
+  "document": {
+    "id": 59,
+    "title": "test_Doccc",
+    "content": "This is an updated test Document",
+    "access": "Role",
+    "createdAt": "2017-04-06T22:35:32.001Z",
+    "updatedAt": "2017-04-06T22:40:02.254Z",
+    "userId": 3
+  }
 }
 ```
 
@@ -618,135 +748,67 @@ DOCUMENTS
 #### Response
 ```
 {
-  status: 200,
-  message: 'Delete Successful'
+  "success": true,
+  "message": "Document deleted Successfully"
 }
-```
-
-## Get Accessible Documents
-#### Request
-  - Endpoint **GET** `/accessible/documents`
-  - Requires `Authorization` header to be set
-#### Response
-```
-[
-  {
-    "id": 19,
-    "title": "DEDE",
-    "content": "This is my document",
-    "OwnerId": 1,
-    "access": "public"
-  },
-  {
-    "id": 4,
-    "title": "meal ",
-    "content": "<p>et ratione earum</p>",
-    "OwnerId": 1,
-    "access": "role"
-  },
-  {
-    "id": 15,
-    "title": "bla bla",
-    "content": "<p>A random text to test how things are working</p>",
-    "OwnerId": 1,
-    "access": "public"
-  },
-  {
-    "id": 7,
-    "title": "debitis",
-    "content": "culpa laudantium dolores",
-    "OwnerId": 6,
-    "access": "public"
-  }
-]
-```
-
-## Get Documents that were private shared with user
-#### Request
-  - Endpoint **GET** `/documents/access/private`
-  - Requires `Authorization` header to be set
-#### Response
-```
-[
-  {
-    "id": 3,
-    "title": "new doc ",
-    "content": "This is my test second data",
-    "OwnerId": 2,
-    "access": "private",
-    "createdAt": "2017-04-02T16:47:41.262Z",
-    "updatedAt": "2017-04-02T16:47:41.262Z"
-  },
-  {
-    "id": 18,
-    "title": "Simisola",
-    "content": "<p>Hi simi,</p>\n<p>This is Seyi.&nbsp;</p>\n<p>i am sharing a private message with you&nbsp;</p>",
-    "OwnerId": 5,
-    "access": "private",
-    "createdAt": "2017-04-03T10:58:09.488Z",
-    "updatedAt": "2017-04-03T10:58:09.488Z"
-  }
-]
 ```
 
 Search
 -----
 
-## Search Users
+# Search for a user with username 
 #### Request
-  - Endpoint **GET** `/search/users?q=simi`
-  - Requires `Authorization` header to be set
-#### Response
+  - Enpoint: **GET**: `/search/users?username=Sunday`
+  - Requires `Authorization` header to be set as Admin/Super Admin
+
+#### Response 
+
 ```
-[
-  {
-    "id": 1,
-    "username": "simi",
-    "firstname": "Simisola",
-    "lastname": "Akinrele",
-    "email": "akinrelesimi@gmail.com",
-    "password": "$2a$10$J/1mi4mPbP4XwEGJSknwlOS1/luSdiTlXueor5GoYO7eWnaXN4fZ.",
-    "RoleId": 1,
-    "createdAt": "2017-04-02T16:47:41.251Z",
-    "updatedAt": "2017-04-02T16:47:41.251Z"
-  },
-  {
-    "id": 6,
-    "username": "Jaylin_Harberdd",
-    "firstname": "Bertsss",
-    "lastname": "Jastsss",
-    "email": "simisoola@gmail.com",
-    "password": "$2a$10$YhkR1owE9.NT7AM27293VeimpYAQSe/6M976p5EDc7QprPL18z.eK",
-    "RoleId": 1,
-    "createdAt": "2017-04-02T16:48:03.390Z",
-    "updatedAt": "2017-04-02T22:04:50.756Z"
-  }
-]
+{
+  "success": true,
+  "message": [
+    {
+      "id": 4,
+      "username": "Sunday",
+      "email": "sunday@andela.com",
+      "password_digest": "$2a$10$HoMaRyIsPjD1YdQspNI38u7j/C5pLb00plIw5YChmgomU0CY5iUYi",
+      "createdAt": "2017-03-31T14:25:06.761Z",
+      "updatedAt": "2017-03-31T14:25:06.761Z",
+      "roleId": 3
+    }
+  ],
+  "count": 1
+}
 ```
 
 ## Search Documents
 #### Request
-  - Endpoint **GET** `/search/documents?q=simi`
+  - Endpoint **GET** `/search/documents?title=Sunday_type`
   - Requires `Authorization` header to be set
 #### Response
 ```
-[
-  {
-    "id": 13,
-    "title": "ddd",
-    "content": "<p>simi</p>",
-    "OwnerId": 1,
-    "access": "private",
-    "createdAt": "2017-04-02T20:20:16.614Z",
-    "updatedAt": "2017-04-03T10:04:25.359Z"
-  },
-  {
-    "id": 18,
-    "title": "Simisola",
-    "content": "<p>Hi simi,</p>\n<p>This is Seyi.&nbsp;</p>\n<p>i am sharing a private message with you&nbsp;</p>",
-    "OwnerId": 5,
-    "access": "private",
-    "createdAt": "2017-04-03T10:58:09.488Z",
-    "updatedAt": "2017-04-03T10:58:09.488Z"
-  }
-]
+{
+  "success": true,
+  "message": [
+    {
+      "id": 55,
+      "title": "Sunday_type",
+      "content": "<p>kjhgfdghj</p>",
+      "access": "Public",
+      "createdAt": "2017-04-05T14:08:11.491Z",
+      "updatedAt": "2017-04-05T14:08:11.491Z",
+      "userId": 3,
+      "User": {
+        "id": 3,
+        "username": "Fisayomi",
+        "email": "fisayomi.ojuri@andela.com",
+        "password_digest": "$2a$10$FLmcv3/RXSeAuEjx92lpjevLCK6vpiJBWRDsSud/DFwdCsyIp92gy",
+        "createdAt": "2017-03-30T14:53:44.355Z",
+        "updatedAt": "2017-03-30T14:53:44.355Z",
+        "roleId": 1
+      }
+    }
+  ],
+  "count": 1
+}
+```
