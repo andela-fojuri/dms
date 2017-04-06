@@ -47,7 +47,6 @@ export function saveRole(role) {
 }
 
 export function editRole(role) {
-  $('#editRole').modal('open');
   return { type: actions.SHOW_EDITABLE_ROLE, role };
 }
 

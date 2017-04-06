@@ -14,7 +14,6 @@ export default function userReducer(state = initialState.manageUsers, action) {
     case types.FIND_USER_SUCCESS:
       return Object.assign({}, state, { userDetails: action.userDetails });
     case types.EDIT_USER:
-      $('#editUser').modal('open');
       return Object.assign({}, state, { editUser: action.user });
     default:
       return state;
