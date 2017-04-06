@@ -21,18 +21,6 @@ const Roles = {
     });
   },
 
-  getUserRoles(req, res) {
-    Role.findAll().then((roles) => {
-      const newRow = [];
-      roles.forEach((row) => {
-        if (row.category !== 'SuperAdmin' && row.category !== 'Admin') { newRow.push(row); }
-      });
-      res.send({ success: true, message: newRow });
-    }).catch((err) => {
-      res.status(500).send({ success: false, message: 'Unexpected error occured' });
-    });
-  },
-
   getRoles(req, res) {
     Role.findAll().then((roles) => {
       res.send({ success: true, message: roles });

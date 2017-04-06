@@ -35,8 +35,7 @@ module.exports = (app) => {
   app.post('/roles', authentication, verifyAdmin, Roles.create);
   app.put('/roles/:id', authentication, verifyAdmin, Roles.updateRole);
   app.delete('/roles/:id', authentication, verifyAdmin, Roles.deleteRole);
-  app.get('/roles', Roles.getRoles);
-  app.get('/user/roles', Roles.getUserRoles);
+  app.get('/roles', authentication, verifyAdmin, Roles.getRoles);
   // Search Endpoints
 };
 

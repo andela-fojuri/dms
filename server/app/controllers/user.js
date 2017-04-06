@@ -12,7 +12,7 @@ const Users = {
       email: req.body.email || null,
       password: req.body.password || null,
       password_confirmation: req.body.password_confirmation || null,
-      roleId: req.body.roleId,
+      roleId: 3,
     }).then((createdUser) => {
       const payload = JSON.stringify(createdUser);
       const token = jwt.sign(payload, process.env.SECRET);
@@ -115,9 +115,9 @@ const Users = {
             res.status(400).send({ success: false, message: 'Incorrect Old Password' });
           }
         });
-      } else if (req.body.username) {
-        user.update({ username: req.body.username }).then((count, row) => {
-          res.send({ success: true, message: 'Name Updated Successfully' });
+      } else if (req.body.username || req.body.roleId) {
+        user.update({ username: req.body.username, roleId: req.body.roleId || user.roleId }).then((count, row) => {
+          res.send({ success: true, message: 'Details Updated Successfully' });
         });
       } else {
         res.status(400).send({ success: false, message: 'Field(s) cannot be empty' });

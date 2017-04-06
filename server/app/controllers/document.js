@@ -193,7 +193,33 @@ const Documents = {
     } else {
       res.send({ success: true, message: accessibleDocuments, count: accessibleDocuments.length });
     }
+  },
+
+  searchDocument2: (req, res) => {
+    Document.findAll({
+      where: {
+        $or: [{
+          title: {
+            $iLike: `%${req.query.q}%`
+          }
+        }, {
+          content: {
+            $iLike: `%${req.query.q}%`
+          }
+        }]
+      }
+    }).then((documents) => {
+      if (!documents) {
+        return res.status(404)
+            .send({ message: 'No document found' });
+      }
+      res.status(200).send(documents);
+    })
+      .catch((err) => {
+        res.status(400).send(err);
+      });
   }
 };
+
 
 export default Documents;
