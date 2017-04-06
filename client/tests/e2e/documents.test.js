@@ -53,6 +53,7 @@ module.exports = { // adapted from: https://git.io/vodU
       .click('.button-collapse')
       .waitForElementPresent('a[id=allRoles]', 1000)
       .click('#allRoles')
+      .click('#allRoles')
       .pause(1000)
       .waitForElementVisible('h4[class=roleLabel]')
       .assert.containsText('h4[class=roleLabel]', 'All Roles')

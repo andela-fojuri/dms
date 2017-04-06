@@ -13,7 +13,11 @@ export function createRoleSuccess(roleCreated) {
 }
 
 export function getRoles() {
-  return dispatch => axios.get('/roles').then((response) => {
+  return dispatch => axios({
+    method: 'get',
+    url: '/roles',
+    headers: { 'x-access-token': localStorage.getItem('token') },
+  }).then((response) => {
     if (response.data.success) {
       dispatch(getRolesSuccess(response.data.message));
     }

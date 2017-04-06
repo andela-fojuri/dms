@@ -43,8 +43,6 @@ module.exports = { // adapted from: https://git.io/vodU0
       .setValue('input[name=email]', faker.internet.email().toLowerCase())
       .setValue('input[name=password]', 'myPassword')
       .setValue('input[name=password_confirmation]', 'myPassword')
-      .click('#selectInput')
-      .click('.opts[value="3"]')
       .click('.btn')
       .pause(5000)
       .assert.urlEquals('http://localhost:4000/dashboard')

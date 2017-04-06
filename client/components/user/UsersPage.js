@@ -1,16 +1,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/userActions';
-import * as componentActions from '../../actions/componentActions';
-import TextInput from '../common/TextInput';
-import SelectInput from '../common/SelectInput';
-
 
 export class UsersPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-
+    this.limit = 10;
     this.state = {
       id: this.props.editUser.id,
       username: this.props.editUser.username,
@@ -20,12 +17,11 @@ export class UsersPage extends React.Component {
 
     this.showUserForm = this.showUserForm.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
-    this.onChangeUser = this.onChangeUser.bind(this);
-    this.onClickSave = this.onClickSave.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
+    this.getTotalPage = this.getTotalPage.bind(this);
   }
 
   componentDidMount() {
-    // $(document).ready(() => {
     $('.modal').modal();
     $('.button-collapse').sideNav();
     $('.dropdown-button').dropdown({
@@ -39,7 +35,6 @@ export class UsersPage extends React.Component {
       // stopPropagation: false // Stops event propagation
     }
     );
-    // ]});
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,16 +47,9 @@ export class UsersPage extends React.Component {
     }
   }
 
-  onChangeUser(event) {
-    const field = event.target.name;
-    const value = event.target.value;
-    this.setState(() => ({ [field]: value }));
-  }
-
-  onClickSave() {
-    this.props.actions.updateUser(this.state).then(() => {
-      $('#editUser').modal('close');
-    });
+  getTotalPage() {
+    const { totalUsers } = this.props;
+    return totalUsers % this.limit === 0 ? Math.floor(totalUsers / this.limit) : Math.floor(totalUsers / this.limit) + 1;
   }
 
   deleteUser(id) {
@@ -73,6 +61,11 @@ export class UsersPage extends React.Component {
   showUserForm(index) {
     $('#editUser').modal('open');
     this.props.actions.editUser(Object.assign({}, this.props.users[index]));
+  }
+
+  handlePagination(page) {
+    const offset = page.selected * this.limit;
+    this.props.actions.getUsers(offset, this.limit);
   }
 
   render() {
@@ -95,54 +88,15 @@ export class UsersPage extends React.Component {
               </div>
             ))}
           </div>
-        </div>
-        <div id="editUser" className="modal">
-          <div className="modal-content">
-            <div className="row">
-              <form>
-                <h5>Edit User</h5>
-                <div className="row">
-                  <TextInput
-                    name="username"
-                    onChange={this.onChangeUser}
-                    icon="account_circle"
-                    value={this.state.username || ''}
-                    placeholder="Enter username"
-                  />
-                </div>
-                <div className="row">
-                  <div className="input-field col s12">
-                    <i className="material-icons prefix">mail_outline</i>
-                    <input
-                      type="email"
-                      name="email"
-                      className="validate"
-                      onChange={this.onChangeUser}
-                      value={this.state.email || ''}
-                      placeholder="Enter Email"
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col s6">
-                    <SelectInput
-                      defaultOption="Select your role"
-                      name="roleId"
-                      options={this.props.roles}
-                      onChange={this.onChangeUser}
-                      value={this.state.roleId}
-                    />
-                  </div>
-                  <input
-                    type="button"
-                    value="Update"
-                    className="waves-effect waves-light btn"
-                    onClick={this.onClickSave}
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
+          <ReactPaginate
+            pageCount={this.getTotalPage()}
+            pageRangeDisplayed={0}
+            marginPagesDisplayed={5}
+            containerClassName="pagination"
+            activeClassName="active"
+            pageClassName="waves_effect"
+            onPageChange={this.handlePagination}
+            pageLinkClassName="paginateLink" />
         </div>
       </div>
     );
@@ -152,26 +106,21 @@ export class UsersPage extends React.Component {
 UsersPage.propTypes = {
   users: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
-  roles: PropTypes.array.isRequired,
-  editUser: PropTypes.object.isRequired
+  editUser: PropTypes.object.isRequired,
+  totalUsers: PropTypes.number
 };
 
 function mapStateToProps(state, ownProps) {
-  const rolesDropdown = state.roles.roles.map(role => ({
-    value: Number(role.id),
-    text: role.category,
-  }));
   return {
     users: state.users.users,
-    roles: rolesDropdown,
-    editUser: state.users.editUser
+    editUser: state.users.editUser,
+    totalUsers: state.users.totalUsers
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    actions: bindActionCreators(userActions, dispatch),
-    actions2: bindActionCreators(componentActions, dispatch)
+    actions: bindActionCreators(userActions, dispatch)
   };
 }
 

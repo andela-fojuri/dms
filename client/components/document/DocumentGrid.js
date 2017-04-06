@@ -17,7 +17,6 @@ export class DocumentGrid extends React.Component {
   }
 
   componentDidMount() {
-    // $(document).ready(() => {
     $('.modal').modal();
     $('.button-collapse').sideNav();
     $('.dropdown-button').dropdown({
@@ -31,7 +30,6 @@ export class DocumentGrid extends React.Component {
       // stopPropagation: false // Stops event propagation
     }
     );
-    // ]});
   }
 
   getDocs(index) {

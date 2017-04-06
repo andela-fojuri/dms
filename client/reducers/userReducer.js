@@ -10,7 +10,7 @@ export default function userReducer(state = initialState.manageUsers, action) {
       browserHistory.push('/dashboard');
       return undefined;
     case types.GET_USERS_SUCCESS:
-      return Object.assign({}, state, { users: action.users });
+      return Object.assign({}, state, { users: action.users, totalUsers: action.count });
     case types.FIND_USER_SUCCESS:
       return Object.assign({}, state, { userDetails: action.userDetails });
     case types.EDIT_USER:

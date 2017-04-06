@@ -7,6 +7,7 @@ import RoleGridComponent from '../role/RoleGrid';
 import * as documentActions from '../../actions/documentActions';
 import DashboardMenuComponent from './DashboardMenu';
 import RoleFormComponent from '../role/RoleForm';
+import UsersFormCompnent from '../user/forms/UsersForm';
 import UsersPageComponent from '../user/UsersPage';
 
 
@@ -52,6 +53,7 @@ export class DashboardPage extends React.Component {
           <DocumentFormComponent />
           <DocumentGridComponent />
           <RoleFormComponent />
+          <UsersFormCompnent />
         </div>
       );
     } else if (this.state.showUsers) {
@@ -61,6 +63,7 @@ export class DashboardPage extends React.Component {
           <UsersPageComponent />
           <DocumentFormComponent />
           <RoleFormComponent />
+          <UsersFormCompnent />
         </div>
       );
     } else if (this.state.showRoles) {
@@ -70,6 +73,7 @@ export class DashboardPage extends React.Component {
           <RoleFormComponent />
           <RoleGridComponent />
           <DocumentFormComponent />
+          <UsersFormCompnent />
         </div>
       );
     }

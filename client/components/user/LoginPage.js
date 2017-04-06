@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
 import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
 import LoginFormComponent from './forms/LoginForm';
 import * as userActions from '../../actions/userActions';
 import * as documentActions from '../../actions/documentActions';
@@ -18,9 +20,10 @@ export class LoginPage extends React.Component {
   }
 
   onClickLogin() {
-    console.log(this.state.userLogin);
     this.props.actions.loginUser(this.state.userLogin).then(() => {
       this.props.actions2.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
+      browserHistory.push('/dashboard');
+      toastr.success('Successfully Looged in');
     });
   }
 

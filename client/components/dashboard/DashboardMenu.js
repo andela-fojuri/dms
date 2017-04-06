@@ -62,41 +62,39 @@ export class DashboardMenu extends React.Component {
   }
 
   getPublicDoc() {
-    // this.props.actions.getPublicDocument();
+    this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/public/documents/', 0, 10, 'Public Documents');
   }
 
   getSharedDoc() {
-    // this.props.actions.getRoleDocument();
+    this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/role/documents/', 0, 10, 'Shared Documents');
   }
 
   getMyDoc() {
+    this.props.actions4.showDocComponent();
     const id = localStorage.getItem('user');
-    // this.props.actions.getDocuments();
     this.props.actions.getDocs(`/users/${id}/documents`, 0, 10, 'My Documents');
   }
 
-  showUsers() {
-    this.props.actions2.getUsers().then(() => {
-      this.props.actions4.showUserComponent();
-    });
-  }
-
   showRoles() {
-    this.props.actions3.getRoles().then(() => {
-      this.props.actions4.showRoleComponent();
-      $('#rolesModal').modal('open');
-    });
+    this.props.actions4.showRoleComponent();
+    this.props.actions3.getRoles();
   }
 
   getAllDoc() {
+    this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/documents/', 0, 10, 'All Documents');
   }
 
   getAccessDoc() {
+    this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
-    // this.props.actions.getAccessibleDocuments();
+  }
+
+  showUsers() {
+    this.props.actions4.showUserComponent();
+    this.props.actions2.getUsers(0, 10); 
   }
 
   createRoleModal() {

@@ -1,7 +1,5 @@
 import axios from 'axios';
 import toastr from 'toastr';
-import { browserHistory } from 'react-router';
-import jwt from 'jsonwebtoken';
 import * as types from './actionTypes';
 
 export function signUp(signupToken) {
@@ -15,8 +13,8 @@ export function editUser(user) {
   return { type: types.EDIT_USER, user };
 }
 
-export function getUsersSuccess(users) {
-  return { type: types.GET_USERS_SUCCESS, users };
+export function getUsersSuccess(users, count) {
+  return { type: types.GET_USERS_SUCCESS, users, count };
 }
 
 
@@ -31,7 +29,6 @@ export function findUser(id) {
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     dispatch(findUserSuccess(response.data.message));
-    browserHistory.push('/dashboard');
   }).catch((error) => {
     throw (error);
   });
@@ -44,7 +41,6 @@ export function loginUser(userLogin) {
     data: userLogin
   }).then((response) => {
     if (response.data.success) {
-      toastr.success(response.data.message);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', response.data.user);
       dispatch(findUser(localStorage.getItem('user')));
@@ -95,7 +91,6 @@ export function createUser(userSignup) {
 }
 
 export function updateUser(user) {
-  console.log(user);
   return dispatch => axios({
     method: 'put',
     url: `/users/${user.id}`,
@@ -103,12 +98,11 @@ export function updateUser(user) {
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
     if (response.data.success) {
-      toastr.success(response.data.message);
+      toastr.success('Details updated Successfully');
     } else {
       toastr.error(response.data.message);
     }
   }, (error) => {
-    console.log(error.response);
     toastr.error('An unexpected error occured');
   }).catch((error) => {
     toastr.error('An unexpected error occured');
@@ -116,13 +110,13 @@ export function updateUser(user) {
   });
 }
 
-export function getUsers() {
+export function getUsers(offset, limit) {
   return dispatch => axios({
-    url: '/users',
+    url: `/users?offset=${offset}&limit=${limit}`,
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    dispatch(getUsersSuccess(response.data.message));
+    dispatch(getUsersSuccess(response.data.message, response.data.count));
   }).catch((error) => {
     toastr.error('Unexpected error occured');
   });
@@ -151,8 +145,8 @@ export function searchUser(username) {
     url: `/search/users?username=${username}`,
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    dispatch(getUsersSuccess(documents.data.message));
+  }).then((response) => {
+    dispatch(getUsersSuccess(response.data.message, response.data.count));
   }).catch((error) => {
     throw (error);
   });
