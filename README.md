@@ -1,5 +1,5 @@
 ###Document Management System
-[![Build Status](https://travis-ci.org/andela-fojuri/dms.svg?branch=master)](https://travis-ci.org/andela-fojuri/dms)
+[![Build Status](https://travis-ci.org/andela-fojuri/dms.svg?branch=develop)](https://travis-ci.org/andela-fojuri/dms)
 [![Test Coverage](https://codeclimate.com/github/andela-fojuri/dms/badges/coverage.svg)](https://codeclimate.com/github/andela-fojuri/dms/coverage)
 
 # Document Management System 
