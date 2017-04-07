@@ -29,7 +29,7 @@ describe('Document Test Suite: ', () => {
         .post('/users/login')
         .send({
           username: 'FissySecond',
-          password: 'fissysecond'
+          password: 'fissySecond'
         })
         .end((err, res) => {
           userToken = res.body.token;
@@ -105,7 +105,7 @@ describe('Document Test Suite: ', () => {
       request(app)
         .post('/users/login')
         .send({
-          username: 'Fissy',
+          username: 'fissyAdmin',
           password: 'fissyAdmin',
         })
         .end((err, res) => {
@@ -251,7 +251,7 @@ describe('Document Test Suite: ', () => {
         .post('/users/login')
         .send({
           username: 'FissyFirst',
-          password: 'fissyfirst',
+          password: 'fissyFirst',
         })
         .end((err, res) => {
           userToken2 = res.body.token;

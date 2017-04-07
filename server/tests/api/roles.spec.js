@@ -15,7 +15,7 @@ describe('Role Test Suite: ', () => {
       .post('/users/login')
       .send({
         username: 'FissyFirst',
-        password: 'fissyfirst',
+        password: 'fissyFirst',
       })
       .end((err, res) => {
         userToken = res.body.token;
@@ -43,7 +43,7 @@ describe('Role Test Suite: ', () => {
       request(app)
       .post('/users/login')
       .send({
-        username: 'Fissy',
+        username: 'fissyAdmin',
         password: 'fissyAdmin',
       })
       .end((err, res) => {
