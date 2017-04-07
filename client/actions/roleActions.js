@@ -1,6 +1,5 @@
 import axios from 'axios';
 import toastr from 'toastr';
-import { browserHistory } from 'react-router';
 import * as actions from './actionTypes';
 
 

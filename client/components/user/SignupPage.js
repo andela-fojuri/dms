@@ -17,7 +17,6 @@ export class SignupPage extends React.Component {
 
   onClickSave() {
     this.props.actions.createUser(this.state.user).then(() => {
-      this.context.router.push('/');
     });
   }
 
@@ -47,6 +46,7 @@ SignupPage.contextTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  return state;
 }
 
 function mapDispatchToProps(dispatch, ownProps) {

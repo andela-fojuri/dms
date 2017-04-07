@@ -1,5 +1,6 @@
 import axios from 'axios';
 import toastr from 'toastr';
+import { browserHistory } from 'react-router';
 import * as types from './actionTypes';
 
 export function signUp(signupToken) {
@@ -28,7 +29,10 @@ export function findUser(id) {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    dispatch(findUserSuccess(response.data.message));
+    browserHistory.push('/dashboard');
+    if (response.data.success) {
+      dispatch(findUserSuccess(response.data.message));
+    }
   }).catch((error) => {
     throw (error);
   });
@@ -116,7 +120,9 @@ export function getUsers(offset, limit) {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    dispatch(getUsersSuccess(response.data.message, response.data.count));
+    if (response.data.success) {
+      dispatch(getUsersSuccess(response.data.message, response.data.count));
+    }
   }).catch((error) => {
     toastr.error('Unexpected error occured');
   });
@@ -146,7 +152,9 @@ export function searchUser(username) {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    dispatch(getUsersSuccess(response.data.message, response.data.count));
+    if (response.data.success) {
+      dispatch(getUsersSuccess(response.data.message, response.data.count));
+    }
   }).catch((error) => {
     throw (error);
   });

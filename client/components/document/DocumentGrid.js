@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
 import { bindActionCreators } from 'redux';
 import ReactPaginate from 'react-paginate';
 import * as documentActions from '../../actions/documentActions';
@@ -66,7 +67,7 @@ export class DocumentGrid extends React.Component {
                     <tbody>
                       <tr>
                         <td>
-                          <a name="myDoc" className="grey-text">Document Title</a> </td>
+                          <a id="title" className="grey-text">Document Title</a> </td>
                         <td><a className="grey-text">Owner</a></td>
                         <td><a className="grey-text">Date Published</a></td>
                         <td> <a className="right grey-text">Action</a></td>
@@ -85,7 +86,7 @@ export class DocumentGrid extends React.Component {
                         <tbody>
                           <tr>
                             <td>
-                              <a name="myDoc" className="grey-text " onClick={() => { this.getDocs(index); }}>{doc.title}</a>
+                              <a className="grey-text docContent" onClick={() => { this.getDocs(index); }}>{doc.title}</a>
                             </td>
                             <td><a className="grey-text">{doc.User.username}</a></td>
                             <td><a className="grey-text">{doc.User.createdAt}</a></td>

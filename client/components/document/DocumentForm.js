@@ -65,9 +65,8 @@ export class DocumentForm extends React.Component {
 
   onClickSave(event) {
     const field = event.currentTarget.name;
-    if (field === 'back') {
-      this.context.router.push('/dashboard');
-    } else if (field === 'create') {
+    if (field === 'create') {
+      $('#modal1').modal('close');
       this.props.actions.saveDocument(Object.assign({}, this.state)).then(() => {
         this.props.actions.getDocuments();
       });

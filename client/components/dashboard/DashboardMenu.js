@@ -62,46 +62,56 @@ export class DashboardMenu extends React.Component {
   }
 
   getPublicDoc() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/public/documents/', 0, 10, 'Public Documents');
   }
 
   getSharedDoc() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/role/documents/', 0, 10, 'Shared Documents');
   }
 
   getMyDoc() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showDocComponent();
     const id = localStorage.getItem('user');
     this.props.actions.getDocs(`/users/${id}/documents`, 0, 10, 'My Documents');
   }
 
   showRoles() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showRoleComponent();
     this.props.actions3.getRoles();
   }
 
   getAllDoc() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/documents/', 0, 10, 'All Documents');
   }
 
   getAccessDoc() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showDocComponent();
     this.props.actions.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
   }
 
   showUsers() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions4.showUserComponent();
-    this.props.actions2.getUsers(0, 10); 
+    this.props.actions2.getUsers(0, 10);
   }
 
   createRoleModal() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions3.editRole({ category: '', id: '' });
+    $('#editRole').modal('open');
   }
 
   showModal() {
+    $('.button-collapse').sideNav('hide');
     this.props.actions.newDocument();
     $('#modal1').modal('open');
   }
@@ -127,9 +137,9 @@ export class DashboardMenu extends React.Component {
             <li><a id="publicDoc" name="publicDoc" onClick={this.getPublicDoc}>Public</a></li>
             <li><a id="sharedDoc" name="shared" onClick={this.getSharedDoc} >Shared</a></li>
             <div id="forAdmin"><li id="allDocs"><a name="allDocs" onClick={this.getAllDoc} >All Documents</a></li>
-              <li><a id="createRole" name="role" onClick={this.createRoleModal} >CreateRole</a></li>
-              <li><a id="allUsers" name="users" onClick={this.showUsers} >Users</a></li>
-              <li><a id="allRoles" name="roles" onClick={this.showRoles} >Roles</a></li></div>
+              <li id="createRole"><a name="role" onClick={this.createRoleModal} >CreateRole</a></li>
+              <li id="allUsers"><a name="users" onClick={this.showUsers} >Users</a></li>
+              <li id="allRoles"><a name="roles" onClick={this.showRoles} >Roles</a></li></div>
           </ul>
           <a data-activates="slide-out" id="button-collapse" className="button-collapse"><i className="material-icons">menu</i></a>
         </div>
