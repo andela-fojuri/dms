@@ -1,7 +1,7 @@
 addons:
   artifacts: true
   code_climate:
-    repo_token: 11ea769c4665484272290c541893b6e7c2d304761b8962f4a5956b8fd1586fc7
+    repo_token: ca5e6c667335156dd53cb3e507e68552a9392be4242a3b5895e83c69d4f77891
 language: node_js
 node_js:
   - "6"
