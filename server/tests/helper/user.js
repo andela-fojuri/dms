@@ -41,7 +41,7 @@ export default {
     content: faker.lorem.paragraph()
   },
   role1: {
-    category: 'Admin'
+    category: 'Staff'
   },
   role2: {
     category: 'other'

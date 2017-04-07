@@ -1,6 +1,5 @@
 import axios from 'axios';
 import toastr from 'toastr';
-import { browserHistory } from 'react-router';
 import * as actions from './actionTypes';
 import { showDocComponent } from './componentActions';
 
@@ -80,7 +79,6 @@ export function saveDocument(document) {
     if (response.data.success) {
       toastr.success(response.data.message);
       dispatch(createDocumentSuccess());
-      $('#modal1').modal('close');
     }
   }, (error) => {
     if (!document.title && !document.content) {
@@ -105,8 +103,10 @@ export function searchDocument(title) {
     url: `/search/documents?title=${title}`,
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
-  }).then((documents) => {
-    dispatch(getDocumentSuccess(documents.data.message, label2, documents.data.count));
+  }).then((response) => {
+    if (response.data.success) {
+      dispatch(getDocumentSuccess(response.data.message, label2, response.data.count));
+    }
   }).catch((error) => {
     throw (error);
   });

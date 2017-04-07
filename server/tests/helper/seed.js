@@ -6,12 +6,12 @@ import db from '../../app/models';
 export const
   roles = [
     { category: 'SuperAdmin' },
-    { category: 'Regular' },
-    { category: 'Staff' }
+    { category: 'Admin' },
+    { category: 'Regular' }
   ],
   users = [{
-    username: 'Fissy',
-    email: 'fissy@yahoo.com',
+    username: 'fissyAdmin',
+    email: 'fisayomi@yahoo.com',
     password: 'fissyAdmin',
     password_confirmation: 'fissyAdmin',
     password_digest: bcrypt.hashSync('fissyAdmin', 10),
@@ -19,16 +19,16 @@ export const
   }, {
     username: 'FissyFirst',
     email: 'fissyfirst@yahoo.com',
-    password: 'fissyfirst',
-    password_confirmation: 'fissyfirst',
-    password_digest: bcrypt.hashSync('fissyfirst', 10),
+    password: 'fissyFirst',
+    password_confirmation: 'fissyFirst',
+    password_digest: bcrypt.hashSync('fissyFirst', 10),
     roleId: 3
   }, {
     username: 'FissySecond',
     email: 'fissysecond@yahoo.com',
-    password: 'fissysecond',
-    password_confirmation: 'fissysecond',
-    password_digest: bcrypt.hashSync('fissysecond', 10),
+    password: 'fissySecond',
+    password_confirmation: 'fissySecond',
+    password_digest: bcrypt.hashSync('fissySecond', 10),
     roleId: 3
   }],
   documents = [{

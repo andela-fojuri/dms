@@ -15,9 +15,9 @@ import '../node_modules/materialize-css/dist/css/materialize.min.css';
 import '../node_modules/material-icons/css/material-icons.css';
 
 const store = configureStore();
-store.dispatch(getRoles());
 store.dispatch(getDocs('/user/documents/', 0, 10, 'Accessible Documents'));
 store.dispatch(findUser(localStorage.getItem('user')));
+store.dispatch(getRoles());
 
 render(
   <Provider store={store} >

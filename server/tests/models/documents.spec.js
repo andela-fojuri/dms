@@ -19,6 +19,8 @@ describe('Document Model: ', () => {
           documentParams.userId = createdUser.id;
           done();
         });
+      }).catch((err) => {
+        throw (err);
       });
     });
 

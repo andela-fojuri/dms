@@ -136,7 +136,7 @@ describe('User Test Suite: ', () => {
       request(app)
         .post('/users/login')
         .send({
-          username: 'Fissy',
+          username: 'fissyAdmin',
           password: 'fissyAdmin',
         })
         .end((err, res) => {

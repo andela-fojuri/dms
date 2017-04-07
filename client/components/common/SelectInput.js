@@ -12,7 +12,7 @@ const SelectInput = ({ name, label, onChange, defaultOption, value, error, optio
           value={value}
           onChange={onChange}
           className="browser-default">
-          <option value="" disabled selected>{defaultOption}</option>
+          <option value="Default" disabled selected>{defaultOption}</option>
           {options.map((option) => {
             return <option className="opts" key={option.value} value={option.value}>{option.text}</option>;
           })

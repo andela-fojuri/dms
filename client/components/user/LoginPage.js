@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import LoginFormComponent from './forms/LoginForm';
 import * as userActions from '../../actions/userActions';
 import * as documentActions from '../../actions/documentActions';
+import * as roleActions from '../../actions/roleActions';
 
 export class LoginPage extends React.Component {
   constructor(props, context) {
@@ -22,6 +23,7 @@ export class LoginPage extends React.Component {
   onClickLogin() {
     this.props.actions.loginUser(this.state.userLogin).then(() => {
       this.props.actions2.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
+      this.props.actions3.getRoles();
       browserHistory.push('/dashboard');
       toastr.success('Successfully Looged in');
     });
@@ -49,7 +51,8 @@ export class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
   actions: PropTypes.object,
-  actions2: PropTypes.object
+  actions2: PropTypes.object,
+  actions3: PropTypes.object,
 };
 
 LoginPage.contextTypes = {
@@ -66,6 +69,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     actions: bindActionCreators(userActions, dispatch),
     actions2: bindActionCreators(documentActions, dispatch),
+    actions3: bindActionCreators(roleActions, dispatch),
   };
 }
 

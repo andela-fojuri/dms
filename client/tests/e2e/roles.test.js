@@ -17,9 +17,9 @@ module.exports = { // adapted from: https://git.io/vodU
       .click('.btn')
       .pause(1000)
       .click('.button-collapse')
-      .waitForElementPresent('a[id=createRole]', 1000)
-      .click('#createRole')
-      .waitForElementVisible('div[class=modal-content]')
+      .waitForElementPresent('li[id=createRole]', 1000)
+      .click('li#createRole')
+      .waitForElementVisible('div[id=editRole]')
       .setValue('input[name=category]', faker.name.findName())
       .click('input[type=button]')
       .end();
