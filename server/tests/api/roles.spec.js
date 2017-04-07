@@ -82,15 +82,29 @@ describe('Role Test Suite: ', () => {
       });
     });
 
-    // it('Only Super admin can retieve all created roles', (done) => {
-    //   request(app)
-    //   .get('/roles')
-    //   .set('x-access-token', userToken)
-    //   .end((err, res) => {
-    //     expect(res.body.message).to.equal('Not authenticated as Super Admin');
-    //     done();
-    //   });
-    // });
+    it('should throw error if trying to created role with same name', (done) => {
+      request(app)
+      .post('/roles')
+      .set('x-access-token', adminToken)
+      .send({
+        category: 'NewRole2'
+      })
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        done();
+      });
+    });
+
+    it('should throw error if trying to created role with no value', (done) => {
+      request(app)
+      .post('/roles')
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        done();
+      });
+    });
+
 
     it('A Super Admin can retieve all created roles', (done) => {
       request(app)
@@ -115,9 +129,23 @@ describe('Role Test Suite: ', () => {
       });
     });
 
+    it('Super Admin can edit a Role', (done) => {
+      request(app)
+      .put(`/roles/${role.createdRole.id}`)
+      .send({
+        category: 'NewRoleUpdated'
+      })
+      .set('x-access-token', adminToken)
+      .end((err, res) => {
+        role = res.body.role;
+        expect(res.body.message).to.equal('Role Updated Successfully');
+        done();
+      });
+    });
+
     it('Super Admin can delete a role', (done) => {
       request(app)
-      .delete(`/roles/${role.createdRole.id}`)
+      .delete(`/roles/${role.id}`)
       .set('x-access-token', adminToken)
       .end((err, res) => {
         expect(res.body.message).to.equal('Role deleted Successfully');

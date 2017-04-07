@@ -226,6 +226,33 @@ describe('User Test Suite: ', () => {
           done();
         });
     });
+
+    it('check that an authenticated user can update his/her username', (done) => {
+      request(app)
+        .put(`/users/${user.createdUser.id}`)
+        .set('x-access-token', userToken)
+        .send({
+          username: 'FissyChange'
+        })
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Details Updated Successfully');
+          done();
+        });
+    });
+
+    it('check that an Admin/Super Admin can upgrade a users role', (done) => {
+      request(app)
+        .put(`/users/${user.createdUser.id}`)
+        .set('x-access-token', userToken)
+        .send({
+          roleId: 3
+        })
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Details Updated Successfully');
+          expect(res.body.updatedUser.roleId).to.equal(3);
+          done();
+        });
+    });
   });
 
   describe('Delete User:', () => {
