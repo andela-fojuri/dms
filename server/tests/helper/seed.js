@@ -12,22 +12,16 @@ export const
   users = [{
     username: 'fissyAdmin',
     email: 'fisayomi@yahoo.com',
-    password: 'fissyAdmin',
-    password_confirmation: 'fissyAdmin',
     password_digest: bcrypt.hashSync('fissyAdmin', 10),
     roleId: 1
   }, {
     username: 'FissyFirst',
     email: 'fissyfirst@yahoo.com',
-    password: 'fissyFirst',
-    password_confirmation: 'fissyFirst',
     password_digest: bcrypt.hashSync('fissyFirst', 10),
     roleId: 3
   }, {
     username: 'FissySecond',
     email: 'fissysecond@yahoo.com',
-    password: 'fissySecond',
-    password_confirmation: 'fissySecond',
     password_digest: bcrypt.hashSync('fissySecond', 10),
     roleId: 3
   }],
