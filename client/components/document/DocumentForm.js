@@ -68,7 +68,7 @@ export class DocumentForm extends React.Component {
     if (field === 'create') {
       $('#modal1').modal('close');
       this.props.actions.saveDocument(Object.assign({}, this.state)).then(() => {
-        this.props.actions.getDocuments();
+        this.props.actions.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
       });
     }
   }
