@@ -56,7 +56,24 @@ describe('Document Test Suite: ', () => {
           done();
         });
     }).timeout(10000);
+
+    it('throw error if creating document with same title', (done) => {
+      request(app)
+        .post('/documents')
+        .set('x-access-token', userToken)
+        .send({
+          title: 'randomDoc',
+          access: 'Role',
+          content: 'I have a random Document',
+          userId: request('decoded.id'),
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+    }).timeout(10000);
   });
+
 
   describe('Retrieve Document:', () => {
     it('asserts that an authenticated user can see all shared documents ', (done) => {
@@ -170,16 +187,6 @@ describe('Document Test Suite: ', () => {
         });
     });
 
-    // it('Only Super Admin/Owner can retrieve all Documents belonging to a user', (done) => {
-    //   request(app)
-    //   .get(`/users/${document.createdDocument.userId}/documents`)
-    //   .set('x-access-token', userToken)
-    //   .end((err, res) => {
-    //     expect(res.body.message).to.equal('Not authenticated as Super Admin');
-    //     done();
-    //   });
-    // });
-
     it('Super Admin can retrieve all Documents belonging to a user', (done) => {
       request(app)
         .get(`/users/${document.createdDocument.userId}/documents?`)
@@ -207,6 +214,17 @@ describe('Document Test Suite: ', () => {
         })
         .end((err, res) => {
           expect(res.body.message).to.equal('Document updated Successfully');
+          done();
+        });
+    });
+
+    it('document remains same if no values was passed while updating', (done) => {
+      request(app)
+        .put(`/documents/${document.createdDocument.id}`)
+        .set('x-access-token', adminToken)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Document updated Successfully');
+          expect(res.body.document.title).to.equal('BoluDoc4');
           done();
         });
     });
