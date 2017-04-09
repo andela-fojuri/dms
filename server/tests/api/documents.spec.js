@@ -63,7 +63,7 @@ describe('Document Test Suite: ', () => {
         .get('/role/documents')
         .set('x-access-token', userToken)
         .end((err, res) => {
-          expect(res.status).to.equal(302);
+          expect(res.status).to.equal(200);
           const documents = res.body.documents;
           expect(documents).to.be.instanceof(Array);
           documents.forEach((doc) => {

@@ -190,7 +190,7 @@ describe('User Test Suite: ', () => {
           confirmNewPassword: 'fissyChange'
         })
         .end((err, res) => {
-          expect(res.body.message).to.equal('Password Successfully');
+          expect(res.body.message).to.equal('Password Successfully updated');
           done();
         });
     });
