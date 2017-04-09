@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import toastr from 'toastr';
 import * as userActions from '../../../actions/userActions';
 import * as componentActions from '../../../actions/componentActions';
 import TextInput from '../../common/TextInput';
@@ -37,9 +38,15 @@ export class UsersPage extends React.Component {
   }
 
   onClickSave() {
-    this.props.actions.updateUser(this.state).then(() => {
-      $('#editUser').modal('close');
-    });
+    const user = this.state;
+    if (!user.username || !user.email || !user.password
+    || !!user.password_confirmation || !user.roleId) {
+      toastr.error('All field(s) must be filled');
+    } else {
+      this.props.actions.updateUser(this.state).then(() => {
+        $('#editUser').modal('close');
+      });
+    }
   }
 
   render() {
@@ -48,6 +55,11 @@ export class UsersPage extends React.Component {
         <div id="editUser" className="modal">
           <div className="modal-content">
             <div className="row">
+              <div className="row">
+                <a className="right modal-close ">
+                  <i className="black material-icons right">clear</i>
+                </a>
+              </div>
               <form>
                 <h5>Edit User</h5>
                 <div className="row">

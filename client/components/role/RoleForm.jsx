@@ -29,7 +29,6 @@ export class RoleForm extends React.Component {
 
   onClickAdd() {
     this.props.actions.saveRole(this.state).then(() => {
-      toastr.success('Role Successfully saved');
       this.props.actions.getRoles();
       $('#editRole').modal('close');
     });
@@ -46,6 +45,11 @@ export class RoleForm extends React.Component {
         <div id="editRole" className="modal">
           <div className="modal-content">
             <div className="row">
+              <div className="row">
+                <a className="right modal-close ">
+                  <i className="black material-icons right">clear</i>
+                </a>
+              </div>
               <form>
                 <div className="row">
                   <div className="col s12">

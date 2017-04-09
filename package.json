@@ -7,7 +7,7 @@
     "prestart": "babel-node serverTools/startMessage.js",
     "e2e": "node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
-    "start": "npm-run-all --parallel open:client lint-watch test:watch",
+    "start": "npm-run-all --parallel open:client lint-watch",
     "build": "npm-run-all copy:dist build:webpack dist:server",
     "copy:dist": "rm -rf dist && mkdir dist && cp client/index.html serverTools/distServer.js dist",
     "build:webpack": "node_modules/.bin/webpack --config webpack.config.prod.js",

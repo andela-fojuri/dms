@@ -17,12 +17,38 @@ describe('Document Reducer', () => {
       path: '/documents'
     };
 
-    const action = actions.getDocumentSuccess(docs.documents,
-     docs.documentLabel, docs.totalCount, docs.path);
-    const newState = documentReducer(initialState, action);
+    const expectedState = {
+      documents: ['myDoc1', 'myDoc2'],
+      documentLabel: 'MyLabel',
+      totalCount: 2,
+      path: '/documents'
+    };
 
-    expect(newState.documents.length).toEqual(2);
-    expect(newState.path).toEqual('/documents');
-    expect(newState.documentLabel).toEqual('MyLabel');
+    const action = actions.getDocumentSuccess(docs.documents,
+      docs.documentLabel, docs.totalCount, docs.path);
+    const newState = documentReducer(initialState, action);
+    expect(newState).toEqual(expectedState);
+  });
+
+  it('shoud show a document when passed SHOW_DOCUMENT action', () => {
+
+    const initialState = {
+      showDocument: {}
+    };
+    const document = {
+      access: 'Role',
+      content: 'this is a doc'
+    };
+
+    const expectedState = {
+      showDocument: {
+        access: 'Role',
+        content: 'this is a doc'
+      }
+    };
+
+    const action = actions.showDocument(document);
+    const newState = documentReducer(initialState, action);
+    expect(newState).toEqual(expectedState);
   });
 });

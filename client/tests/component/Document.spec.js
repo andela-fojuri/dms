@@ -2,7 +2,7 @@ import React from 'react';
 import expect from 'expect';
 import FroalaEditor from 'react-froala-wysiwyg';
 import ReactPaginate from 'react-paginate';
-import { shallow, mount, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import { DocumentForm } from '../../components/document/DocumentForm';
 import { DocumentGrid } from '../../components/document/DocumentGrid';
 

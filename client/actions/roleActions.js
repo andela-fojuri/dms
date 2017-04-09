@@ -7,8 +7,8 @@ export function getRolesSuccess(roles) {
   return { type: actions.GET_ROLES_SUCCESS, roles };
 }
 
-export function createRoleSuccess(roleCreated) {
-  return { type: actions.CREATE_ROLES_SUCCESS, roleCreated };
+export function editRole(role) {
+  return { type: actions.SHOW_EDITABLE_ROLE, role };
 }
 
 export function getRoles() {
@@ -17,10 +17,15 @@ export function getRoles() {
     url: '/roles',
     headers: { 'x-access-token': localStorage.getItem('token') },
   }).then((response) => {
-    if (response.data.success) {
-      dispatch(getRolesSuccess(response.data.message));
+    if (response.status === 200) {
+      dispatch(getRolesSuccess(response.data));
     }
   }).catch((error) => {
+    if (error.response) {
+      console.log(error.response.data.message);
+    } else {
+      console.log(error.message);
+    }
     throw (error);
   });
 }
@@ -36,21 +41,17 @@ export function saveRole(role) {
     requestObject = Object.assign({}, requestObject, { method: 'put', url: `/roles/${role.id}` });
   }
   return dispatch => axios(requestObject).then((response) => {
-    if (response.data.success) {
-      dispatch(createRoleSuccess(response.data.message));
+    if (response.status === 200) {
+      toastr.success(response.data.message);
     } else {
-      toastr.error('Unexpected error occured');
+      toastr.error(response.data.message);
     }
-  }, (error) => {
-    toastr.error('Unexpected error occured');
   }).catch((error) => {
-    toastr.error('Unexpected error occured');
+    if (error.response) {
+      toastr.error(error.response.data.message);
+    }
     throw (error);
   });
-}
-
-export function editRole(role) {
-  return { type: actions.SHOW_EDITABLE_ROLE, role };
 }
 
 export function deleteRole(id) {
@@ -59,12 +60,13 @@ export function deleteRole(id) {
     method: 'delete',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    if (response.data.success) {
-      toastr.success('Role deleted successfully');
+    if (response.status === 200) {
+      toastr.success(response.data.message);
     } else {
-      toastr.error('Unexpected error occured');
+      toastr.error(response.data.message);
     }
   }).catch((error) => {
+    toastr.error(error.response.data.message);
     throw (error);
   });
 }

@@ -30,7 +30,12 @@ class Search extends React.Component {
             <form>
               <li className="input-field">
                 <input id="search" type="search" onChange={this.onSearchChange} required />
-                <label id="searchIcon" className="label-icon" htmlFor="search"><i className="material-icons">search</i></label>
+                <label
+                  id="searchIcon"
+                  className="label-icon"
+                  htmlFor="search">
+                  <i className="material-icons">search</i>
+                </label>
               </li>
             </form>
           </ul>

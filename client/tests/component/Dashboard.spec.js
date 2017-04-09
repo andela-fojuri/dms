@@ -1,6 +1,6 @@
 import React from 'react';
 import expect from 'expect';
-import { shallow, mount, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import { DashboardPage } from '../../components/dashboard/DashboardPage';
 import { DashboardMenu } from '../../components/dashboard/DashboardMenu';
 import { DocumentForm } from '../../components/document/DocumentForm';
@@ -8,8 +8,6 @@ import { DocumentGrid } from '../../components/document/DocumentGrid';
 import { UsersPage } from '../../components/user/UsersPage';
 import { RoleForm } from '../../components/role/RoleForm';
 import { RoleGrid } from '../../components/role/RoleGrid';
-
-
 
 function Dashboard(showDoc, showUsers, showRoles) {
   const state = {
@@ -19,7 +17,6 @@ function Dashboard(showDoc, showUsers, showRoles) {
   };
   return shallow(<DashboardPage {...state} />);
 }
-
 
 describe('Dashboard component suite', () => {
   it('contains default components', () => {
@@ -38,7 +35,7 @@ describe('Dashboard component suite', () => {
     const wrapper = Dashboard(false, true, false);
     it('contains UsersPage Component', () => {
       expect(wrapper.contains(<UsersPage />)).toBeTrue;
-     expect(wrapper.contains(<DashboardMenu />)).toBeTrue;
+      expect(wrapper.contains(<DashboardMenu />)).toBeTrue;
     });
   });
 

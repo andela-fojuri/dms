@@ -1,7 +1,7 @@
 
-import Users from '../controllers/user';
-import Documents from '../controllers/document';
-import Roles from '../controllers/role';
+import Users from '../controllers/Users';
+import Documents from '../controllers/Documents';
+import Roles from '../controllers/Roles';
 import auth from '../middlewares/jwtAuthentication';
 
 const { authentication, verifyAdmin, verifyAdminOrOwner } = auth;
@@ -23,7 +23,7 @@ module.exports = (app) => {
   app.get('/documents', authentication, verifyAdmin, Documents.getDocuments);
   app.get('/documents/:id', authentication, Documents.findDocument);
 
-  app.put('/documents/:id', authentication, verifyAdminOrOwner, Documents.updateDocument);
+  app.put('/documents/:id', authentication, Documents.updateDocument);
   app.delete('/documents/:id', authentication, Documents.deleteDocument);
   app.get('/users/:id/documents', authentication, verifyAdminOrOwner, Documents.findUserDocument);
   app.get('/user/documents', authentication, Documents.userDocument);

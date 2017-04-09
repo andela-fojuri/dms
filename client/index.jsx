@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import React from 'react';
+import jwt from 'jsonwebtoken';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
@@ -15,9 +16,14 @@ import '../node_modules/materialize-css/dist/css/materialize.min.css';
 import '../node_modules/material-icons/css/material-icons.css';
 
 const store = configureStore();
-store.dispatch(getDocs('/user/documents/', 0, 10, 'Accessible Documents'));
-store.dispatch(findUser(localStorage.getItem('user')));
-store.dispatch(getRoles());
+
+if (localStorage.getItem('token')) {
+  store.dispatch(getDocs('/user/documents/', 0, 10, 'Accessible Documents'));
+  const user = jwt.decode(localStorage.getItem('token'));
+  store.dispatch(findUser(user.id));
+  store.dispatch(getRoles());
+}
+
 
 render(
   <Provider store={store} >
