@@ -40,7 +40,8 @@ export function findUser(id) {
 }
 
 export function loginUser(userLogin) {
-  if ((!userLogin.username || userLogin.username === '') && (!userLogin.password || userLogin.password === '')) {
+  if ((!userLogin.username || userLogin.username === '')
+   && (!userLogin.password || userLogin.password === '')) {
     toastr.error('Username/Password Required');
   } else if (!userLogin.username || userLogin.username === '') {
     toastr.error('Username Required');
