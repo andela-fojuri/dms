@@ -51,5 +51,5 @@ Users are authenticated and validated us JWT web token. Generating tokens on sig
 
 ` I strongly suggest using separate DB for testing and development `
 ## API Documentation Link
-- [visit] (https://manage-document.herokuapp.com/)
+- [visit] (https://andela-fojuri.github.io/dms/)
 
