@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as roleActions from '../../actions/roleActions';
+import Grid from '../grid/Grid';
+import Collection from '../grid/Collection';
 
 export class RoleGrid extends React.Component {
   constructor(props, context) {
@@ -10,6 +12,7 @@ export class RoleGrid extends React.Component {
     };
     this.showRoleForm = this.showRoleForm.bind(this);
     this.deleteRole = this.deleteRole.bind(this);
+    this.createRoleModal = this.createRoleModal.bind(this);
   }
 
   componentDidMount() {
@@ -41,24 +44,30 @@ export class RoleGrid extends React.Component {
     });
   }
 
+  createRoleModal() {
+    $('.button-collapse').sideNav('hide');
+    this.props.actions.editRole({ category: '', id: '' });
+    $('#editRole').modal('open');
+  }
+
   render() {
     return (
-      <div className="col s11">
-        <div className="docTable">
-          <h4 className="roleLabel"> All Roles</h4>
-          {this.props.roles.map((role, index) => (
-            <div key={role.id}>
-              <div className="card">
-                <div className="card-content">
-                  <div className="card-title activator ">
-                    <a name="myDoc" className="grey-text text-darken-4" onClick={() => { this.showRoleForm(index); }}>{role.category}</a>
-                    <a id="deleteIcon" name="delete" onClick={() => { this.deleteRole(role.id); }}><i className="material-icons right">delete</i></a>
-                    <a id="editIcon" name="delete" onClick={() => { this.showRoleForm(index); }}><i className="material-icons right">mode_edit</i></a>
-                  </div>
-                </div>
-              </div>
+      <div className="row">
+        <div className="row">
+          <div className="otherTable">
+            <Collection label="All roles" onClick={this.createRoleModal} />
+            <div className="collection-item">
+              {this.props.roles.map((role, index) => (
+                <Grid
+                  key={role.id}
+                  rolecategory={role.category}
+                  deleteIcon="delete"
+                  editIcon="mode_edit"
+                  onClickDelete={() => { this.deleteRole(role.id); }}
+                  onClickEdit={() => { this.showRoleForm(index); }} />
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
 

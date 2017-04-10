@@ -1,15 +1,13 @@
 import axios from 'axios';
 import toastr from 'toastr';
+import jwt from 'jsonwebtoken';
 import { browserHistory } from 'react-router';
+import auth from '../middlewares/authentication';
+import { getDocs } from './documentActions';
+import { getRoles } from './roleActions';
 import * as types from './actionTypes';
 
-export function signUp(signupToken) {
-  return { type: types.USER_SIGNUP_SUCCESS, signupToken };
-}
 
-export function userLogoutSuccess() {
-  return { type: types.USER_LOGOUT_SUCCESS };
-}
 export function editUser(user) {
   return { type: types.EDIT_USER, user };
 }
@@ -18,6 +16,9 @@ export function getUsersSuccess(users, count) {
   return { type: types.GET_USERS_SUCCESS, users, count };
 }
 
+export function userLogoutSuccess() {
+  return { type: types.USER_LOGOUT_SUCCESS };
+}
 
 export function findUserSuccess(userDetails) {
   return { type: types.FIND_USER_SUCCESS, userDetails };
@@ -29,45 +30,43 @@ export function findUser(id) {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    browserHistory.push('/dashboard');
-    if (response.data.success) {
-      dispatch(findUserSuccess(response.data.message));
+    if (response.status === 200) {
+      browserHistory.push('/dashboard');
+      dispatch(findUserSuccess(response.data));
     }
   }).catch((error) => {
-    throw (error);
+    toastr.error(error.response.data.message);
   });
 }
 
 export function loginUser(userLogin) {
-  return dispatch => axios({
-    method: 'post',
-    url: '/users/login',
-    data: userLogin
-  }).then((response) => {
-    if (response.data.success) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', response.data.user);
-      dispatch(findUser(localStorage.getItem('user')));
-    } else {
-      toastr.error('User not found, Kindly signup to Proceed');
-    }
-  }, (error) => {
-    if (!userLogin.username && !userLogin.password) {
-      toastr.error('Username/Password Required');
-    } else if (!userLogin.username) {
-      toastr.error('Username Required');
-    } else if (!userLogin.password) {
-      toastr.error('Password Required');
-    } else if (error.response.data.message === 'Invalid Username/Password') {
-      toastr.error('Invalid Username/Password');
-    } else if (error.response.data.message.includes('Registered')) {
-      toastr.error('User not found, Kindly signup to Proceed');
-    } else {
-      toastr.error('Unexpected error occured');
-    }
-  }).catch((error) => {
-    toastr.error('Unexpected error occured');
-  });
+  if ((!userLogin.username || userLogin.username === '')
+   && (!userLogin.password || userLogin.password === '')) {
+    toastr.error('Username/Password Required');
+  } else if (!userLogin.username || userLogin.username === '') {
+    toastr.error('Username Required');
+  } else if (!userLogin.password || userLogin.password === '') {
+    toastr.error('Password Required');
+  } else {
+    return dispatch => axios({
+      method: 'post',
+      url: '/users/login',
+      data: userLogin
+    }).then((response) => {
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        const user = jwt.decode(localStorage.getItem('token'));
+        dispatch(findUser(user.id));
+        dispatch(getDocs('/user/documents/', 0, 10, 'Accessible Documents'));
+        dispatch(getRoles());
+        toastr.success(response.data.message);
+      } else {
+        toastr.error(response.data.message);
+      }
+    }).catch((error) => {
+      toastr.error(error.response.data.message);
+    });
+  }
 }
 
 export function createUser(userSignup) {
@@ -76,21 +75,13 @@ export function createUser(userSignup) {
     url: '/users',
     data: userSignup
   }).then((response) => {
-    if (response.data.success) {
+    if (response.data.token) {
       dispatch(loginUser(userSignup));
     } else {
-      toastr.error('Unexpected error occured');
-    }
-  }, (error) => {
-    if (error.response.data.message === 'Invalid Username/Email') {
-      toastr.error('Invalid Username/Email');
-    } else if (!userSignup.username || !userSignup.email || !userSignup.password || !!userSignup.password_confirmation || !userSignup.roleId) {
-      toastr.error('All field(s) must be filled');
-    } else {
-      toastr.error('Unexpected error occured');
+      toastr.error(response.data.token);
     }
   }).catch((error) => {
-    throw (error);
+    toastr.error(error.response.data.message);
   });
 }
 
@@ -101,15 +92,13 @@ export function updateUser(user) {
     data: user,
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    if (response.data.success) {
-      toastr.success('Details updated Successfully');
+    if (response.status === 200) {
+      toastr.success(response.data.message);
     } else {
       toastr.error(response.data.message);
     }
-  }, (error) => {
-    toastr.error('An unexpected error occured');
   }).catch((error) => {
-    toastr.error('An unexpected error occured');
+    toastr.error(error.response.data.message);
     throw (error);
   });
 }
@@ -120,11 +109,11 @@ export function getUsers(offset, limit) {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    if (response.data.success) {
-      dispatch(getUsersSuccess(response.data.message, response.data.count));
+    if (response.data.users) {
+      dispatch(getUsersSuccess(response.data.users, response.data.count));
     }
   }).catch((error) => {
-    toastr.error('Unexpected error occured');
+    toastr.error(error.response.data.message);
   });
 }
 
@@ -134,15 +123,13 @@ export function deleteUser(id) {
     method: 'delete',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    if (response.data.success) {
-      toastr.success('User deleted successfully');
+    if (response.status === 200) {
+      toastr.success(response.data.message);
     } else {
-      toastr.error('Unexpected error occured');
+      toastr.error(response.data.message);
     }
-  }, () => {
-    toastr.error('Unexpected error occured');
   }).catch((error) => {
-    toastr.error('Unexpected error occured');
+    toastr.error(error.response.data.message);
   });
 }
 
@@ -152,7 +139,7 @@ export function searchUser(username) {
     method: 'get',
     headers: { 'x-access-token': localStorage.getItem('token') }
   }).then((response) => {
-    if (response.data.success) {
+    if (response.data.users) {
       dispatch(getUsersSuccess(response.data.message, response.data.count));
     }
   }).catch((error) => {

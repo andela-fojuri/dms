@@ -1,33 +1,20 @@
 import request from 'supertest';
 import chai from 'chai';
-import assert from 'assert';
 import app from '../../../serverTools/server';
 import userDetails from '../helper/user';
 
 const expect = chai.expect;
 
-let user;
 describe('User Test Suite: ', () => {
-  let user2, userToken, userToken2, adminToken;
+  let userToken, userToken2, adminToken;
   describe('Create User:', () => {
-    it('checks if all fields were filled before creating a user', (done) => {
-      request(app)
-        .post('/users')
-        .send(userDetails.user0)
-        .end((err, res) => {
-          expect(res.status).to.equal(400);
-          done();
-        });
-    });
-
     it('creates a new user', (done) => {
       request(app)
         .post('/users')
         .send(userDetails.user1)
         .end((err, res) => {
-          user = res.body;
-          expect(res.status).to.equal(200);
-          expect(user.message).to.equal('User Created Successfully');
+          expect(res.status).to.equal(201);
+          expect(res.body.message).to.equal('User Created Successfully');
           done();
         });
     });
@@ -37,29 +24,23 @@ describe('User Test Suite: ', () => {
       request(app)
         .post('/users')
         .send({
-          username: user.createdUser.username,
-          email: user.createdUser.email,
+          username: userDetails.user1.username,
+          email: userDetails.user1.email,
           password: 'fissyTest2',
           password_confirmation: 'fissyTest2',
-          roleId: 2
         })
         .end((err, res) => {
-          expect(res.status).to.equal(400);
+          expect(res.status).to.equal(409);
+          expect(res.body.message).to.equal(`User with ${userDetails.user1.username}exits`);
           done();
         });
-    });
-
-    it('checks if createduser has a role', (done) => {
-      expect(user.createdUser.roleId).to.not.be.undefined;
-      expect(user.createdUser.roleId).to.be.a('number');
-      done();
     });
 
     it('asserts that a  user cannot log in with wrong username/password', (done) => {
       request(app)
         .post('/users/login')
         .send({
-          username: user.createdUser.username,
+          username: userDetails.user1.username,
           password: 'fissyTe',
         })
         .end((err, res) => {
@@ -85,7 +66,7 @@ describe('User Test Suite: ', () => {
       request(app)
         .post('/users/login')
         .send({
-          username: user.createdUser.username,
+          username: userDetails.user1.username,
           password: 'fissyTest',
         })
         .end((err, res) => {
@@ -101,8 +82,7 @@ describe('User Test Suite: ', () => {
         .post('/users')
         .send(userDetails.user2)
         .end((err, res) => {
-          user2 = res.body;
-          expect(res.status).to.equal(200);
+          expect(res.status).to.equal(201);
           expect(res.body.message).to.equal('User Created Successfully');
           done();
         });
@@ -112,7 +92,7 @@ describe('User Test Suite: ', () => {
       request(app)
         .post('/users/login')
         .send({
-          username: user2.createdUser.username,
+          username: userDetails.user2.username,
           password: 'fissyTest2',
         })
         .end((err, res) => {
@@ -148,33 +128,23 @@ describe('User Test Suite: ', () => {
   });
 
   describe('Retieve User:', () => {
-    it('checks if user is authenticated as Super Admin to see list of other users', (done) => {
-      request(app)
-        .get('/users')
-        .set('x-access-token', userToken)
-        .end((err, res) => {
-          expect(res.body.message).to.equal('Not authenticated as Super Admin');
-          done();
-        });
-    });
-
     it('asserts that SuperAdmin/Admin can see list of all users', (done) => {
       request(app)
         .get('/users')
         .set('x-access-token', adminToken)
         .end((err, res) => {
-          expect(res.body.message).to.be.instanceof(Array);
+          expect(res.body.users).to.be.instanceof(Array);
           done();
         });
     });
 
     it('asserts that SuperAdmin/Admin can search for a user', (done) => {
       request(app)
-        .get(`/search/users?username=${user.createdUser.username}`)
+        .get(`/search/users?username=${2}`)
         .set('x-access-token', adminToken)
         .end((err, res) => {
-          expect(res.body.message).to.be.instanceof(Array);
-          res.body.message.forEach((searchedUser) => {
+          expect(res.body.users).to.be.instanceof(Array);
+          res.body.users.forEach((searchedUser) => {
             expect(searchedUser.username).to.be.a('string');
             expect(searchedUser.id).to.be.a('number');
           });
@@ -184,12 +154,12 @@ describe('User Test Suite: ', () => {
 
     it('asserts that authenticated user can see profile of a selected user', (done) => {
       request(app)
-        .get(`/users/${user.createdUser.id}`)
+        .get(`/users/${2}`)
         .set('x-access-token', adminToken)
         .end((err, res) => {
-          expect(res.body.message).to.be.instanceof(Object);
-          expect(res.body.message.id).to.be.a('number');
-          expect(res.body.message.username).to.be.a('string');
+          expect(res.body).to.be.instanceof(Object);
+          expect(res.body.id).to.be.a('number');
+          expect(res.body.username).to.be.a('string');
           done();
         });
     });
@@ -197,10 +167,9 @@ describe('User Test Suite: ', () => {
   describe('Update User:', () => {
     it('check that an authenticated user can update his/her profile with right details', (done) => {
       request(app)
-        .put(`/users/${user.createdUser.id}`)
+        .put(`/users/${4}`)
         .set('x-access-token', userToken)
         .send({
-          username: 'FissyChange',
           oldPassword: 'fissyst',
           newPassword: 'fissyChange',
           confirmNewPassword: 'fissyChange'
@@ -211,64 +180,52 @@ describe('User Test Suite: ', () => {
         });
     });
 
-    it('check that an authenticated user can update his/her profile', (done) => {
+    it('check that an authenticated user can update his/her password', (done) => {
       request(app)
-        .put(`/users/${user.createdUser.id}`)
+        .put(`/users/${4}`)
         .set('x-access-token', userToken)
         .send({
-          username: 'FissyChange',
           oldPassword: 'fissyTest',
           newPassword: 'fissyChange',
           confirmNewPassword: 'fissyChange'
         })
         .end((err, res) => {
-          expect(res.body.message).to.equal('Details Updated Successfully');
+          expect(res.body.message).to.equal('Password Successfully updated');
           done();
         });
     });
 
     it('check that an authenticated user can update his/her username', (done) => {
       request(app)
-        .put(`/users/${user.createdUser.id}`)
+        .put(`/users/${4}`)
         .set('x-access-token', userToken)
         .send({
           username: 'FissyChange'
         })
         .end((err, res) => {
-          expect(res.body.message).to.equal('Details Updated Successfully');
+          expect(res.body.message).to.equal('Username Updated Successfully');
           done();
         });
     });
 
     it('check that an Admin/Super Admin can upgrade a users role', (done) => {
       request(app)
-        .put(`/users/${user.createdUser.id}`)
-        .set('x-access-token', userToken)
+        .put(`/users/${4}`)
+        .set('x-access-token', adminToken)
         .send({
           roleId: 3
         })
         .end((err, res) => {
-          expect(res.body.message).to.equal('Details Updated Successfully');
-          expect(res.body.updatedUser.roleId).to.equal(3);
+          expect(res.body.message).to.equal('Role Updated Successfully');
           done();
         });
     });
   });
 
   describe('Delete User:', () => {
-    it('checks that only a SuperAdmin/Admin can delete a user', (done) => {
+    it('Super Admin can delete a user', (done) => {
       request(app)
-        .delete(`/users/${user.createdUser.id}`)
-        .set('x-access-token', userToken)
-        .end((err, res) => {
-          expect(res.body.message).to.equal('Not authenticated as Super Admin');
-          done();
-        });
-    });
-
-    it('Super Amin can delete a user', (done) => {
-      request(app)
-        .delete(`/users/${user.createdUser.id}`)
+        .delete(`/users/${4}`)
         .set('x-access-token', adminToken)
         .end((err, res) => {
           expect(res.body.message).to.equal('User deleted Successfully');

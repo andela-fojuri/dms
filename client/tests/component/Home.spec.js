@@ -1,6 +1,6 @@
 import React from 'react';
 import expect from 'expect';
-import { shallow, mount, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import { HomePage } from '../../components/home/HomePage';
 import { SignupPage } from '../../components/user/SignupPage';
 import { LoginPage } from '../../components/user/LoginPage';

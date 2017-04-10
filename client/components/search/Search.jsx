@@ -30,7 +30,12 @@ class Search extends React.Component {
             <form>
               <li className="input-field">
                 <input id="search" type="search" onChange={this.onSearchChange} required />
-                <label id="searchIcon" className="label-icon" htmlFor="search"><i className="material-icons">search</i></label>
+                <label
+                  id="searchIcon"
+                  className="label-icon"
+                  htmlFor="search">
+                  <i className="material-icons">search</i>
+                </label>
               </li>
             </form>
           </ul>
@@ -45,7 +50,7 @@ Search.propTypes = {
   actions: PropTypes.object.isRequired,
   actions2: PropTypes.object.isRequired,
   documents: PropTypes.array.isRequired,
-  showDoc: PropTypes.bool.isRequired,
+  showDoc: PropTypes.bool,
   showUsers: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired
 };

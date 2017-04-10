@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
-import toastr from 'toastr';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import * as documentActions from '../../actions/documentActions';
 import * as userActions from '../../actions/userActions';
@@ -13,15 +11,14 @@ import userImage from '../../images/user2.jpg';
 export class DashboardMenu extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this.showModal = this.showModal.bind(this);
     this.getPublicDoc = this.getPublicDoc.bind(this);
     this.getSharedDoc = this.getSharedDoc.bind(this);
     this.getMyDoc = this.getMyDoc.bind(this);
-    this.createRoleModal = this.createRoleModal.bind(this);
     this.showRoles = this.showRoles.bind(this);
     this.showUsers = this.showUsers.bind(this);
     this.getAllDoc = this.getAllDoc.bind(this);
     this.getAccessDoc = this.getAccessDoc.bind(this);
+    this.editProfile = this.editProfile.bind(this);
   }
   componentDidMount() {
     $('.modal').modal();
@@ -43,7 +40,6 @@ export class DashboardMenu extends React.Component {
     if (this.props.user.Role || nextProps.user.Role) {
       if (nextProps.user.Role.category === 'SuperAdmin' || nextProps.user.Role.category === 'Admin') {
         document.getElementById('forAdmin').style.display = 'block';
-        // document.getElementById('forUser').style.display = 'none';
       }
     }
     $('.modal').modal();
@@ -104,17 +100,10 @@ export class DashboardMenu extends React.Component {
     this.props.actions2.getUsers(0, 10);
   }
 
-  createRoleModal() {
-    $('.button-collapse').sideNav('hide');
-    this.props.actions3.editRole({ category: '', id: '' });
-    $('#editRole').modal('open');
+  editProfile() {
+    $('#editDetails').modal('open');
   }
 
-  showModal() {
-    $('.button-collapse').sideNav('hide');
-    this.props.actions.newDocument();
-    $('#modal1').modal('open');
-  }
 
   render() {
     return (
@@ -126,22 +115,42 @@ export class DashboardMenu extends React.Component {
                 <div className="background">
                   <img src={userImage} />
                 </div>
-                <a href="#!name"><span className="black-text name">{this.props.user.username}</span></a>
-                <a href="#!email"><span className="black-text email">{this.props.user.email}</span></a>
-                <a href="#!email">My Profile</a>
+                <a href="#!name">
+                  <span className="black-text name">{this.props.user.username}</span>
+                </a>
+                <a href="#!email">
+                  <span className="black-text email">{this.props.user.email}</span>
+                </a>
+                <a href="#!email" onClick={this.editProfile}>Edit Profile</a>
               </div>
             </li>
-            <li><a id="createDoc" name="create" onClick={this.showModal} ><i className="material-icons">add</i>New Doc</a></li>
-            <li><a id="anyDoc" name="anyone" onClick={this.getAccessDoc} >Owned By Anyone</a></li>
-            <li><a id="myDoc" name="myDoc" onClick={this.getMyDoc} >Owned By me</a></li>
-            <li><a id="publicDoc" name="publicDoc" onClick={this.getPublicDoc}>Public</a></li>
-            <li><a id="sharedDoc" name="shared" onClick={this.getSharedDoc} >Shared</a></li>
-            <div id="forAdmin"><li id="allDocs"><a name="allDocs" onClick={this.getAllDoc} >All Documents</a></li>
-              <li id="createRole"><a name="role" onClick={this.createRoleModal} >CreateRole</a></li>
-              <li id="allUsers"><a name="users" onClick={this.showUsers} >Users</a></li>
-              <li id="allRoles"><a name="roles" onClick={this.showRoles} >Roles</a></li></div>
+            <li>
+              <a id="anyDoc" name="anyone" onClick={this.getAccessDoc} >Owned By Anyone</a>
+            </li>
+            <li>
+              <a id="myDoc" name="myDoc" onClick={this.getMyDoc} >Owned By me</a>
+            </li>
+            <li>
+              <a id="publicDoc" name="publicDoc" onClick={this.getPublicDoc}>Public</a>
+            </li>
+            <li>
+              <a id="sharedDoc" name="shared" onClick={this.getSharedDoc} >Shared</a>
+            </li>
+            <div id="forAdmin">
+              <li id="allDocs">
+                <a name="allDocs" onClick={this.getAllDoc} >All Documents</a>
+              </li>
+              <li id="allUsers">
+                <a name="users" onClick={this.showUsers} >Users</a>
+              </li>
+              <li id="allRoles">
+                <a name="roles" onClick={this.showRoles} >Roles</a>
+              </li>
+            </div>
           </ul>
-          <a data-activates="slide-out" id="button-collapse" className="button-collapse"><i className="material-icons">menu</i></a>
+          <a data-activates="slide-out" id="button-collapse" className="button-collapse">
+            <i className="material-icons">menu</i>
+          </a>
         </div>
       </div>
     );

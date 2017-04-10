@@ -110,6 +110,16 @@ width:100%;
   width: 80%;
 }
 
+.otherTable{
+  margin: 0 auto;
+  margin-top: 0% !important;
+  width: 50%;
+}
+
+.label{
+  margin-bottom: 50px !important
+}
+
 #createBtn{
   float: right
 }
@@ -120,8 +130,8 @@ width:100%;
 }
 
 .card {
-  height: 60px !important;
-  margin-top: 0px !important;
+  height: 50px !important;
+  margin-top: -1px !important;
   margin-right: 0px !important;
   margin-bottom: 1px !important;
   margin-left: 0px !important;
@@ -148,7 +158,7 @@ width:100%;
   width: 50% !important;
 }
 
-#deleteIcon{
+.deleteIcon{
   color: red;
 }
 
@@ -180,8 +190,17 @@ td{
   display: none
 }
 .paginateLink{
-  cursor: pointer;
-  padding: 5px ;
-  background-color: grey;
+  padding: 3px ;
 }
+.setCollect{
+  margin-bottom: auto !important;
+}
+.row .col{
+  padding: 0rem !important;
+}
+
+.limit{
+  height: 50px !important;
+}
+
 

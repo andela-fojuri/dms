@@ -15,7 +15,15 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.ENUM('Public', 'Private', 'Role'),
       defaultValue: 'Public',
       allowNull: false,
-    }
+    },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATEONLY
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATEONLY
+    },
   }, {
     classMethods: {
       associate(models) {
@@ -24,7 +32,7 @@ export default (sequelize, DataTypes) => {
           onDelete: 'CASCADE',
           allowNull: false,
         });
-        // associations can be defined here
+          // associations can be defined here
       }
     }
   });

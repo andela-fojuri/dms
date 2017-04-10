@@ -268,26 +268,13 @@
     &quot;password&quot;: &quot;yetunde&quot;,
     &quot;password_confirmation&quot;: &quot;yetunde&quot;
 }</code></pre><h4>Response</h4><pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
   &quot;message&quot;: &quot;User Created Successfully&quot;,
-  &quot;createdUser&quot;: {
-    &quot;id&quot;: 29,
-    &quot;username&quot;: &quot;Yetunde&quot;,
-    &quot;email&quot;: &quot;yetunde@gmail.com&quot;,
-    &quot;password&quot;: &quot;yetunde&quot;,
-    &quot;password_confirmation&quot;: &quot;yetunde&quot;,
-    &quot;roleId&quot;: 3,
-    &quot;updatedAt&quot;: &quot;2017-04-06T20:31:30.512Z&quot;,
-    &quot;createdAt&quot;: &quot;2017-04-06T20:31:30.512Z&quot;,
-    &quot;password_digest&quot;: &quot;$2a$10$27HY4xUyMq2dGINYfE2k2e6sktlL265cNyjPrBgUQXL997G2AOs.W&quot;
-  },
-  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjksImVtYWlsIjoieWV0dW5kZUBnbWFpbC5jb20iLCJyb2xlSWQiOjMsImlhdCI6MTQ5MTUxMDY5MCwiZXhwIjoxNDkxNTQ2NjkwfQ.78zyf7GLfgZkodRT6pqcG87K6poHTkizfDGOFhmBEN4&quot;
+  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsImVtYWlsIjoieWV0dW5kZUBnbWFpbC5jb20iLCJyb2xlSWQiOjMsImlhdCI6MTQ5MTgyNDU5MCwiZXhwIjoxNDkxODYwNTkwfQ.EezfO9EyTbOTaYA8wUO_O-sGg_KbzbMvaPef2w3KsZM&quot;
 }</code></pre><h2>Get Users</h2><p>Fetches all users' details,</p>
 <h4>Request</h4><ul>
 <li>Endpoint: <strong>GET</strong>: <code>/users</code></li>
 <li>Requires <code>Authorization</code> header to be set<h4>Response</h4><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: [
+&quot;users&quot;: [
 {
   &quot;id&quot;: 1,
   &quot;username&quot;: &quot;yemisi&quot;,
@@ -296,15 +283,6 @@
   &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
   &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
   &quot;roleId&quot;: 3
-},
-{
-  &quot;id&quot;: 3,
-  &quot;username&quot;: &quot;Fisayomi&quot;,
-  &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;,
-  &quot;password_digest&quot;: &quot;$2a$10$FLmcv3/RXSeAuEjx92lpjevLCK6vpiJBWRDsSud/DFwdCsyIp92gy&quot;,
-  &quot;createdAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
-  &quot;updatedAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
-  &quot;roleId&quot;: 1
 },
 {
   &quot;id&quot;: 4,
@@ -415,24 +393,6 @@
   &quot;roleId&quot;: 3
 },
 {
-  &quot;id&quot;: 28,
-  &quot;username&quot;: &quot;Adebimpe&quot;,
-  &quot;email&quot;: &quot;bimpe@gmail.com&quot;,
-  &quot;password_digest&quot;: &quot;$2a$10$WtRS9ECgUO2QAbZsTOAEIOzFunrEfGGlG9hPu7.Jg5kT01pIovkMC&quot;,
-  &quot;createdAt&quot;: &quot;2017-04-06T20:22:48.100Z&quot;,
-  &quot;updatedAt&quot;: &quot;2017-04-06T20:22:48.100Z&quot;,
-  &quot;roleId&quot;: 3
-},
-{
-  &quot;id&quot;: 29,
-  &quot;username&quot;: &quot;Yetunde&quot;,
-  &quot;email&quot;: &quot;yetunde@gmail.com&quot;,
-  &quot;password_digest&quot;: &quot;$2a$10$27HY4xUyMq2dGINYfE2k2e6sktlL265cNyjPrBgUQXL997G2AOs.W&quot;,
-  &quot;createdAt&quot;: &quot;2017-04-06T20:31:30.512Z&quot;,
-  &quot;updatedAt&quot;: &quot;2017-04-06T20:31:30.512Z&quot;,
-  &quot;roleId&quot;: 3
-},
-{
   &quot;id&quot;: 16,
   &quot;username&quot;: &quot;testing&quot;,
   &quot;email&quot;: &quot;te@yahoo.com&quot;,
@@ -440,45 +400,168 @@
   &quot;createdAt&quot;: &quot;2017-04-04T22:55:07.605Z&quot;,
   &quot;updatedAt&quot;: &quot;2017-04-06T20:51:36.255Z&quot;,
   &quot;roleId&quot;: 10
+},
+{
+  &quot;id&quot;: 28,
+  &quot;username&quot;: &quot;Adebimpe&quot;,
+  &quot;email&quot;: &quot;bimpe@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$WtRS9ECgUO2QAbZsTOAEIOzFunrEfGGlG9hPu7.Jg5kT01pIovkMC&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-06T20:22:48.100Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-06T22:07:26.663Z&quot;,
+  &quot;roleId&quot;: 4
+},
+{
+  &quot;id&quot;: 30,
+  &quot;username&quot;: &quot;Ward Farrell&quot;,
+  &quot;email&quot;: &quot;ressie.grant97@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$KpaVNBEz3muxcUSH8umVsO4TsI58wUunRiFGtll9wJiTjmxguTfDu&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:28:21.030Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:28:21.030Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 31,
+  &quot;username&quot;: &quot;Frances Lakin&quot;,
+  &quot;email&quot;: &quot;robin_weber37@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$dw.GTXm.FplLuakrr1G73egMkb9g.0biN9Hl..ZaTlBJ2Hu7RDpPK&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:30:18.953Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:30:18.953Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 33,
+  &quot;username&quot;: &quot;Grady Schaefer&quot;,
+  &quot;email&quot;: &quot;leone_morar@yahoo.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$vfQa6VZI8L9kQo5QGy9fgO2XuIJfmSqr5MIjx/kAWJKbXK8wnoiVG&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:38:03.260Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:38:03.260Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 34,
+  &quot;username&quot;: &quot;Dr. Ian Witting&quot;,
+  &quot;email&quot;: &quot;rowland_weissnat@yahoo.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$l4KL2BGLHOvOk6kisQdBhuuM9nGeH9gnRZmgDjyfPBQeOb90ALKKa&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:40:57.381Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:40:57.381Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 35,
+  &quot;username&quot;: &quot;Ugonna&quot;,
+  &quot;email&quot;: &quot;ugonna@yahho.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$NcHa5UUq2cM67r86VWAM7eqSgR/a1/dkh0NMjguTJuC05S1htQrdG&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:42:34.235Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:42:34.235Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 36,
+  &quot;username&quot;: &quot;kjhgcfx&quot;,
+  &quot;email&quot;: &quot;gg@u.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$9GV.3R5Tjeuhq7dT1vSSWORvbNWVccETgG7jODlM1Op8xVOU6Vz7a&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:44:36.014Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:44:36.014Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 37,
+  &quot;username&quot;: &quot;werghjm&quot;,
+  &quot;email&quot;: &quot;er@yahho.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$8GG4oHmzssRr7C/pGYwvX.mq8NDioI15IR6qfrOjbL9CDAIHGkIKm&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:51:31.456Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:51:31.456Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 38,
+  &quot;username&quot;: &quot;Solon Stehr&quot;,
+  &quot;email&quot;: &quot;noelia4@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$8KXoMgvB2u.QaZ2bvY631.CpbaY6a/Kv4tJouZmBln8OD.WgC6Gg2&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T10:52:30.761Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T10:52:30.761Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 39,
+  &quot;username&quot;: &quot;Tristian Ward&quot;,
+  &quot;email&quot;: &quot;nicola30@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$pFwiUg8qcqkTg1OGvra24u0RrZnWfu2ywyDQzyHrBv6zDu5hfJ6we&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T11:23:10.449Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T11:23:10.449Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 40,
+  &quot;username&quot;: &quot;Martin Schmitt&quot;,
+  &quot;email&quot;: &quot;hermann28@hotmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$LEN4SAx8LE0k0ad6sztVkeyZ/I1A4geKAHQEpaULI0BBZyz4VSkl2&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T11:25:59.983Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T11:25:59.983Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 41,
+  &quot;username&quot;: &quot;Mr. Ova Maggio&quot;,
+  &quot;email&quot;: &quot;wilfredo.smith31@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$BQ9G0hgmRBThO47OK1Cpg.M/jQnTuqDaem8dsrN63jfJSz9aKTZBe&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T11:29:14.957Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T11:29:14.957Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 42,
+  &quot;username&quot;: &quot;Norval Oberbrunner&quot;,
+  &quot;email&quot;: &quot;al.wiegand66@yahoo.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$nYWrPxEuISA0cc.l/xe5A.l5FlJ/XcERmqHK3j6nfM6OSg65XBax6&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-07T15:03:19.963Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-07T15:03:19.963Z&quot;,
+  &quot;roleId&quot;: 3
+},
+{
+  &quot;id&quot;: 3,
+  &quot;username&quot;: &quot;Fisayomi&quot;,
+  &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$75QI2BggpeZkHrjsh0NVq.cFJc4xwRN2XiQQfigKhmi2sVoY9f9Ju&quot;,
+  &quot;createdAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-08T21:07:00.563Z&quot;,
+  &quot;roleId&quot;: 1
+},
+{
+  &quot;id&quot;: 43,
+  &quot;username&quot;: &quot;Yetunde&quot;,
+  &quot;email&quot;: &quot;yetunde@gmail.com&quot;,
+  &quot;password_digest&quot;: &quot;$2a$10$A0RCdxYGgFGgIITdk.L3EOv0NlAk2P3mh0Nw8CR8/HNxHLzf9N0OK&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-10T11:43:10.504Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-10T11:43:10.504Z&quot;,
+  &quot;roleId&quot;: 3
 }
 ],
-&quot;count&quot;: 17
+&quot;count&quot;: 29
 }</code></pre></li>
 </ul>
 <h2>Find A User</h2><h4>Request</h4><ul>
 <li>Endpoint: <strong>GET</strong>: <code>/users/:id</code></li>
 <li>Requires <code>Authorization</code> header to be set<h4>Response</h4><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: {
-&quot;id&quot;: 16,
-&quot;username&quot;: &quot;testing&quot;,
-&quot;email&quot;: &quot;te@yahoo.com&quot;,
-&quot;password_digest&quot;: &quot;$2a$10$pmepBViOnyc4bfn91bvycOmqSB/L59W5l.Stc6Xm37DF86IkS7fNu&quot;,
-&quot;createdAt&quot;: &quot;2017-04-04T22:55:07.605Z&quot;,
-&quot;updatedAt&quot;: &quot;2017-04-06T20:51:36.255Z&quot;,
-&quot;roleId&quot;: 10,
+&quot;id&quot;: 3,
+&quot;username&quot;: &quot;Fisayomi&quot;,
+&quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;,
+&quot;password_digest&quot;: &quot;$2a$10$75QI2BggpeZkHrjsh0NVq.cFJc4xwRN2XiQQfigKhmi2sVoY9f9Ju&quot;,
+&quot;createdAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
+&quot;updatedAt&quot;: &quot;2017-04-08T21:07:00.563Z&quot;,
+&quot;roleId&quot;: 1,
 &quot;Role&quot;: {
-  &quot;id&quot;: 10,
-  &quot;category&quot;: &quot;test2&quot;,
-  &quot;createdAt&quot;: &quot;2017-04-05T14:39:10.388Z&quot;,
-  &quot;updatedAt&quot;: &quot;2017-04-05T22:19:20.160Z&quot;
-}
+&quot;id&quot;: 1,
+&quot;category&quot;: &quot;SuperAdmin&quot;,
+&quot;createdAt&quot;: &quot;2017-03-29T19:51:32.526Z&quot;,
+&quot;updatedAt&quot;: &quot;2017-03-29T19:51:32.526Z&quot;
 }
 }</code></pre><h2>Update user</h2><h4>Request</h4></li>
 <li>Enpoint: <strong>PUT</strong>: <code>/users/:id</code></li>
 <li>Requires <code>Authorization</code> header to be set<pre class="prettyprint source"><code>{
 &quot;RoleId&quot;: 4
 }</code></pre><h4>Response</h4><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: {
-&quot;id&quot;: 28,
-&quot;username&quot;: &quot;Adebimpe&quot;,
-&quot;email&quot;: &quot;bimpe@gmail.com&quot;,
-&quot;password_digest&quot;: &quot;$2a$10$WtRS9ECgUO2QAbZsTOAEIOzFunrEfGGlG9hPu7.Jg5kT01pIovkMC&quot;,
-&quot;createdAt&quot;: &quot;2017-04-06T20:22:48.100Z&quot;,
-&quot;updatedAt&quot;: &quot;2017-04-06T22:07:26.663Z&quot;,
-&quot;roleId&quot;: &quot;4&quot;
-}
+&quot;message&quot;: &quot;Role Updated Successfully&quot;
 }</code></pre></li>
 </ul>
 <h2>Delete user</h2><h4>Request</h4><ul>
@@ -486,26 +569,22 @@
 <li>Requires <code>Authorization</code> header to be set<h4>Response</h4></li>
 </ul>
 <pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
   &quot;message&quot;: &quot;User deleted Successfully&quot;
 }</code></pre><h2>User login</h2><h3>Request</h3><ul>
 <li>Endpoint: <strong>POST</strong>: <code>/users/login</code><pre class="prettyprint source"><code>{
- &quot;email&quot;: &quot;Fisayomi&quot;,
- &quot;password&quot;:&quot;fisayomi&quot;
+ &quot;email&quot;: &quot;yemisi&quot;,
+ &quot;password&quot;:&quot;yemisi&quot;
 }</code></pre></li>
 </ul>
 <h3>Response</h3><pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
   &quot;message&quot;: &quot;Successfully logged in&quot;,
-  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJmaXNheW9taS5vanVyaUBhbmRlbGEuY29tIiwicm9sZUlkIjoxLCJSb2xlIjp7ImlkIjoxLCJjYXRlZ29yeSI6IlN1cGVyQWRtaW4iLCJjcmVhdGVkQXQiOiIyMDE3LTAzLTI5VDE5OjUxOjMyLjUyNloiLCJ1cGRhdGVkQXQiOiIyMDE3LTAzLTI5VDE5OjUxOjMyLjUyNloifSwiaWF0IjoxNDkxNTE1ODAwLCJleHAiOjE0OTE1NTE4MDB9.tnGpWrYtPg6XLsqDgIwiLyi3WHW8BJ4NQ0p4lHSXCnc&quot;,
-  &quot;user&quot;: 3
+  &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ5ZW1pc2lAeWFob28uY29tIiwicm9sZUlkIjozLCJSb2xlIjp7ImlkIjozLCJjYXRlZ29yeSI6IlJlZ3VsYXIiLCJjcmVhdGVkQXQiOiIyMDE3LTAzLTI5VDE5OjUxOjU1LjIyOFoiLCJ1cGRhdGVkQXQiOiIyMDE3LTAzLTI5VDE5OjUxOjU1LjIyOFoifSwiaWF0IjoxNDkxODI0OTA2LCJleHAiOjE0OTE4NjA5MDZ9.EOX9nSsN6vYI6pkpypY3rcif5_5JSn69LeOdudKtYc4&quot;
 }</code></pre><h1>Get user's accessible Documents</h1><h3>Request</h3><ul>
 <li>Enpoint: <strong>GET</strong>: <code>/user/documents</code></li>
 <li>Requires <code>Authorization</code> header to be set</li>
 </ul>
 <h3>Response</h3><pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
-  &quot;message&quot;: [
+  &quot;documents&quot;: [
     {
       &quot;id&quot;: 34,
       &quot;title&quot;: &quot;ljskhagfxjhgfjhgfnbvjhg&quot;,
@@ -517,11 +596,7 @@
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     },
     {
@@ -535,11 +610,7 @@
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     },
     {
@@ -553,11 +624,7 @@
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     },
     {
@@ -571,29 +638,21 @@
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     },
     {
       &quot;id&quot;: 27,
       &quot;title&quot;: &quot;ljskhagfx&quot;,
-      &quot;content&quot;: &quot;&lt;p>jkhgfdcfghjk&lt;/p>&quot;,
+      &quot;content&quot;: &quot;&lt;p>jkhgfdcfghjkupdated&lt;/p>&quot;,
       &quot;access&quot;: &quot;Role&quot;,
       &quot;createdAt&quot;: &quot;2017-04-01T09:40:19.128Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-04-01T09:40:19.128Z&quot;,
+      &quot;updatedAt&quot;: &quot;2017-04-08T16:37:19.558Z&quot;,
       &quot;userId&quot;: 1,
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     },
     {
@@ -607,11 +666,7 @@
       &quot;User&quot;: {
         &quot;id&quot;: 4,
         &quot;username&quot;: &quot;Sunday&quot;,
-        &quot;email&quot;: &quot;sunday@andela.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$HoMaRyIsPjD1YdQspNI38u7j/C5pLb00plIw5YChmgomU0CY5iUYi&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-31T14:25:06.761Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-31T14:25:06.761Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;sunday@andela.com&quot;
       }
     }
   ],
@@ -620,16 +675,9 @@
 <li>Endpoint <strong>POST</strong> <code>/roles</code></li>
 <li>Requires <code>Authorization</code> header to be set
 Body (application/json)<pre class="prettyprint source"><code>{
-&quot;category&quot;: &quot;technical&quot;
+&quot;categoy&quot;: &quot;testing&quot;
 }</code></pre><h4>Response</h4>Body (application/json)<pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: &quot;Role created Successfully&quot;,
-&quot;createdRole&quot;: {
-&quot;id&quot;: 14,
-&quot;category&quot;: &quot;technical&quot;,
-&quot;updatedAt&quot;: &quot;2017-04-06T22:28:20.167Z&quot;,
-&quot;createdAt&quot;: &quot;2017-04-06T22:28:20.167Z&quot;
-}
+&quot;message&quot;: &quot;Role created Successfully&quot;
 }</code></pre></li>
 </ul>
 <h2>Get Roles</h2><h4>Request</h4><ul>
@@ -637,78 +685,49 @@ Body (application/json)<pre class="prettyprint source"><code>{
 <li>Requires <code>Authorization</code> header to be set</li>
 </ul>
 <h4>Response</h4><p>Body (application/json)</p>
-<pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
-  &quot;message&quot;: [
-    {
-      &quot;id&quot;: 1,
-      &quot;category&quot;: &quot;SuperAdmin&quot;,
-      &quot;createdAt&quot;: &quot;2017-03-29T19:51:32.526Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-03-29T19:51:32.526Z&quot;
-    },
-    {
-      &quot;id&quot;: 2,
-      &quot;category&quot;: &quot;Admin&quot;,
-      &quot;createdAt&quot;: &quot;2017-03-29T19:51:44.268Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-03-29T19:51:44.268Z&quot;
-    },
-    {
-      &quot;id&quot;: 3,
-      &quot;category&quot;: &quot;Regular&quot;,
-      &quot;createdAt&quot;: &quot;2017-03-29T19:51:55.228Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-03-29T19:51:55.228Z&quot;
-    },
-    {
-      &quot;id&quot;: 4,
-      &quot;category&quot;: &quot;Staff&quot;,
-      &quot;createdAt&quot;: &quot;2017-03-29T19:52:09.640Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-03-29T19:52:09.640Z&quot;
-    },
-    {
-      &quot;id&quot;: 7,
-      &quot;category&quot;: &quot;another&quot;,
-      &quot;createdAt&quot;: &quot;2017-04-05T14:17:59.919Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-04-05T14:17:59.919Z&quot;
-    },
-    {
-      &quot;id&quot;: 8,
-      &quot;category&quot;: &quot;anotherRole&quot;,
-      &quot;createdAt&quot;: &quot;2017-04-05T14:34:59.373Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-04-05T14:34:59.373Z&quot;
-    },
-    {
-      &quot;id&quot;: 11,
-      &quot;category&quot;: &quot;testing&quot;,
-      &quot;createdAt&quot;: &quot;2017-04-05T14:42:29.076Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-04-05T14:42:29.076Z&quot;
-    },
-    {
-      &quot;id&quot;: 12,
-      &quot;category&quot;: &quot;cgcvdgfds&quot;,
-      &quot;createdAt&quot;: &quot;2017-04-05T14:48:50.672Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-04-05T14:48:50.672Z&quot;
-    },
-    {
-      &quot;id&quot;: 10,
-      &quot;category&quot;: &quot;test2&quot;,
-      &quot;createdAt&quot;: &quot;2017-04-05T14:39:10.388Z&quot;,
-      &quot;updatedAt&quot;: &quot;2017-04-05T22:19:20.160Z&quot;
-    }
-  ]
-}</code></pre><h2>Update Role</h2><h4>Request</h4><ul>
-<li>Endpoint <strong>POST</strong> <code>/roles/:id</code></li>
+<pre class="prettyprint source"><code>[
+  {
+    &quot;id&quot;: 1,
+    &quot;category&quot;: &quot;SuperAdmin&quot;,
+    &quot;createdAt&quot;: &quot;2017-03-29T19:51:32.526Z&quot;,
+    &quot;updatedAt&quot;: &quot;2017-03-29T19:51:32.526Z&quot;
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;category&quot;: &quot;Admin&quot;,
+    &quot;createdAt&quot;: &quot;2017-03-29T19:51:44.268Z&quot;,
+    &quot;updatedAt&quot;: &quot;2017-03-29T19:51:44.268Z&quot;
+  },
+  {
+    &quot;id&quot;: 3,
+    &quot;category&quot;: &quot;Regular&quot;,
+    &quot;createdAt&quot;: &quot;2017-03-29T19:51:55.228Z&quot;,
+    &quot;updatedAt&quot;: &quot;2017-03-29T19:51:55.228Z&quot;
+  },
+  {
+    &quot;id&quot;: 4,
+    &quot;category&quot;: &quot;Staff&quot;,
+    &quot;createdAt&quot;: &quot;2017-03-29T19:52:09.640Z&quot;,
+    &quot;updatedAt&quot;: &quot;2017-03-29T19:52:09.640Z&quot;
+  },
+  {
+    &quot;id&quot;: 8,
+    &quot;category&quot;: &quot;anotherRole&quot;,
+    &quot;createdAt&quot;: &quot;2017-04-05T14:34:59.373Z&quot;,
+    &quot;updatedAt&quot;: &quot;2017-04-05T14:34:59.373Z&quot;
+  },
+  {
+    &quot;id&quot;: 11,
+    &quot;category&quot;: &quot;testing&quot;,
+    &quot;createdAt&quot;: &quot;2017-04-05T14:42:29.076Z&quot;,
+    &quot;updatedAt&quot;: &quot;2017-04-05T14:42:29.076Z&quot;
+  }</code></pre><h2>Update Role</h2><h4>Request</h4><ul>
+<li>Endpoint <strong>POST</strong> <code>/roles/:11</code></li>
 <li>Requires <code>Authorization</code> header to be set
 Body (application/json)<pre class="prettyprint source"><code>{
 &quot;category&quot;: &quot;tech&quot;
 }</code></pre><h4>Response</h4>Body (application/json)<pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: &quot;Role Updated Successfully&quot;,
-&quot;role&quot;: {
-&quot;id&quot;: 14,
-&quot;category&quot;: &quot;tech&quot;,
-&quot;createdAt&quot;: &quot;2017-04-06T22:28:20.167Z&quot;,
-&quot;updatedAt&quot;: &quot;2017-04-06T22:29:29.938Z&quot;
-}
+&quot;message&quot;: &quot;Role Updated Successfully&quot;
 }</code></pre></li>
 </ul>
 <h2>DOCUMENTS</h2><h2>Create Document</h2><h4>Request</h4><ul>
@@ -719,25 +738,56 @@ Body (application/json)<pre class="prettyprint source"><code>{
 &quot;access&quot;: &quot;Role&quot;
 }</code></pre><h4>Response</h4></li>
 <li>Body <code>(application/json)</code><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: &quot;Document added Successfully&quot;,
-&quot;createdDocument&quot;: {
-&quot;id&quot;: 59,
-&quot;title&quot;: &quot;test_Doccc&quot;,
-&quot;content&quot;: &quot;This is a test Document&quot;,
-&quot;access&quot;: &quot;Role&quot;,
-&quot;userId&quot;: 3,
-&quot;updatedAt&quot;: &quot;2017-04-06T22:35:32.001Z&quot;,
-&quot;createdAt&quot;: &quot;2017-04-06T22:35:32.001Z&quot;
-}
+&quot;message&quot;: &quot;Document created Successfully&quot;
 }</code></pre><h2>Get Document</h2><h4>Request</h4></li>
 <li>Endpoint <strong>GET</strong> <code>/public/documents</code></li>
 <li>Optional queries <strong>offset</strong> &amp;&amp; <strong>limit</strong> (number of documents per page)</li>
 <li>Requires <code>Authorization</code> header to be set</li>
 </ul>
 <h4>Response</h4><pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
-  &quot;message&quot;: [
+  &quot;documents&quot;: [
+    {
+      &quot;id&quot;: 78,
+      &quot;title&quot;: &quot;JavaLearning&quot;,
+      &quot;content&quot;: &quot;I love coding&quot;,
+      &quot;access&quot;: &quot;Public&quot;,
+      &quot;createdAt&quot;: &quot;2017-04-10T11:57:12.328Z&quot;,
+      &quot;updatedAt&quot;: &quot;2017-04-10T11:57:12.328Z&quot;,
+      &quot;userId&quot;: 3,
+      &quot;User&quot;: {
+        &quot;id&quot;: 3,
+        &quot;username&quot;: &quot;Fisayomi&quot;,
+        &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 65,
+      &quot;title&quot;: &quot;sdfghj&quot;,
+      &quot;content&quot;: &quot;&lt;p>gthjk&lt;/p>&quot;,
+      &quot;access&quot;: &quot;Public&quot;,
+      &quot;createdAt&quot;: &quot;2017-04-07T10:19:28.700Z&quot;,
+      &quot;updatedAt&quot;: &quot;2017-04-07T10:19:28.700Z&quot;,
+      &quot;userId&quot;: 3,
+      &quot;User&quot;: {
+        &quot;id&quot;: 3,
+        &quot;username&quot;: &quot;Fisayomi&quot;,
+        &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;
+      }
+    },
+    {
+      &quot;id&quot;: 64,
+      &quot;title&quot;: &quot;defrghngfd&quot;,
+      &quot;content&quot;: &quot;&lt;p>dfgfgnhjkl&lt;/p>&quot;,
+      &quot;access&quot;: &quot;Public&quot;,
+      &quot;createdAt&quot;: &quot;2017-04-07T10:18:48.386Z&quot;,
+      &quot;updatedAt&quot;: &quot;2017-04-07T10:18:48.386Z&quot;,
+      &quot;userId&quot;: 3,
+      &quot;User&quot;: {
+        &quot;id&quot;: 3,
+        &quot;username&quot;: &quot;Fisayomi&quot;,
+        &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;
+      }
+    },
     {
       &quot;id&quot;: 55,
       &quot;title&quot;: &quot;Sunday_type&quot;,
@@ -749,11 +799,7 @@ Body (application/json)<pre class="prettyprint source"><code>{
       &quot;User&quot;: {
         &quot;id&quot;: 3,
         &quot;username&quot;: &quot;Fisayomi&quot;,
-        &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$FLmcv3/RXSeAuEjx92lpjevLCK6vpiJBWRDsSud/DFwdCsyIp92gy&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
-        &quot;roleId&quot;: 1
+        &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;
       }
     },
     {
@@ -767,11 +813,7 @@ Body (application/json)<pre class="prettyprint source"><code>{
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     },
     {
@@ -785,52 +827,34 @@ Body (application/json)<pre class="prettyprint source"><code>{
       &quot;User&quot;: {
         &quot;id&quot;: 1,
         &quot;username&quot;: &quot;yemisi&quot;,
-        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;,
-        &quot;password_digest&quot;: &quot;$2a$10$cBBuacSVltzzCjjHsxAKIOgs5.AApjdxltBTNqNtyJbDCn27uHGl2&quot;,
-        &quot;createdAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;updatedAt&quot;: &quot;2017-03-29T19:54:35.398Z&quot;,
-        &quot;roleId&quot;: 3
+        &quot;email&quot;: &quot;yemisi@yahoo.com&quot;
       }
     }
   ],
-  &quot;count&quot;: 3
+  &quot;count&quot;: 6
 }</code></pre><h2>Find A Document</h2><h4>Request</h4><ul>
 <li>Endpoint <strong>GET</strong> <code>/documents/:id</code> where id is the id of the document</li>
 <li>Requires <code>Authorization</code> header to be set</li>
 </ul>
 <h5>Response</h5><pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
-  &quot;message&quot;: {
-    &quot;id&quot;: 33,
-    &quot;title&quot;: &quot;ljskhagfxjhgfjhgfnbv&quot;,
-    &quot;content&quot;: &quot;&lt;p>jkhgfdcfghjkjhgfdckjuhgkjhgf&lt;/p>&quot;,
-    &quot;access&quot;: &quot;Public&quot;,
-    &quot;createdAt&quot;: &quot;2017-04-01T09:41:16.502Z&quot;,
-    &quot;updatedAt&quot;: &quot;2017-04-01T09:41:16.502Z&quot;,
-    &quot;userId&quot;: 1
-  }
+  &quot;id&quot;: 33,
+  &quot;title&quot;: &quot;ljskhagfxjhgfjhgfnbv&quot;,
+  &quot;content&quot;: &quot;&lt;p>jkhgfdcfghjkjhgfdckjuhgkjhgf&lt;/p>&quot;,
+  &quot;access&quot;: &quot;Public&quot;,
+  &quot;createdAt&quot;: &quot;2017-04-01T09:41:16.502Z&quot;,
+  &quot;updatedAt&quot;: &quot;2017-04-01T09:41:16.502Z&quot;,
+  &quot;userId&quot;: 1
 }</code></pre><h2>Update Document</h2><h4>Request</h4><ul>
 <li>Endpoint <strong>PUT</strong> <code>/documents/:id</code> id is the id of the document</li>
 <li>Requires <code>Authorization</code> header to be set<pre class="prettyprint source"><code>{
-&quot;content&quot;: &quot;This is an updated test Document&quot;
+&quot;content&quot;: &quot;I love coding updated&quot;
 }</code></pre><h5>Response</h5><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: &quot;Document updated Successfully&quot;,
-&quot;document&quot;: {
-&quot;id&quot;: 59,
-&quot;title&quot;: &quot;test_Doccc&quot;,
-&quot;content&quot;: &quot;This is an updated test Document&quot;,
-&quot;access&quot;: &quot;Role&quot;,
-&quot;createdAt&quot;: &quot;2017-04-06T22:35:32.001Z&quot;,
-&quot;updatedAt&quot;: &quot;2017-04-06T22:40:02.254Z&quot;,
-&quot;userId&quot;: 3
-}
+&quot;message&quot;: &quot;Document updated Successfully&quot;
 }</code></pre></li>
 </ul>
 <h2>Delete Document</h2><h4>Request</h4><ul>
 <li>Endpoint <strong>DELETE</strong> <code>/documents/:id</code>id of the document</li>
 <li>Requires <code>Authorization</code> header to be set<h4>Response</h4><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
 &quot;message&quot;: &quot;Document deleted Successfully&quot;
 }</code></pre></li>
 </ul>
@@ -839,8 +863,7 @@ Body (application/json)<pre class="prettyprint source"><code>{
 <li>Requires <code>Authorization</code> header to be set as Admin/Super Admin</li>
 </ul>
 <h4>Response</h4><pre class="prettyprint source"><code>{
-  &quot;success&quot;: true,
-  &quot;message&quot;: [
+  &quot;users&quot;: [
     {
       &quot;id&quot;: 4,
       &quot;username&quot;: &quot;Sunday&quot;,
@@ -855,8 +878,7 @@ Body (application/json)<pre class="prettyprint source"><code>{
 }</code></pre><h2>Search Documents</h2><h4>Request</h4><ul>
 <li>Endpoint <strong>GET</strong> <code>/search/documents?title=Sunday_type</code></li>
 <li>Requires <code>Authorization</code> header to be set<h4>Response</h4><pre class="prettyprint source"><code>{
-&quot;success&quot;: true,
-&quot;message&quot;: [
+&quot;documents&quot;: [
 {
   &quot;id&quot;: 55,
   &quot;title&quot;: &quot;Sunday_type&quot;,
@@ -868,11 +890,7 @@ Body (application/json)<pre class="prettyprint source"><code>{
   &quot;User&quot;: {
     &quot;id&quot;: 3,
     &quot;username&quot;: &quot;Fisayomi&quot;,
-    &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;,
-    &quot;password_digest&quot;: &quot;$2a$10$FLmcv3/RXSeAuEjx92lpjevLCK6vpiJBWRDsSud/DFwdCsyIp92gy&quot;,
-    &quot;createdAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
-    &quot;updatedAt&quot;: &quot;2017-03-30T14:53:44.355Z&quot;,
-    &quot;roleId&quot;: 1
+    &quot;email&quot;: &quot;fisayomi.ojuri@andela.com&quot;
   }
 }
 ],
@@ -928,7 +946,7 @@ Body (application/json)<pre class="prettyprint source"><code>{
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on 2017-04-06T23:55:32+01:00
+		on 2017-04-10T13:05:19+01:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>

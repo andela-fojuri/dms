@@ -4,13 +4,11 @@ export default {
     localStorage.setItem('token', token);
   }),
 
-  isUserAuthenticated: (() => {
-    return localStorage.getItem('token');
-  }),
-
+  isUserAuthenticated: (() => localStorage.getItem('token')),
 
   deauthenticateUser: (() => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }),
 
   getToken: (() => localStorage.getItem('token'))

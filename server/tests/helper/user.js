@@ -8,21 +8,21 @@ export default {
     roleId: 2
   },
   user1: {
-    username: faker.name.findName(),
-    email: faker.internet.email().toLowerCase(),
+    username: 'testUser1',
+    email: 'testUser@gmail.com',
     password: 'fissyTest',
     password_confirmation: 'fissyTest',
     roleId: 2
   },
   user2: {
-    username: faker.name.findName(),
+    username: 'testUser2',
     email: faker.internet.email().toLowerCase(),
     password: 'fissyTest2',
     password_confirmation: 'fissyTest2',
     roleId: 3
   },
   user3: {
-    username: faker.name.findName(),
+    username: 'testUser3',
     password: 'fissyTest2',
     email: faker.internet.email().toLowerCase(),
     password_confirmation: 'fissyTest2',

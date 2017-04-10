@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/userActions';
 
@@ -9,19 +9,25 @@ class Search extends React.Component {
     super(props, context);
 
     this.state = {
-      user: {}
     };
     this.onClickLogout = this.onClickLogout.bind(this);
   }
 
   onClickLogout() {
+    localStorage.removeItem('token');
     this.props.actions.userLogoutSuccess();
+    browserHistory.push('/');
   }
 
   render() {
     if (this.props.user.id) {
       return (
-        <Link id="logout" className="brandLogo right" to="/" onClick={this.onClickLogout} activeClassName="active">logout</Link>
+        <Link
+          id="logout"
+          className="brandLogo right"
+          to="/ "
+          onClick={this.onClickLogout} activeClassName="active" >
+          logout</Link >
       );
     }
     return (<div />);

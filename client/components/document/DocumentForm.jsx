@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import toastr from 'toastr';
 import 'froala-editor/js/froala_editor.pkgd.min';
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -29,7 +30,7 @@ export class DocumentForm extends React.Component {
       access: props.showDocument.access,
       userId: props.showDocument.userId,
     };
-  
+
     this.updateDocumentState = this.updateDocumentState.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
@@ -66,10 +67,22 @@ export class DocumentForm extends React.Component {
   onClickSave(event) {
     const field = event.currentTarget.name;
     if (field === 'create') {
+      const document = this.state;
+      if ((!document.title || document.title === '')
+       && (!document.content || document.content === '')) {
+        toastr.error('Document Title/Content required');
+      } else if (!document.content || document.content === '') {
+        toastr.warning('Document Content required');
+      } else if (!document.title || document.title === '') {
+        toastr.warning('Document Title required');
+      } else {
+        this.props.actions.saveDocument(Object.assign({}, this.state)).then(() => {
+          $('#modal1').modal('close');
+          this.props.actions.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
+        });
+      }
+    } else {
       $('#modal1').modal('close');
-      this.props.actions.saveDocument(Object.assign({}, this.state)).then(() => {
-        this.props.actions.getDocs('/user/documents/', 0, 10, 'Accessible Documents');
-      });
     }
   }
 
@@ -90,6 +103,11 @@ export class DocumentForm extends React.Component {
         <div id="modal1" className="modal">
           <div className="modal-content">
             <div className="row">
+              <div className="row">
+                <a className="right modal-close ">
+                  <i className="black material-icons right">clear</i>
+                </a>
+              </div>
               <form>
                 <div className="row">
                   <div className="col s6">
@@ -124,8 +142,16 @@ export class DocumentForm extends React.Component {
                     id="createBtn"
                     name="create"
                     type="button"
-                    className="waves-effect waves-light btn"
+                    className="right waves-effect waves-light btn"
                     value="Save"
+                    onClick={this.onClickSave}
+                  />
+                  <input
+                    id="createBtn"
+                    name="cancel"
+                    type="button"
+                    className="left waves-effect waves-light btn"
+                    value="Cancel"
                     onClick={this.onClickSave}
                   />
                 </div>

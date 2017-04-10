@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import { bindActionCreators } from 'redux';
 import * as userActions from '../../actions/userActions';
+import Grid from '../grid/Grid';
+import Collection from '../grid/Collection';
 
 export class UsersPage extends React.Component {
   constructor(props, context) {
@@ -49,7 +51,8 @@ export class UsersPage extends React.Component {
 
   getTotalPage() {
     const { totalUsers } = this.props;
-    return totalUsers % this.limit === 0 ? Math.floor(totalUsers / this.limit) : Math.floor(totalUsers / this.limit) + 1;
+    return totalUsers % this.limit === 0 ? Math.floor(totalUsers / this.limit)
+      : Math.floor(totalUsers / this.limit) + 1;
   }
 
   deleteUser(id) {
@@ -71,33 +74,37 @@ export class UsersPage extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col s11">
-          <div className="docTable">
-            <h4 className="userLabel">All Users</h4>
-            {this.props.users.map((user, index) => (
-              <div key={user.id}>
-                <div className="card">
-                  <div className="card-content">
-                    <div className="card-title activator ">
-                      <a name="myDoc" className="grey-text text-darken-4" onClick={() => { this.showUserForm(index); }}>{user.username}</a>
-                      <a id="deleteIcon" name="delete" onClick={() => { this.deleteUser(user.id); }}><i className="material-icons right">delete</i></a>
-                      <a id="editIcon" name="delete" onClick={() => { this.showUserForm(index); }}><i className="material-icons right">mode_edit</i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div className="row">
+          <div className="otherTable">
+            <Collection label="All Users" />
+            <div className="collection-item">
+              {this.props.users.map((user, index) => (
+                <Grid
+                  key={user.id}
+                  deleteIcon="delete"
+                  editIcon="mode_edit"
+                  username={user.username}
+                  onClickDelete={() => { this.deleteUser(user.id); }}
+                  onClickEdit={() => { this.showUserForm(index); }}
+                  showContent={() => { this.showUserForm(index); }} />
+              ))}
+            </div>
           </div>
-          <ReactPaginate
-            pageCount={this.getTotalPage()}
-            pageRangeDisplayed={0}
-            marginPagesDisplayed={5}
-            containerClassName="pagination"
-            activeClassName="active"
-            pageClassName="waves_effect"
-            onPageChange={this.handlePagination}
-            pageLinkClassName="paginateLink" />
         </div>
+        <div className="row">
+          <div className="col s5 offset-s3">
+            <ReactPaginate
+              pageCount={this.getTotalPage()}
+              pageRangeDisplayed={0}
+              marginPagesDisplayed={5}
+              containerClassName="pagination blue-grey darken-4"
+              activeClassName="active"
+              pageClassName="waves_effect"
+              onPageChange={this.handlePagination}
+              pageLinkClassName="paginateLink" />
+          </div>
+        </div>
+
       </div>
     );
   }

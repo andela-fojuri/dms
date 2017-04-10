@@ -33,7 +33,9 @@ export class HomePage extends React.Component {
       return (
         <div id="login" className="z-depth-1 card-panel">
           <LoginPageComponent />
-          <p> Dont have an account yet? <a id="signupLink" name="signupLink" onClick={this.displaySignupForm}>Signup</a></p>
+          <p> Dont have an account yet?
+            <a id="signupLink" name="signupLink" onClick={this.displaySignupForm}>Signup</a>
+          </p>
         </div>
       );
     } else if (this.state.isSignup) {
@@ -46,7 +48,10 @@ export class HomePage extends React.Component {
     }
     return (
       <div id="start">
-        <button id="startBtn" className="btn waves-effect waves-light blue-grey darken-4" onClick={this.displayLoginForm} type="submit" name="action">Get Started
+        <button
+          id="startBtn"
+          className="btn waves-effect waves-light blue-grey darken-4"
+          onClick={this.displayLoginForm} type="submit" name="action">Get Started
           <i className="material-icons right">send</i>
         </button>
       </div>
