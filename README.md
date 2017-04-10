@@ -19,24 +19,24 @@ Users are authenticated and validated us JWT web token. Generating tokens on sig
 *   Edit Documents
 *   Delete documents
 *   View public documents created by other users.
-*   View documents created by his access group with access level set as `role`.
-*   Search a users public documents.
-*   View `public` and `role` access level documents of other regular users.
+*   View documents created with access level set as `role` if on same role level.
+*   Search for specific documents.
 *   Logout
 
 -   In addition to the general user functions, an admin user can:
     -   View all users.
-    -   View all created documents except documents with access set to private.
+    -   View all created documents.
     -   Delete any user.
     -   Update any user's record.
     -   Create a new role.
     -   View all created roles.
     -   Search for any user.
+    -   Search for any Document
 
 ## Installation
 -   Ensure that you have NodeJs and Postgres installed on your machine
 -   Clone the repository `$ git clone https://github.com/andela-fojuri/dms.git`
--   Change into the directory `$ cd /doc-management`
+-   Change into the directory `$ cd /dms`
 -   Install all required dependencies with `$ npm install`
 
 ## Usage
