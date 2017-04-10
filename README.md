@@ -5,12 +5,6 @@
 
 Document Management System provides a restful API and friend users interface for users to create and manage documents giving different privileges based on user roles and managing authentication using JWT. The API has routes, each dedicated to a single task that uses HTTP response codes to indicate API status and errors.
 
-## API Documentation Link
-- [visit] (https://andela-fojuri.github.io/dms/)
-
-## Heroku Link
-- [visit] (https://manage-document.herokuapp.com/)
-
 ## Development
 This application was developed using [NodeJs](https://nodejs.org) with [React Redux](http://redux.js.org/docs/basics/UsageWithReact.html) for frontend and [express](https://expressjs.com/) for routing. Postgres was used for persisting data with [Sequelize](https://sequelizejs.org) as [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping)
 
