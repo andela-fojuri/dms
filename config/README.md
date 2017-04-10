@@ -3,21 +3,6 @@
 
 Document Management System API contains several API end points that allows users to create, edit, retrieve and delete documents. It also offers a way to ensure that only authorized users can perform certain operations.
 
-Development
------------
-The application was developed with [NodeJs](http://nodejs.org) and [Express](http://expressjs.com) is used for routing. The [Postgres](http://postgresql.com) database was used with [sequelize](http://sequelizejs.com) as the ORM
-
-Installation
-------------
-1.  Ensure you have NodeJs and postgres installed
-2.  Clone the repository `git clone https://github.com/andela-fojuri/dms.git`
-3.  Change your directory `cd dms`
-4.  Install all dependencies `npm install`
-5.  Run tests  `npm test`
-6.  Run integration test `npm run e2e`
-7.  Start the app `npm start` and use [postman](https://www.getpostman.com/) to consume the API
-
-
 ## API ENDPOINTS
 **Users**
 
