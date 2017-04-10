@@ -117,12 +117,17 @@ UsersPage.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const rolesDropdown = state.roles.roles.map(role => ({
-    value: Number(role.id),
-    text: role.category,
-  }));
+  if (state.roles.roles) {
+    const rolesDropdown = state.roles.roles.map(role => ({
+      value: Number(role.id),
+      text: role.category,
+    }));
+    return {
+      roles: rolesDropdown,
+      editUser: state.users.editUser
+    };
+  }
   return {
-    roles: rolesDropdown,
     editUser: state.users.editUser
   };
 }

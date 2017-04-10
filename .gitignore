@@ -8,3 +8,4 @@ reports/
 screenshots/
 docs/
 .vscode
+webpack.config.dev.js

@@ -50,7 +50,7 @@ Search.propTypes = {
   actions: PropTypes.object.isRequired,
   actions2: PropTypes.object.isRequired,
   documents: PropTypes.array.isRequired,
-  showDoc: PropTypes.bool.isRequired,
+  showDoc: PropTypes.bool,
   showUsers: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired
 };
