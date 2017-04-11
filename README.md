@@ -50,6 +50,13 @@ Users are authenticated and validated us JWT web token. Generating tokens on sig
 -   You can undo your migrations by running this command `npm run db:migrate:test:undo`.
 
 ` I strongly suggest using separate DB for testing and development `
+
+## Contributions
+* Clone the repository.
+* Install dependencies
+* Create a new branch for included feature(s) using the keyword feature/ example feature/new-feature.
+* Raise a pull request.
+
 ## API Documentation Link
 - [visit] (https://andela-fojuri.github.io/dms/)
 
